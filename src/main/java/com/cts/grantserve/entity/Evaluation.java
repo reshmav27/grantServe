@@ -1,0 +1,65 @@
+package com.cts.grantserve.entity;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "Evaluation")
+public class Evaluation {
+    @Id
+    private Long evaluationID;
+    private Long applicationID;
+    private String result;
+    private LocalDateTime date;
+    private String notes;
+
+    public Long getEvaluationID()
+    {
+        return evaluationID;
+    }
+
+    public void setEvaluationID(Long evaluationID)
+    {
+        this.evaluationID = evaluationID;
+    }
+
+    public Long getApplicationID()
+    {
+        return applicationID;
+    }
+
+    public void setApplicationID(Long applicationID)
+    {
+        this.applicationID = applicationID;
+    }
+
+    public String getResult()
+    {
+        return result;
+    }
+
+    public void setResult(String result)
+    {
+        this.result = result;
+    }
+
+    public LocalDateTime getDate()
+    {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date)
+    {
+        this.date = date;
+    }
+
+    public String getNotes()
+    {
+        return notes;
+    }
+
+    public void setNotes(String notes)
+    {
+        this.notes = notes;
+    }
+}

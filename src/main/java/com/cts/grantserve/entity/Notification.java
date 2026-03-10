@@ -1,0 +1,74 @@
+package com.cts.grantserve.entity;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name="Notification")
+public class Notification {
+    @Id
+    private Long notificationID;
+    private Long userID;
+    private Long entityID;
+    private String message;
+    private String category;
+    private String status;
+    private LocalDateTime createdDate;
+
+    public Long getNotificationID() {
+        return notificationID;
+    }
+
+    public void setNotificationID(Long notificationID) {
+        this.notificationID = notificationID;
+    }
+
+    public Long getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Long userID) {
+        this.userID = userID;
+    }
+
+    public Long getEntityID() {
+        return entityID;
+    }
+
+    public void setEntityID(Long entityID) {
+        this.entityID = entityID;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+}
