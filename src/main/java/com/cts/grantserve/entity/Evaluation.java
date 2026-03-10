@@ -9,7 +9,7 @@ public class Evaluation {
     @Id
     private Long evaluationID;
     private Long applicationID;
-    private String result;
+    private boolean result;
     private LocalDateTime date;
     private String notes;
 
@@ -33,12 +33,12 @@ public class Evaluation {
         this.applicationID = applicationID;
     }
 
-    public String getResult()
+    public boolean getResult()
     {
         return result;
     }
 
-    public void setResult(String result)
+    public void setResult(boolean result)
     {
         this.result = result;
     }
