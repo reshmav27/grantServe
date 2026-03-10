@@ -1,20 +1,18 @@
 package com.cts.grantserve.entity;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "Disbursement")
 public class Disbursement {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long disbursementID;
-    private Long applicationID;
-    private Double amount;
-    private LocalDateTime date;
-    private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "applicationID")
+    private GrantApplication application;
 
-
-
-    // Getters and Setters
     public Long getDisbursementID() {
         return disbursementID;
     }
@@ -23,12 +21,12 @@ public class Disbursement {
         this.disbursementID = disbursementID;
     }
 
-    public Long getApplicationID() {
-        return applicationID;
+    public GrantApplication getApplication() {
+        return application;
     }
 
-    public void setApplicationID(Long applicationID) {
-        this.applicationID = applicationID;
+    public void setApplication(GrantApplication application) {
+        this.application = application;
     }
 
     public Double getAmount() {
@@ -39,11 +37,11 @@ public class Disbursement {
         this.amount = amount;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -53,5 +51,19 @@ public class Disbursement {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    private Double amount;
+    private java.time.LocalDate date;
+    private String status;
+    @OneToOne(mappedBy = "disbursement", cascade = CascadeType.ALL)
+    private Payment payment;
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 }

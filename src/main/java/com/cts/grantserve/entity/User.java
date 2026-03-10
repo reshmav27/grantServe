@@ -1,17 +1,44 @@
 package com.cts.grantserve.entity;
 
+import com.cts.grantserve.enums.Role;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-@Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
     private String name;
-    private String role;
     private String email;
     private String phone;
     private String status;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<AuditLog> auditLogs; // One user can have many log entries
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public List<AuditLog> getAuditLogs() {
+        return auditLogs;
+    }
+
+    public void setAuditLogs(List<AuditLog> auditLogs) {
+        this.auditLogs = auditLogs;
+    }
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Notification> notifications; // One user receives many notifications
 
     public Long getUserID() {
         return userID;
@@ -27,14 +54,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getEmail() {
@@ -59,5 +78,13 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

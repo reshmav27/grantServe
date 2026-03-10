@@ -4,16 +4,14 @@ package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Budget")
 public class Budget {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long budgetID;
-    private Long programID;
-    private Double allocatedAmount;
-    private Double spentAmount;
-    private Double remainingAmount;
-    private String status;
+
+    @OneToOne
+    @JoinColumn(name = "programID")
+    private Program program;
 
     public Long getBudgetID() {
         return budgetID;
@@ -23,12 +21,12 @@ public class Budget {
         this.budgetID = budgetID;
     }
 
-    public Long getProgramID() {
-        return programID;
+    public Program getProgram() {
+        return program;
     }
 
-    public void setProgramID(Long programID) {
-        this.programID = programID;
+    public void setProgram(Program program) {
+        this.program = program;
     }
 
     public Double getAllocatedAmount() {
@@ -61,10 +59,10 @@ public class Budget {
 
     public void setStatus(String status) {
         this.status = status;
-
     }
 
-
-
+    private Double allocatedAmount;
+    private Double spentAmount;
+    private Double remainingAmount;
+    private String status;
 }
-

@@ -3,20 +3,18 @@ package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name="Program")
 public class Program {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long programID;
     private String title;
-    @Column(length = 1000)
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private java.time.LocalDate startDate;
+    private java.time.LocalDate endDate;
     private Double budget;
-    private String status;
 
     public Long getProgramID() {
         return programID;
@@ -72,5 +70,28 @@ public class Program {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Budget getBudgetRecord() {
+        return budgetRecord;
+    }
+
+    public void setBudgetRecord(Budget budgetRecord) {
+        this.budgetRecord = budgetRecord;
+    }
+
+    private String status;
+
+    @OneToOne(mappedBy = "program")
+    private Budget budgetRecord;
+    @OneToMany(mappedBy = "program")
+    private List<GrantApplication> applications;
+
+    public List<GrantApplication> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<GrantApplication> applications) {
+        this.applications = applications;
     }
 }

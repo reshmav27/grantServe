@@ -1,74 +1,74 @@
 package com.cts.grantserve.entity;
 
 
+import com.cts.grantserve.enums.DocType;
 import jakarta.persistence.*;
 
     import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name="ResearcherDocument")
-    public class ResearcherDocument {
+public class ResearcherDocument {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long documentID;
 
-        @Id
-        private String documentID;
-        private String researcherID;
-        private String docType;
-        private String fileURI;
-        private LocalDate uploadedDate;
-        private String verificationStatus;
+    @ManyToOne
+    @JoinColumn(name = "researcherID")
+    private Researcher researcher;
 
-        // Getter and Setter Methods
-        public String getDocumentID()
-        {
-            return documentID;
-        }
-        public void setDocumentID(String documentID)
-        {
-            this.documentID = documentID;
-        }
+    @Enumerated(EnumType.STRING)
+    private DocType docType;
 
-        public String getResearcherID()
-        {
-            return researcherID;
-        }
-        public void setResearcherID(String researcherID)
-        {
-            this.researcherID = researcherID;
-        }
+    public Long getDocumentID() {
+        return documentID;
+    }
 
-        public String getDocType()
-        {
-            return docType;
-        }
-        public void setDocType(String docType)
-        {
-            this.docType = docType;
-        }
+    public void setDocumentID(Long documentID) {
+        this.documentID = documentID;
+    }
 
-        public String getFileURI()
-        {
-            return fileURI;
-        }
-        public void setFileURI(String fileURI)
-        {
-            this.fileURI = fileURI;
-        }
+    public Researcher getResearcher() {
+        return researcher;
+    }
 
-        public LocalDate getUploadedDate()
-        {
-            return uploadedDate;
-        }
-        public void setUploadedDate(LocalDate uploadedDate)
-        {
-            this.uploadedDate = uploadedDate;
-        }
+    public void setResearcher(Researcher researcher) {
+        this.researcher = researcher;
+    }
 
-        public String getVerificationStatus()
-        {
-            return verificationStatus;
-        }
-        public void setVerificationStatus(String verificationStatus)
-        {
-            this.verificationStatus = verificationStatus;
-        }
+    public DocType getDocType() {
+        return docType;
+    }
+
+    public void setDocType(DocType docType) {
+        this.docType = docType;
+    }
+
+    public String getFileURI() {
+        return fileURI;
+    }
+
+    public void setFileURI(String fileURI) {
+        this.fileURI = fileURI;
+    }
+
+    public LocalDateTime getUploadedDate() {
+        return uploadedDate;
+    }
+
+    public void setUploadedDate(LocalDateTime uploadedDate) {
+        this.uploadedDate = uploadedDate;
+    }
+
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
+    private String fileURI;
+    private java.time.LocalDateTime uploadedDate;
+    private String verificationStatus;
 }

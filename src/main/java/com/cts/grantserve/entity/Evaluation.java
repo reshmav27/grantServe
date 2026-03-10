@@ -1,65 +1,63 @@
 package com.cts.grantserve.entity;
+import com.cts.grantserve.enums.Result;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Evaluation")
 public class Evaluation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long evaluationID;
-    private Long applicationID;
-    private boolean result;
-    private LocalDateTime date;
+
+    @OneToOne
+    @JoinColumn(name = "applicationID")
+    private GrantApplication application;
+
+    @Enumerated(EnumType.STRING)
+    private Result result;
+
+    private java.time.LocalDate date;
     private String notes;
 
-    public Long getEvaluationID()
-    {
+    public Long getEvaluationID() {
         return evaluationID;
     }
 
-    public void setEvaluationID(Long evaluationID)
-    {
+    public void setEvaluationID(Long evaluationID) {
         this.evaluationID = evaluationID;
     }
 
-    public Long getApplicationID()
-    {
-        return applicationID;
+    public GrantApplication getApplication() {
+        return application;
     }
 
-    public void setApplicationID(Long applicationID)
-    {
-        this.applicationID = applicationID;
+    public void setApplication(GrantApplication application) {
+        this.application = application;
     }
 
-    public boolean getResult()
-    {
+    public Result getResult() {
         return result;
     }
 
-    public void setResult(boolean result)
-    {
+    public void setResult(Result result) {
         this.result = result;
     }
 
-    public LocalDateTime getDate()
-    {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date)
-    {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public String getNotes()
-    {
+    public String getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes)
-    {
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 }

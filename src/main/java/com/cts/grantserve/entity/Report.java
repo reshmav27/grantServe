@@ -1,16 +1,21 @@
 package com.cts.grantserve.entity;
+import com.cts.grantserve.enums.ReportScope;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Report")
 public class Report {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportID;
-    private String scope;
-    private String metrics;
-    private LocalDateTime generatedDate;
+
+    @Enumerated(EnumType.STRING)
+    private ReportScope scope;
+
+    private String metrics; // Usually stored as JSON string
+    private java.time.LocalDate generatedDate;
 
     public Long getReportID() {
         return reportID;
@@ -20,11 +25,11 @@ public class Report {
         this.reportID = reportID;
     }
 
-    public String getScope() {
+    public ReportScope getScope() {
         return scope;
     }
 
-    public void setScope(String scope) {
+    public void setScope(ReportScope scope) {
         this.scope = scope;
     }
 
@@ -36,11 +41,11 @@ public class Report {
         this.metrics = metrics;
     }
 
-    public LocalDateTime getGeneratedDate() {
+    public LocalDate getGeneratedDate() {
         return generatedDate;
     }
 
-    public void setGeneratedDate(LocalDateTime generatedDate) {
+    public void setGeneratedDate(LocalDate generatedDate) {
         this.generatedDate = generatedDate;
     }
 }

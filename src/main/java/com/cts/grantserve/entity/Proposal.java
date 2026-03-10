@@ -1,17 +1,22 @@
 package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name="Proposal")
 public class Proposal {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long proposalID;
-    private Long applicationID;
-    private String fileURI;
-    private LocalDateTime submittedDate;
-    private String status;
+
+    public GrantApplication getApplication() {
+        return application;
+    }
+
+    public void setApplication(GrantApplication application) {
+        this.application = application;
+    }
 
     public Long getProposalID() {
         return proposalID;
@@ -19,14 +24,6 @@ public class Proposal {
 
     public void setProposalID(Long proposalID) {
         this.proposalID = proposalID;
-    }
-
-    public Long getApplicationID() {
-        return applicationID;
-    }
-
-    public void setApplicationID(Long applicationID) {
-        this.applicationID = applicationID;
     }
 
     public String getFileURI() {
@@ -37,11 +34,11 @@ public class Proposal {
         this.fileURI = fileURI;
     }
 
-    public LocalDateTime getSubmittedDate() {
+    public LocalDate getSubmittedDate() {
         return submittedDate;
     }
 
-    public void setSubmittedDate(LocalDateTime submittedDate) {
+    public void setSubmittedDate(LocalDate submittedDate) {
         this.submittedDate = submittedDate;
     }
 
@@ -52,4 +49,23 @@ public class Proposal {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @OneToOne
+    @JoinColumn(name = "applicationID")
+    private GrantApplication application;
+
+    @OneToMany(mappedBy = "proposal")
+    private List<Review> reviews;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    private String fileURI;
+    private java.time.LocalDate submittedDate;
+    private String status;
 }
