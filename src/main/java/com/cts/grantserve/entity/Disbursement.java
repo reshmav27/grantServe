@@ -2,7 +2,7 @@ package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "Disbursement")
+@Table(name = "disbursement")
 public class Disbursement {
     @Id
     private Long disbursementID;

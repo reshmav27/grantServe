@@ -1,17 +1,30 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Proposal")
+@Table(name="proposal")
 public class Proposal {
     @Id
     private Long proposalID;
-    private Long applicationID;
+//    private Long applicationID;
     private String fileURI;
     private LocalDateTime submittedDate;
     private String status;
+    @ManyToOne
+    @JoinColumn(name = "applicationID")
+    @JsonBackReference
+    private GrantApplication grantApplication;
+
+    public GrantApplication getGrantApplication() {
+        return grantApplication;
+    }
+
+    public void setGrantApplication(GrantApplication grantApplication) {
+        this.grantApplication = grantApplication;
+    }
 
     public Long getProposalID() {
         return proposalID;
@@ -21,13 +34,6 @@ public class Proposal {
         this.proposalID = proposalID;
     }
 
-    public Long getApplicationID() {
-        return applicationID;
-    }
-
-    public void setApplicationID(Long applicationID) {
-        this.applicationID = applicationID;
-    }
 
     public String getFileURI() {
         return fileURI;

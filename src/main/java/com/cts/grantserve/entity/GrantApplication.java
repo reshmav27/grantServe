@@ -1,18 +1,32 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-
 public class GrantApplication {
     @Id
+
     private Long applicationID;
     private String researcherID;
     private Long programID;
     private String title;
     private LocalDateTime submittedDate;
     private String status;
+    @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Proposal> proposals= new ArrayList<>();
+
+    public List<Proposal> getProposals() {
+        return proposals;
+    }
+
+    public void setProposals(List<Proposal> proposals) {
+        this.proposals = proposals;
+    }
 
     public Long getApplicationID()
     {

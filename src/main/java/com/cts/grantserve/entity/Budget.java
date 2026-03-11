@@ -4,7 +4,7 @@ package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Budget")
+@Table(name = "budget")
 public class Budget {
 
     @Id

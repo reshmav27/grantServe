@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Notification")
+@Table(name="notification")
 public class Notification {
     @Id
     private Long notificationID;
