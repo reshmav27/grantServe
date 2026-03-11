@@ -3,29 +3,17 @@ package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name="audit")
 public class Audit {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auditID;
-    @ManyToOne
-    @JoinColumn(name = "officerID", referencedColumnName = "userID")
-    private User officer;
-
-    public User getOfficer() {
-        return officer;
-    }
-
-    public void setOfficer(User officer) {
-        this.officer = officer;
-    }
-
+    private Long officerID;
     private String scope;
     private String findings;
-    private java.time.LocalDate date;
+    private LocalDateTime date;
     private String status;
 
     public Long getAuditID() {
@@ -36,6 +24,13 @@ public class Audit {
         this.auditID = auditID;
     }
 
+    public Long getOfficerID() {
+        return officerID;
+    }
+
+    public void setOfficerID(Long officerID) {
+        this.officerID = officerID;
+    }
 
     public String getScope() {
         return scope;
@@ -53,11 +48,11 @@ public class Audit {
         this.findings = findings;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -68,5 +63,11 @@ public class Audit {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+
 }
+
+
+
 
