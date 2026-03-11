@@ -1,8 +1,10 @@
 package com.cts.grantserve.entity;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 @Entity
 public class Disbursement {
     @Id
@@ -12,6 +14,12 @@ public class Disbursement {
     @ManyToOne
     @JoinColumn(name = "applicationID")
     private GrantApplication application;
+
+    private Double amount;
+    private LocalDate date;
+    private String status;
+    @OneToOne(mappedBy = "disbursement", cascade = CascadeType.ALL)
+    private Payment payment;
 
     public Long getDisbursementID() {
         return disbursementID;
@@ -52,12 +60,6 @@ public class Disbursement {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    private Double amount;
-    private java.time.LocalDate date;
-    private String status;
-    @OneToOne(mappedBy = "disbursement", cascade = CascadeType.ALL)
-    private Payment payment;
 
     public Payment getPayment() {
         return payment;
