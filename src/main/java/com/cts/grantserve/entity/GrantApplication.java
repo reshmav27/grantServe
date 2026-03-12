@@ -9,9 +9,12 @@ import java.util.List;
 @Entity
 public class GrantApplication {
     @Id
-
     private Long applicationID;
+
+    @ManyToOne
     private String researcherID;
+
+    @ManyToOne
     private Long programID;
     private String title;
     private LocalDateTime submittedDate;

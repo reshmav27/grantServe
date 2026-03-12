@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+
 @Entity
 @Table(name="proposal")
 public class Proposal {
+
     @Id
     private Long proposalID;
 //    private Long applicationID;
