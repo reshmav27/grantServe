@@ -9,11 +9,11 @@ import java.util.List;
 @Repository
 public interface ResearcherDocumentRepository extends JpaRepository<ResearcherDocument, Long> {
 
-    // Find all documents belonging to a specific Researcher ID
+
     List<ResearcherDocument> findByResearcher_ResearcherID(Long researcherID);
 
 
 
-    // Find documents by verification status
+
     List<ResearcherDocument> findByVerificationStatus(String status);
 }
