@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.dao.EvaluationDao; // Assuming this is your DAO name
+import com.cts.grantserve.dao.EvaluationDao;
 import com.cts.grantserve.entity.Evaluation;
 import com.cts.grantserve.exception.EvaluationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

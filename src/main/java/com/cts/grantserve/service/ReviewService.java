@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.dao.ReviewDao; // Assuming this is your DAO name
+import com.cts.grantserve.dao.ReviewDao;
 import com.cts.grantserve.entity.Review;
 import com.cts.grantserve.entity.Proposal;
 import com.cts.grantserve.exception.ReviewNotFoundException;
@@ -16,6 +16,7 @@ public class ReviewService {
     ReviewDao reviewDao;
 
     public List<Review> getReviewsByReviewer(long reviewerId) {
+
         return reviewDao.findByReviewerID(reviewerId);
     }
 
