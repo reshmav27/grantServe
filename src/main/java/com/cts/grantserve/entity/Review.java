@@ -1,87 +1,77 @@
 package com.cts.grantserve.entity;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-@Table(name="review")
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewID;
-    private Long proposalID;
-    private Long reviewerID;
-    private Integer score;
-    private String comments;
-    private LocalDateTime date;
-    private String status;
 
-    public Long getReviewID()
-    {
+    public Long getReviewID() {
         return reviewID;
     }
 
-    public void setReviewID(Long reviewID)
-    {
+    public void setReviewID(Long reviewID) {
         this.reviewID = reviewID;
     }
 
-    public Long getProposalID()
-    {
-        return proposalID;
+    public Proposal getProposal() {
+        return proposal;
     }
 
-    public void setProposalID(Long proposalID)
-    {
-        this.proposalID = proposalID;
+    public void setProposal(Proposal proposal) {
+        this.proposal = proposal;
     }
 
-    public Long getReviewerID()
-    {
+    public Long getReviewerID() {
         return reviewerID;
     }
 
-    public void setReviewerID(Long reviewerID)
-    {
+    public void setReviewerID(Long reviewerID) {
         this.reviewerID = reviewerID;
     }
 
-    public Integer getScore()
-    {
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(Integer score)
-    {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
-    public String getComments()
-    {
+    public String getComments() {
         return comments;
     }
 
-    public void setComments(String comments)
-    {
+    public void setComments(String comments) {
         this.comments = comments;
     }
 
-    public LocalDateTime getDate()
-    {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date)
-    {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "proposalID")
+    private Proposal proposal;
+
+    private Long reviewerID; // Linked to User.userID
+    private Integer score;
+    private String comments;
+    private java.time.LocalDate date;
+    private String status;
 }

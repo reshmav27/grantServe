@@ -1,18 +1,24 @@
 package com.cts.grantserve.entity;
 
+import com.cts.grantserve.enums.ComplianceType;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Entity
-
 public class ComplianceRecord {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long complianceID;
-    private Long entityID;
-    private String type; // Application/Program
+
+    private Long entityID; // Can be ApplicationID or ProgramID
+
+    @Enumerated(EnumType.STRING)
+    private ComplianceType type;
+
     private String result;
-    private LocalDateTime date;
+    private java.time.LocalDate date;
     private String notes;
 
     public Long getComplianceID() {
@@ -31,11 +37,11 @@ public class ComplianceRecord {
         this.entityID = entityID;
     }
 
-    public String getType() {
+    public ComplianceType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ComplianceType type) {
         this.type = type;
     }
 
@@ -47,11 +53,11 @@ public class ComplianceRecord {
         this.result = result;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

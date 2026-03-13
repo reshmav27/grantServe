@@ -1,20 +1,36 @@
 package com.cts.grantserve.entity;
 
+import com.cts.grantserve.enums.NotificationCategory;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="notification")
 public class Notification {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationID;
-    private Long userID;
+    @ManyToOne
+    @JoinColumn(name = "userID",nullable = false)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     private Long entityID;
     private String message;
-    private String category;
-    private String status;
-    private LocalDateTime createdDate;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationCategory category;
+
+    private String status; // Read/Unread
+    private java.time.LocalDate createdDate;
 
     public Long getNotificationID() {
         return notificationID;
@@ -24,13 +40,6 @@ public class Notification {
         this.notificationID = notificationID;
     }
 
-    public Long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
 
     public Long getEntityID() {
         return entityID;
@@ -48,11 +57,11 @@ public class Notification {
         this.message = message;
     }
 
-    public String getCategory() {
+    public NotificationCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(NotificationCategory category) {
         this.category = category;
     }
 
@@ -64,11 +73,11 @@ public class Notification {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 }

@@ -1,17 +1,24 @@
 package com.cts.grantserve.entity;
+import com.cts.grantserve.enums.PaymentMethod;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
-@Table(name ="payment")
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentID;
-    private Long disbursementID;
-    private String method; // Bank/Wallet
-    private LocalDateTime date;
+
+    @OneToOne
+    @JoinColumn(name = "disbursementID")
+    private Disbursement disbursement;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod method;
+
+    private java.time.LocalDate date;
     private String status;
-
-
 
     public Long getPaymentID() {
         return paymentID;
@@ -21,27 +28,27 @@ public class Payment {
         this.paymentID = paymentID;
     }
 
-    public Long getDisbursementID() {
-        return disbursementID;
+    public Disbursement getDisbursement() {
+        return disbursement;
     }
 
-    public void setDisbursementID(Long disbursementID) {
-        this.disbursementID = disbursementID;
+    public void setDisbursement(Disbursement disbursement) {
+        this.disbursement = disbursement;
     }
 
-    public String getMethod() {
+    public PaymentMethod getMethod() {
         return method;
     }
 
-    public void setMethod(String method) {
+    public void setMethod(PaymentMethod method) {
         this.method = method;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
