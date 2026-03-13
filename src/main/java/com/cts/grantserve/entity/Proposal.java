@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Table(name="proposal")
 public class Proposal {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long proposalID;
 //    private Long applicationID;
     private String fileURI;

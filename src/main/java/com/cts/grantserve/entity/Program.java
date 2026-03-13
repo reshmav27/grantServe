@@ -84,14 +84,14 @@ public class Program {
 
     @OneToOne(mappedBy = "program")
     private Budget budgetRecord;
-    @OneToMany(mappedBy = "program")
-    private List<GrantApplication> applications;
-
-    public List<GrantApplication> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(List<GrantApplication> applications) {
-        this.applications = applications;
-    }
+//    @OneToMany(mappedBy = "program")
+//    private List<GrantApplication> applications;
+//
+////    public List<GrantApplication> getApplications() {
+////        return applications;
+////    }
+//
+//    public void setApplications(List<GrantApplication> applications) {
+//        this.applications = applications;
+//    }
 }
