@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class Proposal {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long proposalID;
 //    private Long applicationID;
     private String fileURI;

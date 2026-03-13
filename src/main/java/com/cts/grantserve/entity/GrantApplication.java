@@ -9,8 +9,8 @@ import java.util.List;
 @Entity
 public class GrantApplication {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationID;
-
 
     private String researcherID;
 
