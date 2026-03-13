@@ -11,7 +11,9 @@ public class GrantApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationID;
+
     private String researcherID;
+
     private Long programID;
     private String title;
     private LocalDateTime submittedDate;
