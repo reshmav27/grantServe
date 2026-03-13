@@ -1,4 +1,4 @@
-package com.cts.grantserve.dao;
+package com.cts.grantserve.Repository;
 
 import com.cts.grantserve.entity.Payment;
 import com.cts.grantserve.enums.PaymentMethod;

@@ -1,7 +1,10 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class GrantApplication {
@@ -57,12 +60,12 @@ public class GrantApplication {
         this.status = status;
     }
 
-    public Proposal getProposal() {
-        return proposal;
+    public List<Proposal> getProposals() {
+        return proposals;
     }
 
-    public void setProposal(Proposal proposal) {
-        this.proposal = proposal;
+    public void setProposals(List<Proposal> proposals) {
+        this.proposals = proposals;
     }
 
     @ManyToOne
@@ -73,8 +76,9 @@ public class GrantApplication {
     @JoinColumn(name = "programID")
     private Program program;
 
-    @OneToOne(mappedBy = "application")
-    private Proposal proposal;
+    @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Proposal> proposals= new ArrayList<>();
 
     private String title;
     private java.time.LocalDate submittedDate;
