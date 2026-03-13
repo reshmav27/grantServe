@@ -1,21 +1,29 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name="proposal")
 public class Proposal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long proposalID;
+//    private Long applicationID;
+    private String fileURI;
+    private LocalDateTime submittedDate;
+    private String status;
+    @ManyToOne
+    @JoinColumn(name = "applicationID")
+    @JsonBackReference
+    private GrantApplication grantApplication;
 
-    public GrantApplication getApplication() {
-        return application;
+    public GrantApplication getGrantApplication() {
+        return grantApplication;
     }
 
-    public void setApplication(GrantApplication application) {
-        this.application = application;
+    public void setGrantApplication(GrantApplication grantApplication) {
+        this.grantApplication = grantApplication;
     }
 
     public Long getProposalID() {
@@ -26,6 +34,7 @@ public class Proposal {
         this.proposalID = proposalID;
     }
 
+
     public String getFileURI() {
         return fileURI;
     }
@@ -34,11 +43,11 @@ public class Proposal {
         this.fileURI = fileURI;
     }
 
-    public LocalDate getSubmittedDate() {
+    public LocalDateTime getSubmittedDate() {
         return submittedDate;
     }
 
-    public void setSubmittedDate(LocalDate submittedDate) {
+    public void setSubmittedDate(LocalDateTime submittedDate) {
         this.submittedDate = submittedDate;
     }
 
@@ -49,23 +58,4 @@ public class Proposal {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    @OneToOne
-    @JoinColumn(name = "applicationID")
-    private GrantApplication application;
-
-    @OneToMany(mappedBy = "proposal")
-    private List<Review> reviews;
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    private String fileURI;
-    private java.time.LocalDate submittedDate;
-    private String status;
 }
