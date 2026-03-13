@@ -1,6 +1,7 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.dao.ReviewDao;
+import com.cts.grantserve.Repository.IProposalRepository;
+import com.cts.grantserve.Repository.ReviewRepository;
 import com.cts.grantserve.entity.Review;
 import com.cts.grantserve.entity.Proposal;
 import com.cts.grantserve.exception.ReviewNotFoundException;
@@ -13,26 +14,26 @@ import java.util.List;
 public class ReviewService {
 
     @Autowired
-    ReviewDao reviewDao;
+    ReviewRepository reviewRepository;
 
     public List<Review> getReviewsByReviewer(long reviewerId) {
 
-        return reviewDao.findByReviewerID(reviewerId);
+        return reviewRepository.findByReviewerID(reviewerId);
     }
 
     public Review getReviewById(long id) {
-        return reviewDao.findById(id).orElseThrow(() -> new ReviewNotFoundException("Review with ID " + id + " not found"));
+        return reviewRepository.findById(id).orElseThrow(() -> new ReviewNotFoundException("Review with ID " + id + " not found"));
     }
 
 // Inside ReviewService.java
-   /* @Autowired
-    private IProposalDao proposalDao;
+   @Autowired
+    private IProposalRepository proposalRepository;
 
     public String assignReviewer(long proposalId, long reviewerId) {
         Review newReview = new Review();
 
         // 1. Fetch the actual Proposal object from the DB
-        Proposal proposal = proposalDao.findById(proposalId)
+        Proposal proposal = proposalRepository.findById(proposalId)
                 .orElseThrow(() -> new RuntimeException("Proposal not found"));
 
         // 2. Set the Object, not just the ID
@@ -43,5 +44,5 @@ public class ReviewService {
 
         reviewRepository.save(newReview);
         return "Assigned Successfully";
-    }*/
+    }
 }
