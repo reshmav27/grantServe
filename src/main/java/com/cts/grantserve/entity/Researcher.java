@@ -20,8 +20,8 @@ public class Researcher {
     @OneToMany(mappedBy = "researcher", cascade = CascadeType.ALL)
     private List<ResearcherDocument> documents; // One researcher has many docs [cite: 1, 85]
 
-    @OneToMany(mappedBy = "researcher")
-    private List<GrantApplication> applications;
+//    @OneToMany(mappedBy = "researcher")
+//    private List<GrantApplication> applications;
 
     public List<ResearcherDocument> getDocuments() {
         return documents;
@@ -31,13 +31,13 @@ public class Researcher {
         this.documents = documents;
     }
 
-    public List<GrantApplication> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(List<GrantApplication> applications) {
-        this.applications = applications;
-    }
+//    public List<GrantApplication> getApplications() {
+//        return applications;
+//    }
+//
+//    public void setApplications(List<GrantApplication> applications) {
+//        this.applications = applications;
+//    }
 
     public Long getResearcherID() {
         return researcherID;

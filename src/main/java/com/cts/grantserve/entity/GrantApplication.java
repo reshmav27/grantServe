@@ -1,7 +1,10 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class GrantApplication {
@@ -9,74 +12,81 @@ public class GrantApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationID;
 
-    public Researcher getResearcher() {
-        return researcher;
+    private String researcherID;
+
+    private Long programID;
+    private String title;
+    private LocalDateTime submittedDate;
+    private String status;
+    @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Proposal> proposals= new ArrayList<>();
+
+    public List<Proposal> getProposals() {
+        return proposals;
     }
 
-    public void setResearcher(Researcher researcher) {
-        this.researcher = researcher;
+    public void setProposals(List<Proposal> proposals) {
+        this.proposals = proposals;
     }
 
-    public Long getApplicationID() {
+    public Long getApplicationID()
+    {
         return applicationID;
     }
 
-    public void setApplicationID(Long applicationID) {
+    public void setApplicationID(Long applicationID)
+    {
         this.applicationID = applicationID;
     }
 
-    public Program getProgram() {
-        return program;
+    public String getResearcherID()
+    {
+        return researcherID;
     }
 
-    public void setProgram(Program program) {
-        this.program = program;
+    public void setResearcherID(String researcherID)
+    {
+        this.researcherID = researcherID;
     }
 
-    public String getTitle() {
+    public Long getProgramID()
+    {
+        return programID;
+    }
+
+    public void setProgramID(Long programID)
+    {
+        this.programID = programID;
+    }
+
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public LocalDate getSubmittedDate() {
+    public LocalDateTime getSubmittedDate()
+    {
         return submittedDate;
     }
 
-    public void setSubmittedDate(LocalDate submittedDate) {
+    public void setSubmittedDate(LocalDateTime submittedDate)
+    {
         this.submittedDate = submittedDate;
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
-
-    public Proposal getProposal() {
-        return proposal;
-    }
-
-    public void setProposal(Proposal proposal) {
-        this.proposal = proposal;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "researcherID")
-    private Researcher researcher;
-
-    @ManyToOne
-    @JoinColumn(name = "programID")
-    private Program program;
-
-    @OneToOne(mappedBy = "application")
-    private Proposal proposal;
-
-    private String title;
-    private java.time.LocalDate submittedDate;
-    private String status;
 }
