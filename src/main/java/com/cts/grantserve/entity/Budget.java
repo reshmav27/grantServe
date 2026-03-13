@@ -1,6 +1,5 @@
 package com.cts.grantserve.entity;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -8,6 +7,11 @@ public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long budgetID;
+
+    private Double allocatedAmount;
+    private Double spentAmount;
+    private Double remainingAmount;
+    private String status;
 
     @OneToOne
     @JoinColumn(name = "programID")
@@ -60,9 +64,4 @@ public class Budget {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    private Double allocatedAmount;
-    private Double spentAmount;
-    private Double remainingAmount;
-    private String status;
 }
