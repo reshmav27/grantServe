@@ -1,9 +1,8 @@
 package com.cts.grantserve.controller;
 
 
-import com.cts.grantserve.DTO.GrantApplicationDto;
+import com.cts.grantserve.dto.GrantApplicationDto;
 import com.cts.grantserve.entity.GrantApplication;
-import com.cts.grantserve.service.GrantApplicationServiceImpl;
 import com.cts.grantserve.service.IGrantApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

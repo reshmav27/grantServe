@@ -1,9 +1,7 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.UserDto;
-import com.cts.grantserve.entity.User;
+import com.cts.grantserve.dto.UserDto;
 import com.cts.grantserve.service.IUserService;
-import com.cts.grantserve.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

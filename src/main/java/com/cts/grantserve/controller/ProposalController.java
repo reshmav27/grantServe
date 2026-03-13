@@ -1,9 +1,7 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.ProposalDto;
-import com.cts.grantserve.entity.Proposal;
+import com.cts.grantserve.dto.ProposalDto;
 import com.cts.grantserve.service.IProposalService;
-import com.cts.grantserve.service.ProposalServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
