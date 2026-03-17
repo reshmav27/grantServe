@@ -40,31 +40,6 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Notification> notifications; // One user receives many notifications
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<AuditLog> auditLogs; // One user can have many log entries
-
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    public List<AuditLog> getAuditLogs() {
-        return auditLogs;
-    }
-
-    public void setAuditLogs(List<AuditLog> auditLogs) {
-        this.auditLogs = auditLogs;
-    }
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Notification> notifications; // One user receives many notifications
-
     public Long getUserID() {
         return userID;
     }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -28,10 +29,10 @@ public class ProposalServiceImpl implements  IProposalService {
         proposal.setStatus("Pending");
         GrantApplication application = grantApplicationRepository.findById(proposalDto.getApplicationID())
                 .orElseThrow(() -> new ProposalException("Application Not found",HttpStatus.NOT_FOUND));
-        proposal.setGrantApplication(application);
+        proposal.setApplication(application);
 
 
-        proposal.setSubmittedDate(LocalDateTime.now());
+        proposal.setSubmittedDate(LocalDate.now());
         proposalDao.save(proposal);
         return "Created SuccessFully";
     }
