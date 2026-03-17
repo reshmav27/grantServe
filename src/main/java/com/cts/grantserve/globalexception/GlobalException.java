@@ -17,6 +17,7 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalException {
 
+
     @ExceptionHandler(ProposalException.class)
     public ResponseEntity<String> proposalExceptionHandler(ProposalException p){
         return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
@@ -56,5 +57,15 @@ public class GlobalException {
     public ResponseEntity<String> handleInsufficientBudgetException(InsufficientFundsException ex) {
         // Returns a 400 Bad Request with the custom message
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AuditException.class)
+    public ResponseEntity<String> proposalExceptionHandler(AuditException p){
+        return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
+    }
+
+    @ExceptionHandler(ComplianceRecordException.class)
+    public ResponseEntity<String> GrantApplicationExceptionHandler(ComplianceRecordException g){
+        return ResponseEntity.status(g.getHttpStatus()).body(g.getMessage());
     }
 }
