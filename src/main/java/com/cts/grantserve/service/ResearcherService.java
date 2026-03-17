@@ -3,7 +3,7 @@ package com.cts.grantserve.service;
 
 import com.cts.grantserve.DTO.ResearcherDto;
 import com.cts.grantserve.entity.Researcher;
-import com.cts.grantserve.dao.ResearcherRepository;
+import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.exception.ResearcherException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

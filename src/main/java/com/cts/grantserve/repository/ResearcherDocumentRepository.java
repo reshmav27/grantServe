@@ -1,5 +1,4 @@
-package com.cts.grantserve.dao;
-
+package com.cts.grantserve.repository;
 import com.cts.grantserve.entity.ResearcherDocument;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,3 +16,4 @@ public interface ResearcherDocumentRepository extends JpaRepository<ResearcherDo
 
     List<ResearcherDocument> findByVerificationStatus(String status);
 }
+
