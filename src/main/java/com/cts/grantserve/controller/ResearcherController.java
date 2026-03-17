@@ -1,9 +1,11 @@
 package com.cts.grantserve.controller;
 
+import com.cts.grantserve.DTO.ResearcherDto;
 import com.cts.grantserve.dao.ResearcherRepository;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ResearcherException;
 import com.cts.grantserve.service.ResearcherService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,8 @@ public class ResearcherController {
 
     // 1. Create/Register a Researcher
     @PostMapping("/register")
-    public String register(@RequestBody Researcher researcher) throws ResearcherException {
-        return researcherService.createResearcher(researcher);
+    public String register(@Valid @RequestBody ResearcherDto researcherDto) throws ResearcherException {
+        return researcherService.createResearcher(researcherDto);
     }
 
     // 2. Get a Researcher by ID
