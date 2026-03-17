@@ -21,7 +21,7 @@ public class Program {
 
     @OneToOne(mappedBy = "program")
     private Budget budgetRecord;
-    @OneToMany(mappedBy = "program")
+    @OneToMany(mappedBy = "programID")
     private List<GrantApplication> applications;
 
     public Long getProgramID() {
