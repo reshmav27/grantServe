@@ -1,4 +1,4 @@
-package com.cts.grantserve.dao;
+package com.cts.grantserve.Repository;
 
 import com.cts.grantserve.entity.Disbursement;
 import org.springframework.data.jpa.repository.JpaRepository;

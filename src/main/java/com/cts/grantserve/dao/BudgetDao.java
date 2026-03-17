@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface BudgetDao extends JpaRepository<Budget, Long> {
     Budget getBudgetByProgramID(Long programId);
     Budget getByBudgetID(Long budgetId);
-    boolean allocateAmount(Long programId, Double amount);
+    boolean allocatedAmount(Long programId, Double amount);
 }

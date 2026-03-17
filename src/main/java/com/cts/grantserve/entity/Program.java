@@ -17,11 +17,12 @@ public class Program {
     private java.time.LocalDate startDate;
     private java.time.LocalDate endDate;
     private Double budget;
+    @Enumerated
     private ProgramStatus status;
 
     @OneToOne(mappedBy = "program")
     private Budget budgetRecord;
-    @OneToMany(mappedBy = "program")
+    @OneToMany(mappedBy = "programID")
     private List<GrantApplication> applications;
 
     public Long getProgramID() {
