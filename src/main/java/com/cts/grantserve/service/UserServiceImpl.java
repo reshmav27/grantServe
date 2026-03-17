@@ -1,7 +1,7 @@
 package com.cts.grantserve.service;
 
 import com.cts.grantserve.DTO.UserDto;
-import com.cts.grantserve.Repository.IUserRepository;
+import com.cts.grantserve.repository.IUserRepository;
 import com.cts.grantserve.entity.User;
 import com.cts.grantserve.exception.UserException;
 import org.springframework.beans.BeanUtils;
