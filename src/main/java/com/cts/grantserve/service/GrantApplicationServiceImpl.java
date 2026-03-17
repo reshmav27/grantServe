@@ -30,7 +30,7 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
 
     public String DeleteApplication(Long id) throws  GrantApplicationException{
         grantApplicationDao.deleteById(id);
-        return "Delted SuccessFully";
+        return "Deleted SuccessFully";
     }
 
     public Optional<GrantApplication> getApplication(Long id) {
