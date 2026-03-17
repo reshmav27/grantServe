@@ -1,4 +1,4 @@
-package com.cts.grantserve.Repository;
+package com.cts.grantserve.repository;
 
 import com.cts.grantserve.entity.Proposal;
 import org.springframework.data.jpa.repository.JpaRepository;
