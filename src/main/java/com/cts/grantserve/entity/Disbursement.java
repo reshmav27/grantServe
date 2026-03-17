@@ -8,10 +8,14 @@ public class Disbursement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long disbursementID;
-
+    private Double amount;
+    private java.time.LocalDate date;
+    private String status;
     @ManyToOne
     @JoinColumn(name = "applicationID")
     private GrantApplication application;
+    @OneToOne(mappedBy = "disbursement", cascade = CascadeType.ALL)
+    private Payment payment;
 
     public Long getDisbursementID() {
         return disbursementID;
@@ -53,11 +57,7 @@ public class Disbursement {
         this.status = status;
     }
 
-    private Double amount;
-    private java.time.LocalDate date;
-    private String status;
-    @OneToOne(mappedBy = "disbursement", cascade = CascadeType.ALL)
-    private Payment payment;
+
 
     public Payment getPayment() {
         return payment;
