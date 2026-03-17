@@ -1,11 +1,13 @@
 package com.cts.grantserve.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "budget_id")
     private Long budgetID;
 
     private Double allocateAmount;
@@ -14,7 +16,8 @@ public class Budget {
     private String status;
 
     @OneToOne
-    @JoinColumn(name = "programID")
+    @JoinColumn(name = "program_id")
+    @JsonBackReference
     private Program program;
 
     public Long getBudgetID() {

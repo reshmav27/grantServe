@@ -1,14 +1,13 @@
 package com.cts.grantserve.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-public class ProposalException extends RuntimeException{
+public class InsufficientFundsException extends RuntimeException {
     private final HttpStatus httpStatus;
-    public ProposalException(String message,HttpStatus httpStatus) {
+
+    public InsufficientFundsException(String message) {
         super(message);
-        this.httpStatus = httpStatus;
+        this.httpStatus = HttpStatus.BAD_REQUEST;
     }
 
     public HttpStatus getHttpStatus() {

@@ -1,7 +1,7 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.Repository.IProposalRepository;
-import com.cts.grantserve.Repository.ReviewRepository;
+import com.cts.grantserve.repository.IProposalRepository;
+import com.cts.grantserve.repository.ReviewRepository;
 import com.cts.grantserve.entity.Review;
 import com.cts.grantserve.entity.Proposal;
 import com.cts.grantserve.exception.ReviewNotFoundException;

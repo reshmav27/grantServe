@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.Repository.EvaluationRepository;
+import com.cts.grantserve.repository.EvaluationRepository;
 import com.cts.grantserve.entity.Evaluation;
 import com.cts.grantserve.exception.EvaluationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
