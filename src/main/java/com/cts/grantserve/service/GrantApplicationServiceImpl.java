@@ -1,7 +1,7 @@
 package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.GrantApplicationDto;
-import com.cts.grantserve.Repository.IGrantApplicationRepository;
+import com.cts.grantserve.repository.IGrantApplicationRepository;
 import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.exception.GrantApplicationException;
 import org.springframework.beans.BeanUtils;

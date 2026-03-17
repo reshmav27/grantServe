@@ -1,9 +1,7 @@
 package com.cts.grantserve.globalexception;
 
 import com.cts.grantserve.entity.GrantApplication;
-import com.cts.grantserve.exception.GrantApplicationException;
-import com.cts.grantserve.exception.ProposalException;
-import com.cts.grantserve.exception.UserException;
+import com.cts.grantserve.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,4 +42,19 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler({ProgramNotFoundException.class, BudgetNotFoundException.class})
+    public ResponseEntity<String> handleNotFoundException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ProgramNotModifiableException.class)
+    public ResponseEntity<String> handleProgramNotModifiableException(ProgramNotModifiableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<String> handleInsufficientBudgetException(InsufficientFundsException ex) {
+        // Returns a 400 Bad Request with the custom message
+        return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
+    }
 }
