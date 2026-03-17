@@ -1,4 +1,5 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -14,10 +15,15 @@ public class GrantApplication {
 
     private String researcherID;
 
-    private Long programID;
+    @ManyToOne
+    @JoinColumn(name = "programID")
+    @JsonBackReference
+    private Program program;
+
     private String title;
     private LocalDateTime submittedDate;
     private String status;
+
     @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Proposal> proposals= new ArrayList<>();
@@ -50,14 +56,14 @@ public class GrantApplication {
         this.researcherID = researcherID;
     }
 
-    public Long getProgramID()
+    public Program getProgram()
     {
-        return programID;
+        return program;
     }
 
-    public void setProgramID(Long programID)
+    public void setProgram(Program program)
     {
-        this.programID = programID;
+        this.program = program;
     }
 
     public String getTitle()

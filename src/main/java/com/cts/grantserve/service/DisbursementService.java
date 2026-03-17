@@ -1,7 +1,7 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.Repository.DisbursementRepository;
-import com.cts.grantserve.Repository.PaymentRepository;
+import com.cts.grantserve.repository.DisbursementRepository;
+import com.cts.grantserve.repository.PaymentRepository;
 import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Payment;
 import com.cts.grantserve.entity.Budget;
