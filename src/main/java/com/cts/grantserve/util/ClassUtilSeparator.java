@@ -1,11 +1,14 @@
 package com.cts.grantserve.util;
 
+import com.cts.grantserve.dto.DisbursementDto;
 import com.cts.grantserve.dto.ProposalDto;
 import com.cts.grantserve.dto.UserDto;
+import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Proposal;
 import com.cts.grantserve.entity.User;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -36,4 +39,14 @@ public class ClassUtilSeparator {
         return newUser;
 
     }
+
+    public static Disbursement DisbursementUtil(DisbursementDto disbursementDto){
+        Disbursement disbursement = new Disbursement();
+        disbursement.setAmount(disbursementDto.amount());
+        disbursement.setDate(LocalDate.now());
+        disbursement.setStatus("PENDING");
+        return disbursement;
+    }
+
+
 }
