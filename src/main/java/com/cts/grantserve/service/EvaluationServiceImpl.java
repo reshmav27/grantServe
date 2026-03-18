@@ -2,7 +2,7 @@ package com.cts.grantserve.service;
 
 import com.cts.grantserve.repository.EvaluationRepository;
 import com.cts.grantserve.repository.IGrantApplicationRepository;
-import com.cts.grantserve.DTO.EvaluationDto;
+import com.cts.grantserve.dto.EvaluationDto;
 import com.cts.grantserve.entity.Evaluation;
 import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.exception.EvaluationNotFoundException;

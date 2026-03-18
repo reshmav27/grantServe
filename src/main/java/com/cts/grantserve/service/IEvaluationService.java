@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.EvaluationDto;
+import com.cts.grantserve.dto.EvaluationDto;
 import com.cts.grantserve.entity.Evaluation;
 import java.util.List;
 
