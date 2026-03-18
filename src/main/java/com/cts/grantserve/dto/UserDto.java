@@ -1,6 +1,5 @@
-package com.cts.grantserve.DTO;
+package com.cts.grantserve.dto;
 
-import com.cts.grantserve.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

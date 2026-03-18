@@ -1,8 +1,10 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.GrantApplicationDto;
+import com.cts.grantserve.dto.GrantApplicationDto;
 import com.cts.grantserve.entity.GrantApplication;
+import com.cts.grantserve.exception.GrantApplicationException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IGrantApplicationService {
@@ -11,5 +13,7 @@ public interface IGrantApplicationService {
 
      String DeleteApplication(Long id);
 
-     Optional<GrantApplication> getApplication(Long id) ;
+     public GrantApplication getApplication(Long id) throws GrantApplicationException;
+
+     public List<GrantApplication> search(Long id, String title);
 }
