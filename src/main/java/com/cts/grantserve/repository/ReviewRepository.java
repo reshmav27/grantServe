@@ -1,4 +1,4 @@
-package com.cts.grantserve.Repository;
+package com.cts.grantserve.repository;
 
 
 
