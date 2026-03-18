@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.ProposalDto;
+import com.cts.grantserve.dto.ProposalDto;
 import com.cts.grantserve.repository.IGrantApplicationRepository;
 import com.cts.grantserve.repository.IProposalRepository;
 import com.cts.grantserve.entity.GrantApplication;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Service
 public class ProposalServiceImpl implements  IProposalService {

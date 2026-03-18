@@ -1,9 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.AuditDto;
-import com.cts.grantserve.DTO.ComplianceRecordDto;
-import com.cts.grantserve.entity.Audit;
-import com.cts.grantserve.exception.AuditException;
+import com.cts.grantserve.dto.ComplianceRecordDto;
 import com.cts.grantserve.repository.ComplianceRecordRepository;
 import com.cts.grantserve.entity.ComplianceRecord;
 import com.cts.grantserve.enums.ComplianceResult;
@@ -16,9 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ComplianceRecordService {
+public class ComplianceRecordServiceImpl implements IComplianceRecordService{
     @Autowired
     ComplianceRecordRepository complianceRecordRepository;
+
+    @Override
     public String createComplianceRecord(ComplianceRecordDto complianceRecordDto) throws ComplianceRecordException {
         ComplianceRecord complianceRecord = new ComplianceRecord();
         BeanUtils.copyProperties(complianceRecordDto, complianceRecord);
@@ -26,15 +25,18 @@ public class ComplianceRecordService {
         return "Created SuccessFully";
     }
 
-    public String DeleteComplianceRecord(int id) throws  ComplianceRecordException{
+    @Override
+    public String deleteComplianceRecord(int id) throws  ComplianceRecordException{
         complianceRecordRepository.deleteById((long) id);
         return "Deleted SuccessFully";
     }
 
+    @Override
     public Optional<ComplianceRecord> getComplianceRecord(int id) {
         return complianceRecordRepository.findById((long) id);
     }
 
+    @Override
     public List<ComplianceRecord> getComplianceRecordByResult(ComplianceResult result) {
         return complianceRecordRepository.findByResult(result);
     }

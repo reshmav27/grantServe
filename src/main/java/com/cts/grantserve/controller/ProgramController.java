@@ -1,6 +1,6 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.ProgramDto;
+import com.cts.grantserve.dto.ProgramDto;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.service.IProgramService;

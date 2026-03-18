@@ -1,9 +1,9 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.AuditDto;
+import com.cts.grantserve.dto.AuditDto;
 import com.cts.grantserve.entity.Audit;
 import com.cts.grantserve.enums.AuditStatus;
-import com.cts.grantserve.service.AuditService;
+import com.cts.grantserve.service.AuditServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,14 @@ import java.util.Locale;
 @RequestMapping("/GrantServe")
 public class AuditController {
     @Autowired
-    private AuditService auditService;
+    private AuditServiceImpl auditService;
     @PostMapping("/createAudit")
     public ResponseEntity<String> createAudit(@Valid @RequestBody AuditDto audit){
         return ResponseEntity.status(HttpStatus.CREATED).body(auditService.createAudit(audit));
     }
-    @DeleteMapping("/DeleteAudit/{id}")
+    @DeleteMapping("/deleteAudit/{id}")
     public ResponseEntity<String> DeleteAudit(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(auditService.DeleteAudit(id));
+        return ResponseEntity.status(HttpStatus.OK).body(auditService.deleteAudit(id));
 
     }
     @GetMapping("getAudit/{id}")

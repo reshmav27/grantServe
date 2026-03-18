@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.GrantApplicationDto;
+import com.cts.grantserve.dto.GrantApplicationDto;
 import com.cts.grantserve.entity.GrantApplication;
 
 import java.util.Optional;

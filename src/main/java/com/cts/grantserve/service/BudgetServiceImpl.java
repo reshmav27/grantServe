@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.BudgetDto;
+import com.cts.grantserve.dto.BudgetDto;
 import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.exception.BudgetNotFoundException;
@@ -11,7 +11,6 @@ import com.cts.grantserve.repository.ProgramRepository;
 
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.ComplianceRecordDto;
+import com.cts.grantserve.dto.ComplianceRecordDto;
 import com.cts.grantserve.entity.ComplianceRecord;
 import com.cts.grantserve.enums.ComplianceResult;
-import com.cts.grantserve.service.ComplianceRecordService;
+import com.cts.grantserve.service.ComplianceRecordServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,14 @@ import java.util.Locale;
 @RequestMapping("/GrantServe")
 public class ComplianceRecordController {
     @Autowired
-    ComplianceRecordService complianceRecordService;
+    ComplianceRecordServiceImpl complianceRecordService;
     @PostMapping("/createComplianceRecord")
     public ResponseEntity<String> createComplianceRecord(@Valid @RequestBody ComplianceRecordDto complianceRecord){
         return ResponseEntity.status(HttpStatus.CREATED).body(complianceRecordService.createComplianceRecord(complianceRecord));
     }
     @DeleteMapping("/DeleteComplianceRecord/{id}")
     public ResponseEntity<String> DeleteComplianceRecord(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(complianceRecordService.DeleteComplianceRecord(id));
+        return ResponseEntity.status(HttpStatus.OK).body(complianceRecordService.deleteComplianceRecord(id));
 
     }
     @GetMapping("getComplianceRecord/{id}")
