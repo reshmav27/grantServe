@@ -12,4 +12,5 @@ public class GrantserveApplication {
 
 		System.out.println("Database tables have been created successfully by Spring Boot!");
 	}
+
 }

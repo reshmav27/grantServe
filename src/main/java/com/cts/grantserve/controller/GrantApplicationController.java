@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/GrantApplication")
 public class GrantApplicationController {
@@ -22,14 +24,17 @@ public class GrantApplicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(iGrantApplicationService.createApplication(grantApplication));
     }
     @DeleteMapping("/DeleteApplication/{id}")
-    public ResponseEntity<String> DelteApplication(@PathVariable long id){
+    public ResponseEntity<String> DeleteApplication(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.OK).body(iGrantApplicationService.DeleteApplication(id));
-
     }
     @GetMapping("getApplication/{id}")
     public ResponseEntity<GrantApplication> getApplication(@PathVariable long id) {
-        return iGrantApplicationService.getApplication(id)
-                .map(app -> ResponseEntity.ok(app))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.status(HttpStatus.OK).body(iGrantApplicationService.getApplication(id));
+    }
+    @GetMapping("/search")
+    public List<GrantApplication> search(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String title) {
+        return iGrantApplicationService.search(id, title);
     }
 }
