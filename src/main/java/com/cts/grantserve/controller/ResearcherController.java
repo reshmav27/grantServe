@@ -1,6 +1,6 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.ResearcherDto;
+import com.cts.grantserve.dto.ResearcherDto;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ResearcherException;

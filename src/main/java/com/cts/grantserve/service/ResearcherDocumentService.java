@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.ResearcherDocumentDto;
+import com.cts.grantserve.dto.ResearcherDocumentDto;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.entity.ResearcherDocument;
 import com.cts.grantserve.repository.ResearcherDocumentRepository;

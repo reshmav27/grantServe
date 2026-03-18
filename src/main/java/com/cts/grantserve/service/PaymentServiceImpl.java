@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.PaymentDto;
+import com.cts.grantserve.dto.PaymentDto;
 import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Payment;
 import com.cts.grantserve.enums.PaymentMethod;
