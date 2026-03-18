@@ -1,25 +1,34 @@
 package com.cts.grantserve.entity;
 
-import com.cts.grantserve.enums.ProgramStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import com.cts.grantserve.enums.ProgramStatus;
+
 @Entity
 public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "program_id")
     private Long programID;
+
     private String title;
     private String description;
-    private java.time.LocalDate startDate;
-    private java.time.LocalDate endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Double budget;
     private ProgramStatus status;
 
-    @OneToOne(mappedBy = "program")
+    @OneToOne(mappedBy = "program", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Budget budgetRecord;
+
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<GrantApplication> applications;
 
     public Long getProgramID() {
         return programID;
@@ -85,5 +94,11 @@ public class Program {
         this.budgetRecord = budgetRecord;
     }
 
+    public List<GrantApplication> getApplications() {
+        return applications;
+    }
 
+    public void setApplications(List<GrantApplication> applications) {
+        this.applications = applications;
+    }
 }

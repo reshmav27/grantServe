@@ -6,12 +6,13 @@ import com.cts.grantserve.repository.IProposalRepository;
 import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.entity.Proposal;
 import com.cts.grantserve.exception.ProposalException;
-import org.springframework.beans.BeanUtils;
+import com.cts.grantserve.projection.IProposalProjection;
+import com.cts.grantserve.util.ClassUtilSeparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ProposalServiceImpl implements  IProposalService {
@@ -19,20 +20,20 @@ public class ProposalServiceImpl implements  IProposalService {
     IProposalRepository proposalDao;
     @Autowired
     IGrantApplicationRepository grantApplicationRepository;
-    @Autowired
-    private GrantApplicationServiceImpl grantApplicationServiceImpl;
+
 
     public String createProposal(ProposalDto proposalDto) throws ProposalException {
-        Proposal proposal = new Proposal();
-        BeanUtils.copyProperties(proposalDto,proposal);
-        proposal.setStatus("Pending");
-        GrantApplication application = grantApplicationRepository.findById(proposalDto.getApplicationID())
+        Proposal proposal = ClassUtilSeparator.proposalUtil(proposalDto);
+
+        GrantApplication application = grantApplicationRepository.findById(proposalDto.applicationID())
                 .orElseThrow(() -> new ProposalException("Application Not found",HttpStatus.NOT_FOUND));
-        proposal.setApplication(application);
+        proposal.setGrantApplication(application);
 
-
-        proposal.setSubmittedDate(LocalDate.now());
         proposalDao.save(proposal);
         return "Created SuccessFully";
+    }
+
+    public List<IProposalProjection> getProposal(Long id){
+        return proposalDao.findProjectedById(id);
     }
 }

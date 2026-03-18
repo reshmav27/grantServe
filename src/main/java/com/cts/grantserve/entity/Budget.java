@@ -1,3 +1,4 @@
+
 package com.cts.grantserve.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -10,7 +11,7 @@ public class Budget {
     @Column(name = "budget_id")
     private Long budgetID;
 
-    private Double allocatedAmount;
+    private Double allocateAmount;
     private Double spentAmount;
     private Double remainingAmount;
     private String status;
@@ -37,11 +38,11 @@ public class Budget {
     }
 
     public Double getAllocatedAmount() {
-        return allocatedAmount;
+        return allocateAmount;
     }
 
     public void setAllocatedAmount(Double allocatedAmount) {
-        this.allocatedAmount = allocatedAmount;
+        this.allocateAmount = allocatedAmount;
     }
 
     public Double getSpentAmount() {

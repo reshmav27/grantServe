@@ -3,7 +3,6 @@ import com.cts.grantserve.enums.Result;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 public class Evaluation {
