@@ -1,12 +1,13 @@
 package com.cts.grantserve.controller;
 
+import com.cts.grantserve.DTO.ReviewDto;
 import com.cts.grantserve.entity.Review;
-import com.cts.grantserve.service.ReviewService;
+import com.cts.grantserve.service.IReviewService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -14,17 +15,25 @@ import java.util.List;
 public class ReviewController {
 
     @Autowired
-    ReviewService reviewService;
+    private IReviewService reviewService;
 
-    // For the Dashboard: Get all reviews assigned to a specific Reviewer
-    @GetMapping("/getAssignedReviews/{reviewerId}")
-    public ResponseEntity<List<Review>> getAssignedReviews(@PathVariable long reviewerId) {
-        return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReviewsByReviewer(reviewerId));
+    @PostMapping("/assign")
+    public ResponseEntity<String> assign(@Valid @RequestBody ReviewDto reviewDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.assignReviewer(reviewDto));
     }
 
-    // Get specific review details by ID
-    @GetMapping("/getReview/{id}")
-    public ResponseEntity<Review> getReview(@PathVariable long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReviewById(id));
+    @GetMapping("/dashboard/{reviewerId}")
+    public ResponseEntity<List<Review>> getDashboard(@PathVariable long reviewerId) {
+        return ResponseEntity.ok(reviewService.getReviewsByReviewer(reviewerId));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@PathVariable long id, @Valid @RequestBody ReviewDto reviewDto) {
+        return ResponseEntity.ok(reviewService.updateReview(id, reviewDto));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable long id) {
+        return ResponseEntity.ok(reviewService.deleteReview(id));
     }
 }
