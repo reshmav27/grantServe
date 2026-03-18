@@ -14,11 +14,15 @@ public class ResearcherDocument {
     private Long documentID;
 
     @ManyToOne
-    @JoinColumn(name = "researcherID")
+    @JoinColumn(name = "researcher_id")
     private Researcher researcher;
 
     @Enumerated(EnumType.STRING)
     private DocType docType;
+
+    private String fileURI;
+    private java.time.LocalDateTime uploadedDate;
+    private String verificationStatus;
 
     public Long getDocumentID() {
         return documentID;
@@ -67,8 +71,4 @@ public class ResearcherDocument {
     public void setVerificationStatus(String verificationStatus) {
         this.verificationStatus = verificationStatus;
     }
-
-    private String fileURI;
-    private java.time.LocalDateTime uploadedDate;
-    private String verificationStatus;
 }

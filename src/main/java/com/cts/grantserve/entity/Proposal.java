@@ -12,7 +12,7 @@ public class Proposal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long proposalID;
-//    private Long applicationID;
+    //    private Long applicationID;
     private String fileURI;
     private LocalDateTime submittedDate;
     private String status;

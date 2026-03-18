@@ -9,6 +9,16 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewID;
 
+    @ManyToOne
+    @JoinColumn(name = "proposalID")
+    private Proposal proposal;
+
+    private Long reviewerID; // Linked to User.userID
+    private Integer score;
+    private String comments;
+    private java.time.LocalDate date;
+    private String status;
+
     public Long getReviewID() {
         return reviewID;
     }
@@ -65,13 +75,5 @@ public class Review {
         this.status = status;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "proposalID")
-    private Proposal proposal;
 
-    private Long reviewerID; // Linked to User.userID
-    private Integer score;
-    private String comments;
-    private java.time.LocalDate date;
-    private String status;
 }

@@ -1,32 +1,24 @@
 package com.cts.grantserve.entity;
 
+import com.cts.grantserve.enums.AuditScope;
+import com.cts.grantserve.enums.AuditStatus;
 import jakarta.persistence.*;
 
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 public class Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auditID;
-    @ManyToOne
-    @JoinColumn(name = "officerID", referencedColumnName = "userID")
-    private User officer;
+    private Long officerID;
 
-    public User getOfficer() {
-        return officer;
-    }
-
-    public void setOfficer(User officer) {
-        this.officer = officer;
-    }
-
-    private String scope;
+    @Enumerated(EnumType.STRING)
+    private AuditScope scope;
     private String findings;
     private java.time.LocalDate date;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AuditStatus status;
 
     public Long getAuditID() {
         return auditID;
@@ -36,12 +28,19 @@ public class Audit {
         this.auditID = auditID;
     }
 
+    public Long getOfficerID() {
+        return officerID;
+    }
 
-    public String getScope() {
+    public void setOfficerID(Long officerID) {
+        this.officerID = officerID;
+    }
+
+    public AuditScope getScope() {
         return scope;
     }
 
-    public void setScope(String scope) {
+    public void setScope(AuditScope scope) {
         this.scope = scope;
     }
 
@@ -61,12 +60,11 @@ public class Audit {
         this.date = date;
     }
 
-    public String getStatus() {
+    public AuditStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AuditStatus status) {
         this.status = status;
     }
 }
-

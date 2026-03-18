@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -66,5 +68,33 @@ public class GlobalException {
     public ResponseEntity<String> handleBudgetClosedException(BudgetClosedException ex) {
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
+
+    @ExceptionHandler(DisbursementException.class)
+    public ResponseEntity<String> disbursementExceptionHandler(DisbursementException d) {
+        return ResponseEntity.status(d.getHttpStatus()).body(d.getMessage());
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<String> paymentExceptionHandler(PaymentException p) {
+        return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
+    }
+
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<Object> handleReviewNotFound(ReviewNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EvaluationNotFoundException.class)
+    public ResponseEntity<Object> handleEvaluationNotFound(EvaluationNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
 
 }
