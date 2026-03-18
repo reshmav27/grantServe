@@ -10,25 +10,24 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Data
-public class AuditDto {
+public record AuditDto (
 
-    private Long auditID;
+    Long auditID,
 
     @NotNull(message = "Officer ID is mandatory")
-    private Long officerID;
+    Long officerID,
 
     @NotNull(message = "Audit scope is mandatory")
-    private AuditScope scope;
+    AuditScope scope,
 
     @NotBlank(message = "Findings cannot be empty")
     @Size(max = 2000, message = "Findings must not exceed 2000 characters")
-    private String findings;
+    String findings,
 
     @NotNull(message = "Date is mandatory")
     @PastOrPresent(message = "Audit date cannot be in the future")
-    private LocalDate date;
+    LocalDate date,
 
     @NotNull(message = "Audit status is mandatory")
-    private AuditStatus status;
-}
+    AuditStatus status
+    ){}
