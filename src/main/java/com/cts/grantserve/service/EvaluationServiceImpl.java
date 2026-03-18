@@ -22,12 +22,12 @@ public class EvaluationServiceImpl implements IEvaluationService {
     @Override
     public String createEvaluation(EvaluationDto evaluationDto) {
         Evaluation eval = new Evaluation();
-        GrantApplication app = applicationRepository.findById(evaluationDto.getApplicationID())
+        GrantApplication app = applicationRepository.findById(evaluationDto.applicationID())
                 .orElseThrow(() -> new RuntimeException("Application not found"));
         eval.setApplication(app);
-        eval.setResult(evaluationDto.getResult());
-        eval.setDate(evaluationDto.getDate());
-        eval.setNotes(evaluationDto.getNotes());
+        eval.setResult(evaluationDto.result());
+        eval.setDate(evaluationDto.date());
+        eval.setNotes(evaluationDto.notes());
         evaluationRepository.save(eval);
         return "Evaluation submitted successfully";
     }

@@ -1,6 +1,6 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.BudgetDto;
+import com.cts.grantserve.dto.BudgetDto;
 import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.exception.BudgetNotFoundException;
 import com.cts.grantserve.exception.ProgramNotFoundException;

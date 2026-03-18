@@ -25,7 +25,7 @@ public class ProposalServiceImpl implements  IProposalService {
     public String createProposal(ProposalDto proposalDto) throws ProposalException {
         Proposal proposal = ClassUtilSeparator.proposalUtil(proposalDto);
 
-        GrantApplication application = grantApplicationRepository.findById(proposalDto.getApplicationID())
+        GrantApplication application = grantApplicationRepository.findById(proposalDto.applicationID())
                 .orElseThrow(() -> new ProposalException("Application Not found",HttpStatus.NOT_FOUND));
         proposal.setGrantApplication(application);
 
