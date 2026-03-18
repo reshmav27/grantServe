@@ -57,4 +57,14 @@ public class GlobalException {
         // Returns a 400 Bad Request with the custom message
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
+
+    @ExceptionHandler(DisbursementException.class)
+    public ResponseEntity<String> disbursementExceptionHandler(DisbursementException d) {
+        return ResponseEntity.status(d.getHttpStatus()).body(d.getMessage());
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<String> paymentExceptionHandler(PaymentException p) {
+        return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
+    }
 }
