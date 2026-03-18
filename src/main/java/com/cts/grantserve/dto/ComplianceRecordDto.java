@@ -9,24 +9,22 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Data
-public class ComplianceRecordDto {
-    private Long complianceID;
+public record ComplianceRecordDto (
+    Long complianceID,
 
     @NotNull(message = "Entity ID is mandatory and cannot be null")
-    private Long entityID;
+    Long entityID,
 
     @NotNull(message = "Compliance type is required")
-    private ComplianceType type;
+    ComplianceType type,
 
     @NotNull(message = "Compliance result is required")
-    private ComplianceResult result;
+    ComplianceResult result,
 
     @NotNull(message = "Date is mandatory")
     @PastOrPresent(message = "Compliance check date cannot be in the future")
-    private LocalDate date;
+    LocalDate date,
 
     @Size(max = 500, message = "Notes must not exceed 500 characters")
-    private String notes;
-
-}
+    String notes
+    ){}
