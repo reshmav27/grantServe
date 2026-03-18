@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GrantserveApplication {
+public class GrangtserveApplication {
 
 	public static void main(String[] args) {
 		// This is the ONLY line needed to start Spring and Hibernate
