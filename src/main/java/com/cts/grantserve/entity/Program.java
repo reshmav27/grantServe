@@ -20,6 +20,7 @@ public class Program {
     private LocalDate startDate;
     private LocalDate endDate;
     private Double budget;
+    @Enumerated(EnumType.STRING)
     private ProgramStatus status;
 
     @OneToOne(mappedBy = "program", cascade = CascadeType.ALL)
