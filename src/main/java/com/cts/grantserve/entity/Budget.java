@@ -1,5 +1,6 @@
 package com.cts.grantserve.entity;
 
+import com.cts.grantserve.enums.BudgetStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -13,7 +14,7 @@ public class Budget {
     private Double allocatedAmount;
     private Double spentAmount;
     private Double remainingAmount;
-    private String status;
+    private BudgetStatus status;
 
     @OneToOne
     @JoinColumn(name = "program_id")
@@ -60,11 +61,11 @@ public class Budget {
         this.remainingAmount = remainingAmount;
     }
 
-    public String getStatus() {
+    public BudgetStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(BudgetStatus status) {
         this.status = status;
     }
 }
