@@ -1,7 +1,7 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.BudgetDto;
-import com.cts.grantserve.DTO.ProgramDto;
+import com.cts.grantserve.dto.BudgetDto;
+import com.cts.grantserve.dto.ProgramDto;
 import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.enums.ProgramStatus;

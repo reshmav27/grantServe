@@ -1,4 +1,4 @@
-package com.cts.grantserve.DTO;
+package com.cts.grantserve.dto;
 
 import com.cts.grantserve.enums.ProgramStatus;
 import jakarta.validation.constraints.NotBlank;

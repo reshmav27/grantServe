@@ -1,9 +1,8 @@
 package com.cts.grantserve.entity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +12,53 @@ public class GrantApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationID;
 
-    private String researcherID;
+    public Researcher getResearcher() {
+        return researcher;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "programID")
-    @JsonBackReference
-    private Program program;
+    public void setResearcher(Researcher researcher) {
+        this.researcher = researcher;
+    }
 
-    private String title;
-    private LocalDateTime submittedDate;
-    private String status;
+    public Long getApplicationID() {
+        return applicationID;
+    }
 
-    @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Proposal> proposals= new ArrayList<>();
+    public void setApplicationID(Long applicationID) {
+        this.applicationID = applicationID;
+    }
+
+    public Program getProgram() {
+        return program;
+    }
+
+    public void setProgram(Program program) {
+        this.program = program;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public LocalDate getSubmittedDate() {
+        return submittedDate;
+    }
+
+    public void setSubmittedDate(LocalDate submittedDate) {
+        this.submittedDate = submittedDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public List<Proposal> getProposals() {
         return proposals;
@@ -36,63 +68,19 @@ public class GrantApplication {
         this.proposals = proposals;
     }
 
-    public Long getApplicationID()
-    {
-        return applicationID;
-    }
+    @ManyToOne
+    @JoinColumn(name = "researcherID")
+    private Researcher researcher;
 
-    public void setApplicationID(Long applicationID)
-    {
-        this.applicationID = applicationID;
-    }
+    @ManyToOne
+    @JoinColumn(name = "programID")
+    private Program program;
 
-    public String getResearcherID()
-    {
-        return researcherID;
-    }
+    @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Proposal> proposals= new ArrayList<>();
 
-    public void setResearcherID(String researcherID)
-    {
-        this.researcherID = researcherID;
-    }
-
-    public Program getProgram()
-    {
-        return program;
-    }
-
-    public void setProgram(Program program)
-    {
-        this.program = program;
-    }
-
-    public String getTitle()
-    {
-        return title;
-    }
-
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
-    public LocalDateTime getSubmittedDate()
-    {
-        return submittedDate;
-    }
-
-    public void setSubmittedDate(LocalDateTime submittedDate)
-    {
-        this.submittedDate = submittedDate;
-    }
-
-    public String getStatus()
-    {
-        return status;
-    }
-
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
+    private String title;
+    private java.time.LocalDate submittedDate;
+    private String status;
 }

@@ -1,6 +1,6 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.DTO.PaymentDto;
+import com.cts.grantserve.dto.PaymentDto;
 import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Payment;
 import com.cts.grantserve.enums.PaymentMethod;
@@ -28,18 +28,18 @@ public class PaymentServiceImpl implements IPaymentService {
     @Transactional
     public Payment processPayment(PaymentDto dto) {
         // Check if Disbursement exists
-        Disbursement disbursement = disbursementRepo.findById(dto.getDisbursementID())
-                .orElseThrow(() -> new PaymentException("Disbursement not found with ID: " + dto.getDisbursementID(), HttpStatus.NOT_FOUND));
+        Disbursement disbursement = disbursementRepo.findById(dto.disbursementID())
+                .orElseThrow(() -> new PaymentException("Disbursement not found with ID: " + dto.disbursementID(), HttpStatus.NOT_FOUND));
 
         // Business Rule: Check if payment already exists for this disbursement
-        paymentRepo.findByDisbursement_DisbursementID(dto.getDisbursementID())
+        paymentRepo.findByDisbursement_DisbursementID(dto.disbursementID())
                 .ifPresent(p -> {
                     throw new PaymentException("Payment already processed for this disbursement", HttpStatus.CONFLICT);
                 });
 
         Payment payment = new Payment();
         payment.setDisbursement(disbursement);
-        payment.setMethod(dto.getMethod());
+        payment.setMethod(dto.method());
         payment.setStatus("SUCCESS");
         payment.setDate(LocalDate.now());
 

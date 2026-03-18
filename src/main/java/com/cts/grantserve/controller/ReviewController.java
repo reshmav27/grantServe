@@ -1,6 +1,6 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.ReviewDto;
+import com.cts.grantserve.dto.ReviewDto;
 import com.cts.grantserve.entity.Review;
 import com.cts.grantserve.service.IReviewService;
 import jakarta.validation.Valid;

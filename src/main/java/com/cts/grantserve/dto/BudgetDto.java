@@ -1,4 +1,4 @@
-package com.cts.grantserve.DTO;
+package com.cts.grantserve.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

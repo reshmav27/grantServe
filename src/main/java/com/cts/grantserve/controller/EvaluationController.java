@@ -1,6 +1,6 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.DTO.EvaluationDto;
+import com.cts.grantserve.dto.EvaluationDto;
 import com.cts.grantserve.entity.Evaluation;
 import com.cts.grantserve.service.IEvaluationService;
 import jakarta.validation.Valid;
