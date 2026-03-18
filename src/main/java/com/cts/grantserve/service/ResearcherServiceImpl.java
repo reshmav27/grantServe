@@ -7,8 +7,11 @@ import com.cts.grantserve.projection.IResearcherProjection;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.util.ClassUtilSeparator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import com.cts.grantserve.projection.IResearcherProjection;
+
+import java.util.Optional;
 
 @Service
 public class ResearcherServiceImpl implements IResearcherService {
@@ -18,7 +21,6 @@ public class ResearcherServiceImpl implements IResearcherService {
 
     @Override
     public String createResearcher(ResearcherDto researcherDto) throws ResearcherException {
-        // Using your Util pattern for cleaner mapping
         Researcher researcher = ClassUtilSeparator.researcherRegisterUtil(researcherDto);
         researcher.setStatus("Active");
         researcherDAO.save(researcher);
@@ -27,8 +29,8 @@ public class ResearcherServiceImpl implements IResearcherService {
 
     @Override
     public IResearcherProjection fetchResearcher(Long id) throws ResearcherException {
-        // Matches your fetchUser pattern using Projections and custom Exception
-        return researcherDAO.findResearcherById(id)
+        // This resolves the error you saw in the Controller
+        return researcherDAO.findResearcherByResearcherID(id)
                 .orElseThrow(() -> new ResearcherException("Researcher not found with ID: " + id, HttpStatus.NOT_FOUND));
     }
 
@@ -42,12 +44,7 @@ public class ResearcherServiceImpl implements IResearcherService {
     }
 
     @Override
-    public String updateResearcher(Long id, ResearcherDto researcherDto) throws ResearcherException {
-        Researcher existingResearcher = researcherDAO.findById(id)
-                .orElseThrow(() -> new ResearcherException("Update failed. ID not found: " + id, HttpStatus.NOT_FOUND));
-
-        ClassUtilSeparator.researcherUpdateUtil(researcherDto, existingResearcher);
-        researcherDAO.save(existingResearcher);
-        return "Researcher Updated Successfully";
+    public Optional<Researcher> getResearcher(Long id) {
+        return researcherDAO.findById(id);
     }
 }

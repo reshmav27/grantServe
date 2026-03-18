@@ -1,6 +1,7 @@
 package com.cts.grantserve.controller;
 
 import com.cts.grantserve.dto.ResearcherDto;
+import com.cts.grantserve.projection.IResearcherProjection;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ResearcherException;
@@ -28,9 +29,10 @@ public class ResearcherController {
     }
 
     // 2. Get a Researcher by ID
+    // ResearcherController.java
     @GetMapping("/{id}")
-    public Optional<Researcher> getResearcher(@PathVariable Long id) {
-        return researcherService.getResearcher(id);
+    public IResearcherProjection getResearcher(@PathVariable Long id) throws ResearcherException {
+        return researcherService.fetchResearcher(id); // Matches service method name
     }
 
     // 3. Delete a Researcher

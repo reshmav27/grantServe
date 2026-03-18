@@ -35,7 +35,7 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
         grantApplication.setStatus("Active");
         grantApplication.setSubmittedDate(LocalDate.now());
 
-        Program program = programRepository.findById(grantApplicationDto.getProgramID())
+        Program program = programRepository.findById(grantApplicationDto.programID())
                 .orElseThrow(() -> new ProposalException("Program Not found", HttpStatus.NOT_FOUND));
         grantApplication.setProgram(program);
 

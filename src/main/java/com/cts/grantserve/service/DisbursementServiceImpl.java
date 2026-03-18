@@ -32,13 +32,13 @@ public class DisbursementServiceImpl implements IDisbursementService {
     @Transactional
     public Disbursement initiateDisbursement(DisbursementDto dto) {
         // Business Rule: Check budget before creating disbursement
-        reconcileBudget(dto.getProgramID(), dto.getAmount());
+        reconcileBudget(dto.programID(), dto.amount());
 
-        GrantApplication app = applicationRepo.findById(dto.getApplicationID())
+        GrantApplication app = applicationRepo.findById(dto.applicationID())
                 .orElseThrow(() -> new DisbursementException("Application not found", HttpStatus.NOT_FOUND));
 
         Disbursement disbursement = new Disbursement();
-        disbursement.setAmount(dto.getAmount());
+        disbursement.setAmount(dto.amount());
         disbursement.setDate(LocalDate.now());
         disbursement.setStatus("PENDING");
         disbursement.setApplication(app);

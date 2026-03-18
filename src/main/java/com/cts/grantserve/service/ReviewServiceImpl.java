@@ -22,12 +22,12 @@ public class ReviewServiceImpl implements IReviewService {
     @Override
     public String assignReviewer(ReviewDto reviewDto) {
         Review review = new Review();
-        Proposal proposal = proposalRepository.findById(reviewDto.getProposalId())
+        Proposal proposal = proposalRepository.findById(reviewDto.proposalId())
                 .orElseThrow(() -> new RuntimeException("Proposal not found"));
         review.setProposal(proposal);
-        review.setReviewerID(reviewDto.getReviewerId());
+        review.setReviewerID(reviewDto.reviewerId());
         review.setStatus("Pending");
-        review.setDate(reviewDto.getDate());
+        review.setDate(reviewDto.date());
         reviewRepository.save(review);
         return "Review assigned successfully";
     }
@@ -46,9 +46,9 @@ public class ReviewServiceImpl implements IReviewService {
     @Override
     public String updateReview(long id, ReviewDto reviewDto) {
         Review existing = getReviewById(id);
-        existing.setScore(reviewDto.getScore());
-        existing.setComments(reviewDto.getComments());
-        existing.setStatus(reviewDto.getStatus());
+        existing.setScore(reviewDto.score());
+        existing.setComments(reviewDto.comments());
+        existing.setStatus(reviewDto.status());
         reviewRepository.save(existing);
         return "Review updated successfully";
     }
