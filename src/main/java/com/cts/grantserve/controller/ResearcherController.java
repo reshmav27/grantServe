@@ -4,7 +4,6 @@ import com.cts.grantserve.dto.ResearcherDto;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ResearcherException;
-import com.cts.grantserve.service.ResearcherService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
