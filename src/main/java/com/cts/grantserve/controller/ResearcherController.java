@@ -1,10 +1,11 @@
 package com.cts.grantserve.controller;
 
 import com.cts.grantserve.dto.ResearcherDto;
+import com.cts.grantserve.projection.IResearcherProjection;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ResearcherException;
-import com.cts.grantserve.service.ResearcherService;
+import com.cts.grantserve.service.ResearcherServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class ResearcherController {
     ResearcherRepository researcherRepository; // Or use your Service if preferred
 
     @Autowired
-    ResearcherService researcherService;
+    ResearcherServiceImpl researcherService;
 
     // 1. Create/Register a Researcher
     @PostMapping("/register")
@@ -28,9 +29,10 @@ public class ResearcherController {
     }
 
     // 2. Get a Researcher by ID
+    // ResearcherController.java
     @GetMapping("/{id}")
-    public Optional<Researcher> getResearcher(@PathVariable Long id) {
-        return researcherService.getResearcher(id);
+    public IResearcherProjection getResearcher(@PathVariable Long id) throws ResearcherException {
+        return researcherService.fetchResearcher(id); // Matches service method name
     }
 
     // 3. Delete a Researcher
