@@ -8,6 +8,7 @@ import com.cts.grantserve.exception.DisbursementException;
 import com.cts.grantserve.repository.BudgetRepository;
 import com.cts.grantserve.repository.DisbursementRepository;
 import com.cts.grantserve.repository.IGrantApplicationRepository;
+import com.cts.grantserve.util.ClassUtilSeparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,14 +34,9 @@ public class DisbursementServiceImpl implements IDisbursementService {
     public Disbursement initiateDisbursement(DisbursementDto dto) {
         // Business Rule: Check budget before creating disbursement
         reconcileBudget(dto.programID(), dto.amount());
-
+        Disbursement disbursement = ClassUtilSeparator.DisbursementUtil(dto);
         GrantApplication app = applicationRepo.findById(dto.applicationID())
                 .orElseThrow(() -> new DisbursementException("Application not found", HttpStatus.NOT_FOUND));
-
-        Disbursement disbursement = new Disbursement();
-        disbursement.setAmount(dto.amount());
-        disbursement.setDate(LocalDate.now());
-        disbursement.setStatus("PENDING");
         disbursement.setApplication(app);
         return disbursementRepo.save(disbursement);
     }
