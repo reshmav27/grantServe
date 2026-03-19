@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/budgets")
+@RequestMapping("/api/v1/budgets")
 public class BudgetController {
 
     @Autowired
@@ -52,4 +52,5 @@ public class BudgetController {
         String response = budgetService.allocateAmountToResearcherByBudgetId(budgetId, allocatedAmount);
         return ResponseEntity.ok(response);
     }
+
 }

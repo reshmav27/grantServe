@@ -70,6 +70,11 @@ public class GlobalException {
         return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
     }
 
+    @ExceptionHandler(BudgetClosedException.class)
+    public ResponseEntity<String> handleBudgetClosedException(BudgetClosedException ex) {
+        return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
+    }
+
 
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<Object> handleReviewNotFound(ReviewNotFoundException ex) {
