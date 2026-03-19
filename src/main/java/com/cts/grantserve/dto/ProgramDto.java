@@ -1,7 +1,6 @@
 package com.cts.grantserve.dto;
 
 import com.cts.grantserve.enums.ProgramStatus;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -17,7 +16,7 @@ public record ProgramDto(
         String description,
 
         @NotNull(message = "Start date is required")
-        @FutureOrPresent(message = "Start date cannot be in the past")
+        @PastOrPresent(message = "Start date cannot be in the future")
         LocalDate startDate,
 
         @NotNull(message = "End date is required")
@@ -29,15 +28,13 @@ public record ProgramDto(
         @NotNull(message = "Status is required")
         ProgramStatus status
 ) {
+    // Compact constructor for validation logic
     public ProgramDto {
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
         if (budget != null && budget < 0) {
             throw new IllegalArgumentException("Budget must be a valid positive value");
-        }
-        if (budget != null && status == ProgramStatus.DRAFT && budget != 0.0) {
-            throw new IllegalArgumentException("Budget must be set to 0.0 for " + status + " programs");
         }
     }
 }

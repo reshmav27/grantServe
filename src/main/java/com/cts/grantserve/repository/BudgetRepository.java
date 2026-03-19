@@ -13,10 +13,4 @@ import java.util.Optional;
 @Repository
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
     Optional<Budget> findByProgramProgramID(Long programId);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Budget b SET b.status = com.cts.grantserve.enums.BudgetStatus.CLOSED " +
-            "WHERE b.program.programID = :programId AND b.status = com.cts.grantserve.enums.BudgetStatus.ACTIVE")
-    int updateBudgetStatusToClosed(@Param("programId") Long programId);
 }

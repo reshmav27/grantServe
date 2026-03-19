@@ -3,24 +3,19 @@ package com.cts.grantserve.service;
 import com.cts.grantserve.dto.ProgramDto;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.enums.ProgramStatus;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IProgramService {
 
-    @Transactional
-    ProgramDto createProgram(ProgramDto programDto);
+    String createProgram(ProgramDto programDto);
 
-    @Transactional
-    String updateProgram(ProgramDto programDto);
+    String updateProgram(Long id, ProgramDto programDto);
 
-    @Transactional
-    String updateProgramStatusToClosed(Long id);
+    String updateProgramStatus(Long id, ProgramStatus status);
 
     Optional<Program> getProgram(Long id);
 
     List<Program> getAllPrograms();
-
 }
