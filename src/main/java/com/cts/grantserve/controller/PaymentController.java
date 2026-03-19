@@ -21,9 +21,9 @@ public class PaymentController {
     private IPaymentService paymentService;
 
     @PostMapping("/process")
-    public ResponseEntity<Payment> process(@Valid @RequestBody PaymentDto dto) {
+    public String process(@Valid @RequestBody PaymentDto dto) {
         Payment payment = paymentService.processPayment(dto);
-        return new ResponseEntity<>(payment, HttpStatus.CREATED);
+        return "Payment processed";
     }
 
     @GetMapping("/disbursement/{disbursementId}")

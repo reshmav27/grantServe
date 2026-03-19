@@ -1,9 +1,9 @@
 package com.cts.grantserve.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 @Entity
 public class Disbursement {
     @Id
@@ -14,9 +14,10 @@ public class Disbursement {
     private String status;
     @ManyToOne
     @JoinColumn(name = "applicationID")
+    @JsonBackReference
     private GrantApplication application;
     @OneToOne(mappedBy = "disbursement", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
     private Payment payment;
 
     public Long getDisbursementID() {
