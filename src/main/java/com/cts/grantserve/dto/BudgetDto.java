@@ -1,5 +1,6 @@
 package com.cts.grantserve.dto;
 
+import com.cts.grantserve.enums.BudgetStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,7 +17,7 @@ public record BudgetDto(
         Double remainingAmount,
 
         @NotBlank(message = "Status is required")
-        String status,
+        BudgetStatus status,
 
         @NotNull(message = "Program ID is required")
         Long programId

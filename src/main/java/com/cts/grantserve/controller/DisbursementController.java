@@ -20,9 +20,9 @@ public class DisbursementController {
     private IDisbursementService disbursementService;
 
     @PostMapping("/initiate")
-    public ResponseEntity<Disbursement> initiate(@Valid @RequestBody DisbursementDto dto) {
+    public String initiate(@Valid @RequestBody DisbursementDto dto) {
         Disbursement saved = disbursementService.initiateDisbursement(dto);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        return "Disbursement initiated";
     }
 
     @GetMapping("/application/{appId}")

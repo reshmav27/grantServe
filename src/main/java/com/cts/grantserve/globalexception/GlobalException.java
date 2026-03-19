@@ -44,6 +44,11 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     @ExceptionHandler({ProgramNotFoundException.class, BudgetNotFoundException.class})
     public ResponseEntity<String> handleNotFoundException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -56,7 +61,6 @@ public class GlobalException {
 
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<String> handleInsufficientBudgetException(InsufficientFundsException ex) {
-        // Returns a 400 Bad Request with the custom message
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
 
@@ -68,6 +72,11 @@ public class GlobalException {
     @ExceptionHandler(PaymentException.class)
     public ResponseEntity<String> paymentExceptionHandler(PaymentException p) {
         return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
+    }
+
+    @ExceptionHandler(BudgetClosedException.class)
+    public ResponseEntity<String> handleBudgetClosedException(BudgetClosedException ex) {
+        return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
 
 
@@ -86,6 +95,5 @@ public class GlobalException {
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
-
 
 }
