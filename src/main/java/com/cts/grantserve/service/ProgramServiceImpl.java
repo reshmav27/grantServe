@@ -4,6 +4,7 @@ import com.cts.grantserve.dto.BudgetDto;
 import com.cts.grantserve.dto.ProgramDto;
 import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.entity.Program;
+import com.cts.grantserve.enums.BudgetStatus;
 import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProgramNotModifiableException;
@@ -27,14 +28,9 @@ public class ProgramServiceImpl implements IProgramService {
 
     @Transactional
     @Override
-    public String createProgram(ProgramDto programDto) {
+    public ProgramDto createProgram(ProgramDto programDto) {
         Program program = new Program();
-        program.setTitle(programDto.title());
-        program.setDescription(programDto.description());
-        program.setStartDate(programDto.startDate());
-        program.setEndDate(programDto.endDate());
-        program.setBudget(programDto.budget());
-        program.setStatus(programDto.status());
+        BeanUtils.copyProperties(programDto, program);
 
         Program savedProgram = programRepository.save(program);
 
@@ -42,13 +38,13 @@ public class ProgramServiceImpl implements IProgramService {
             initializeProgramBudget(savedProgram);
         }
 
-        return "Program created successfully with status: " + savedProgram.getStatus() + 
-            (savedProgram.getStatus() == ProgramStatus.ACTIVE ? " and budget initialized" : "");
+        return convertToDto(savedProgram);
     }
 
     @Transactional
     @Override
-    public String updateProgram(Long id, ProgramDto programDto) {
+    public String updateProgram(ProgramDto programDto) {
+        Long id = programDto.programID();
         Program existingProgram = programRepository.findById(id)
                 .orElseThrow(() -> new ProgramNotFoundException("Program not found with id: " + id));
 
@@ -56,26 +52,15 @@ public class ProgramServiceImpl implements IProgramService {
             throw new ProgramNotModifiableException("Update failed. Only DRAFT programs can be modified.");
         }
 
-        int rowsAffected = programRepository.updateProgramDetailsIfDraft(
-            id, 
-            programDto.title(),
-            programDto.description(),
-            programDto.startDate(),
-            programDto.endDate(),
-            programDto.budget(),
-            programDto.status()
-        );
-        if (rowsAffected == 0) {
-            Program existing = programRepository.findById(id)
-                .orElseThrow(() -> new ProgramNotFoundException("Program not found."));
-            
-            throw new ProgramNotModifiableException("Cannot update; program is already " + existing.getStatus());
-        }
+        Program updatedProgram = new Program();
+        BeanUtils.copyProperties(programDto, updatedProgram);
+
+        programRepository.save(updatedProgram);
 
         if (programDto.status() == ProgramStatus.ACTIVE) {
             Optional<Budget> existingBudget = budgetService.getBudgetByProgram(id);
             if (existingBudget.isEmpty()) {
-                initializeProgramBudget(convertToEntity(id, programDto));
+                initializeProgramBudget(updatedProgram);
             }
         }
 
@@ -85,41 +70,15 @@ public class ProgramServiceImpl implements IProgramService {
 
     @Transactional
     @Override
-    public String updateProgramStatus(Long id, ProgramStatus status) {
-        if (status == ProgramStatus.DRAFT) {
-            throw new ProgramNotModifiableException("Cannot revert to DRAFT status.");
-        }
-        if (status == ProgramStatus.CLOSED) {
-            int rowsAffected = programRepository.updateProgramStatusToClosed(id);
-            if (rowsAffected == 0) {
-                throw new ProgramNotModifiableException("Cannot close program. It is not in ACTIVE status.");
-            }
-            return "Program status updated to CLOSED successfully.";
-        }
-
-        int rowsAffected = programRepository.updateProgramStatus(id, status);
+    public String updateProgramStatusToClosed(Long id) {
+        int rowsAffected = programRepository.updateProgramStatusToClosed(id);
 
         if (rowsAffected == 0) {
-            Program existing = programRepository.findById(id)
-                    .orElseThrow(() -> new ProgramNotFoundException("Program not found with id: " + id));
-            
-            throw new ProgramNotModifiableException("Status can only be updated from DRAFT. Current status: " + existing.getStatus());
+            throw new ProgramNotModifiableException("Cannot close program. Either the program ID is Invalid or the program is already in CLOSED status.");
         }
 
-        if (status == ProgramStatus.ACTIVE) {
-            Optional<Budget> existingBudget = budgetService.getBudgetByProgram(id);
-            
-            if (existingBudget.isEmpty()) {
-                Optional<Program> updatedProgram = programRepository.findById(id);
-                if (updatedProgram.isEmpty()) {
-                    throw new ProgramNotFoundException("Program not found with id: " + id);
-                }
-                initializeProgramBudget(updatedProgram.get());
-            }
-        }
-
-        return "Program status updated to " + status + 
-            (status == ProgramStatus.ACTIVE ? " and budget initialized successfully." : " successfully.");
+        String res = budgetService.updateBudgetStatusToClosed(id);
+        return "Program status updated to CLOSED successfully. " + res;
     }
 
     @Override
@@ -132,29 +91,29 @@ public class ProgramServiceImpl implements IProgramService {
         return programRepository.findAll();
     }
 
-    private void initializeProgramBudget(Program program) {// Use the record constructor instead of setters
+    private void initializeProgramBudget(Program program) {
         BudgetDto budgetDto = new BudgetDto(
                 null,
                 program.getBudget(),
                 0.0,
                 program.getBudget(),
-                "ACTIVE",
+                BudgetStatus.ACTIVE,
                 program.getProgramID()
         );
 
         budgetService.createBudget(budgetDto);
     }
 
-    private Program convertToEntity(Long id, ProgramDto dto) {
-        Program program = new Program();
-        program.setProgramID(id);
-        program.setTitle(dto.title());
-        program.setDescription(dto.description());
-        program.setStartDate(dto.startDate());
-        program.setEndDate(dto.endDate());
-        program.setBudget(dto.budget());
-        program.setStatus(dto.status());
-        return program;
+    private ProgramDto convertToDto(Program program) {
+        return new ProgramDto(
+                program.getProgramID(),
+                program.getTitle(),
+                program.getDescription(),
+                program.getStartDate(),
+                program.getEndDate(),
+                program.getBudget(),
+                program.getStatus()
+        );
     }
 
 }

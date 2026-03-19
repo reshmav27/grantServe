@@ -1,4 +1,5 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -74,6 +75,7 @@ public class GrantApplication {
 
     @ManyToOne
     @JoinColumn(name = "programID")
+    @JsonBackReference
     private Program program;
 
     @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
