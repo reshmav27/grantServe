@@ -50,8 +50,7 @@ public class BudgetServiceImpl implements IBudgetService {
         }
         if (existingBudget.getRemainingAmount() < allocatedAmount) {
             throw new InsufficientFundsException(
-                    "Insufficient funds. Requested: " + allocatedAmount +
-                    ", Available: " + existingBudget.getRemainingAmount()
+                    "Insufficient funds."
             );
         }
 
