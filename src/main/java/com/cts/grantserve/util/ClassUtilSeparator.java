@@ -12,6 +12,9 @@ import com.cts.grantserve.entity.ResearcherDocument;
 import com.cts.grantserve.entity.User;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -58,13 +61,16 @@ public class ClassUtilSeparator {
         return  user;
     }
 
+
     public static User userRegisterUtil(UserDto userDto){
+
         User newUser = new User();
         newUser.setName(userDto.name());
         newUser.setEmail(userDto.email());
         newUser.setPhone(userDto.phone());
         newUser.setRole(userDto.role());
-        newUser.setPassword(userDto.password());
+
+
 
         return newUser;
 

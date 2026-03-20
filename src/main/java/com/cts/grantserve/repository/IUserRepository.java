@@ -24,4 +24,5 @@ public interface IUserRepository extends JpaRepository<User, Long>, JpaSpecifica
             "FROM User u WHERE u.userID = :userId")
     Optional<IUserProjection> findByUserID(@Param("userId") Long userId);
 
+    Optional<User> findByuserID(Long userID);
 }
