@@ -8,6 +8,7 @@ import com.cts.grantserve.exception.*;
 import com.cts.grantserve.repository.BudgetRepository;
 import com.cts.grantserve.repository.ProgramRepository;
 
+import com.cts.grantserve.util.ClassUtilSeparator;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -29,8 +30,7 @@ public class BudgetServiceImpl implements IBudgetService {
     @Transactional
     @Override
     public BudgetDto createBudget(BudgetDto budgetDto) {
-        Budget budget = new Budget();
-        BeanUtils.copyProperties(budgetDto, budget);
+        Budget budget = ClassUtilSeparator.budgetUtil(budgetDto);
 
         Program program = programRepository.findById(budgetDto.programId())
                 .orElseThrow(() -> new ProgramNotFoundException("Program not found"));
