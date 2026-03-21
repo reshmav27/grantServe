@@ -1,15 +1,7 @@
 package com.cts.grantserve.util;
 
-import com.cts.grantserve.dto.DisbursementDto;
-import com.cts.grantserve.dto.ProposalDto;
-import com.cts.grantserve.dto.ResearcherDocumentDto;
-import com.cts.grantserve.dto.ResearcherDto;
-import com.cts.grantserve.dto.UserDto;
-import com.cts.grantserve.entity.Disbursement;
-import com.cts.grantserve.entity.Proposal;
-import com.cts.grantserve.entity.Researcher;
-import com.cts.grantserve.entity.ResearcherDocument;
-import com.cts.grantserve.entity.User;
+import com.cts.grantserve.dto.*;
+import com.cts.grantserve.entity.*;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +38,7 @@ public class ClassUtilSeparator {
 
         return doc;
     }
+
     public static Proposal proposalUtil(ProposalDto proposalDto){
         Proposal proposal =new Proposal();
         proposal.setFileURI(proposalDto.fileURI());
@@ -73,7 +66,6 @@ public class ClassUtilSeparator {
 
 
         return newUser;
-
     }
 
     public static Disbursement DisbursementUtil(DisbursementDto disbursementDto){
@@ -84,5 +76,30 @@ public class ClassUtilSeparator {
         return disbursement;
     }
 
+    public static Program programUtil(ProgramDto programDto) {
+        Program program = new Program();
+
+        program.setProgramID(programDto.programID());
+        program.setTitle(programDto.title());
+        program.setDescription(programDto.description());
+        program.setBudget(programDto.budget());
+        program.setStartDate(programDto.startDate());
+        program.setEndDate(programDto.endDate());
+        program.setStatus(programDto.status());
+
+        return program;
+    }
+
+    public static Budget budgetUtil(BudgetDto budgetDto) {
+        Budget budget = new Budget();
+
+        budget.setBudgetID(budgetDto.budgetID());
+        budget.setStatus(budgetDto.status());
+        budget.setSpentAmount(budgetDto.spentAmount());
+        budget.setAllocatedAmount(budgetDto.allocatedAmount());
+        budget.setRemainingAmount(budgetDto.remainingAmount());
+
+        return budget;
+    }
 
 }
