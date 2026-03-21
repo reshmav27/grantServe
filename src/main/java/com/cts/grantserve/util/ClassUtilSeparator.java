@@ -1,15 +1,44 @@
 package com.cts.grantserve.util;
 
-import com.cts.grantserve.dto.ProposalDto;
-import com.cts.grantserve.dto.UserDto;
-import com.cts.grantserve.entity.Proposal;
-import com.cts.grantserve.entity.User;
+import com.cts.grantserve.dto.*;
+import com.cts.grantserve.entity.*;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 public class ClassUtilSeparator {
+
+    public static Researcher researcherRegisterUtil(ResearcherDto dto) {
+        Researcher researcher = new Researcher();
+        // Record components are accessed via name() method
+        researcher.setName(dto.name());
+        researcher.setDob(dto.dob());
+        researcher.setGender(dto.gender());
+        researcher.setInstitution(dto.institution());
+        researcher.setDepartment(dto.department());
+        researcher.setContactInfo(dto.contactInfo());
+        return researcher;
+    }
+
+    public static ResearcherDocument documentUploadUtil(ResearcherDocumentDto dto) {
+        ResearcherDocument doc = new ResearcherDocument();
+        doc.setDocType(dto.docType());
+        doc.setFileURI(dto.fileURI());
+
+        // Link the researcher using the ID from the DTO
+        Researcher researcher = new Researcher();
+        researcher.setResearcherID(dto.researcherID());
+        doc.setResearcher(researcher);
+
+        return doc;
+    }
+
     public static Proposal proposalUtil(ProposalDto proposalDto){
         Proposal proposal =new Proposal();
         proposal.setFileURI(proposalDto.fileURI());
@@ -25,15 +54,52 @@ public class ClassUtilSeparator {
         return  user;
     }
 
+
     public static User userRegisterUtil(UserDto userDto){
+
         User newUser = new User();
         newUser.setName(userDto.name());
         newUser.setEmail(userDto.email());
         newUser.setPhone(userDto.phone());
         newUser.setRole(userDto.role());
-        newUser.setPassword(userDto.password());
+
+
 
         return newUser;
-
     }
+
+    public static Disbursement DisbursementUtil(DisbursementDto disbursementDto){
+        Disbursement disbursement = new Disbursement();
+        disbursement.setAmount(disbursementDto.amount());
+        disbursement.setDate(LocalDate.now());
+        disbursement.setStatus("PENDING");
+        return disbursement;
+    }
+
+    public static Program programUtil(ProgramDto programDto) {
+        Program program = new Program();
+
+        program.setProgramID(programDto.programID());
+        program.setTitle(programDto.title());
+        program.setDescription(programDto.description());
+        program.setBudget(programDto.budget());
+        program.setStartDate(programDto.startDate());
+        program.setEndDate(programDto.endDate());
+        program.setStatus(programDto.status());
+
+        return program;
+    }
+
+    public static Budget budgetUtil(BudgetDto budgetDto) {
+        Budget budget = new Budget();
+
+        budget.setBudgetID(budgetDto.budgetID());
+        budget.setStatus(budgetDto.status());
+        budget.setSpentAmount(budgetDto.spentAmount());
+        budget.setAllocatedAmount(budgetDto.allocatedAmount());
+        budget.setRemainingAmount(budgetDto.remainingAmount());
+
+        return budget;
+    }
+
 }

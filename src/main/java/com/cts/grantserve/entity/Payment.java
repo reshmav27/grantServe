@@ -1,5 +1,6 @@
 package com.cts.grantserve.entity;
 import com.cts.grantserve.enums.PaymentMethod;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "disbursementID")
+    @JsonBackReference
     private Disbursement disbursement;
 
     @Enumerated(EnumType.STRING)

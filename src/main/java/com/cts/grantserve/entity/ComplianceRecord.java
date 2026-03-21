@@ -1,5 +1,6 @@
 package com.cts.grantserve.entity;
 
+import com.cts.grantserve.enums.ComplianceResult;
 import com.cts.grantserve.enums.ComplianceType;
 import jakarta.persistence.*;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 
 @Entity
+@Table(name="Compliance_record")
 public class ComplianceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +19,9 @@ public class ComplianceRecord {
     @Enumerated(EnumType.STRING)
     private ComplianceType type;
 
-    private String result;
+    @Enumerated(EnumType.STRING)
+    private ComplianceResult result;
+
     private java.time.LocalDate date;
     private String notes;
 
@@ -45,11 +49,11 @@ public class ComplianceRecord {
         this.type = type;
     }
 
-    public String getResult() {
+    public ComplianceResult getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(ComplianceResult result) {
         this.result = result;
     }
 

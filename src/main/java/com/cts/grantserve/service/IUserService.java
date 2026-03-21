@@ -1,6 +1,7 @@
 package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.UserDto;
+import com.cts.grantserve.entity.User;
 import com.cts.grantserve.exception.UserException;
 import com.cts.grantserve.projection.IUserProjection;
 
@@ -13,4 +14,6 @@ public interface IUserService {
     IUserProjection fetchUser(Long userId);
 
     public String updateUser(Long userId,UserDto userDto) throws UserException;
+
+    String UserLoginValidation(User user);
 }

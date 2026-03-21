@@ -3,12 +3,12 @@ package com.cts.grantserve.service;
 import com.cts.grantserve.dto.BudgetDto;
 import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.entity.Program;
-import com.cts.grantserve.exception.BudgetNotFoundException;
-import com.cts.grantserve.exception.InsufficientFundsException;
-import com.cts.grantserve.exception.ProgramNotFoundException;
+import com.cts.grantserve.enums.BudgetStatus;
+import com.cts.grantserve.exception.*;
 import com.cts.grantserve.repository.BudgetRepository;
 import com.cts.grantserve.repository.ProgramRepository;
 
+import com.cts.grantserve.util.ClassUtilSeparator;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -29,60 +29,28 @@ public class BudgetServiceImpl implements IBudgetService {
 
     @Transactional
     @Override
-    public String createBudget(BudgetDto budgetDto) {
-        Budget budget = new Budget();
-        budget.setAllocatedAmount(budgetDto.allocatedAmount());
-        budget.setSpentAmount(budgetDto.spentAmount());
-        budget.setRemainingAmount(budgetDto.remainingAmount());
-        budget.setStatus(budgetDto.status());
+    public BudgetDto createBudget(BudgetDto budgetDto) {
+        Budget budget = ClassUtilSeparator.budgetUtil(budgetDto);
 
-        Optional<Program> programOpt = programRepository.findById(budgetDto.programId());
-        if (programOpt.isEmpty()) {
-            throw new ProgramNotFoundException("Program not found with id: " + budgetDto.programId());
-        }
-        budget.setProgram(programOpt.get());
+        Program program = programRepository.findById(budgetDto.programId())
+                .orElseThrow(() -> new ProgramNotFoundException("Program not found"));
+        budget.setProgram(program);
 
-        budgetRepository.save(budget);
-        return "Budget created successfully";
+        return convertToDto(budgetRepository.save(budget));
     }
-
-//    @Transactional
-//    @Override
-//    public String updateBudget(Long id, BudgetDto budgetDto) {
-//        Optional<Budget> existingBudgetOpt = budgetRepository.findById(id);
-//        if (existingBudgetOpt.isEmpty()) {
-//            throw new BudgetNotFoundException("Budget not found with id: " + id);
-//        }
-//        Budget existingBudget = existingBudgetOpt.get();
-//        BeanUtils.copyProperties(budgetDto, existingBudget);
-//        existingBudget.setBudgetID(id); // Ensure ID is preserved
-//
-//        // Update program reference if changed
-//        if (!existingBudget.getProgram().getProgramID().equals(budgetDto.programId())) {
-//            Optional<Program> programOpt = programRepository.findById(budgetDto.programId());
-//            if (programOpt.isEmpty()) {
-//                throw new ProgramNotFoundException("Program not found with ID: " + budgetDto.programId());
-//            }
-//            existingBudget.setProgram(programOpt.get());
-//        }
-//
-//        budgetRepository.save(existingBudget);
-//        return "Budget updated successfully";
-//    }
 
     @Transactional
     @Override
     public String allocateAmountToResearcherByBudgetId(Long id, double allocatedAmount) {
-        Optional<Budget> existingBudgetOpt = budgetRepository.findById(id);
-        if (existingBudgetOpt.isEmpty()) {
-            throw new BudgetNotFoundException("Budget not found with id: " + id);
-        }
+        Budget existingBudget = budgetRepository.findById(id)
+                .orElseThrow(() -> new BudgetNotFoundException("Budget not found with id: " + id));
 
-        Budget existingBudget = existingBudgetOpt.get();
+        if (existingBudget.getStatus() == BudgetStatus.CLOSED) {
+            throw new BudgetClosedException("Budget is closed.");
+        }
         if (existingBudget.getRemainingAmount() < allocatedAmount) {
             throw new InsufficientFundsException(
-                    "Insufficient funds. Requested: " + allocatedAmount +
-                    ", Available: " + existingBudget.getRemainingAmount()
+                    "Insufficient funds."
             );
         }
 
@@ -107,4 +75,26 @@ public class BudgetServiceImpl implements IBudgetService {
     public List<Budget> getAllBudgets() {
         return budgetRepository.findAll();
     }
+
+    @Transactional
+    @Override
+    public String updateBudgetStatusToClosed(Long programId) {
+        int rowsAffected = budgetRepository.updateBudgetStatusToClosed(programId);
+        if (rowsAffected == 0) {
+            throw new ProgramNotModifiableException("Cannot close budget. Either the program ID is Invalid or the budget is already in CLOSED status.");
+        }
+        return "Budget status updated to CLOSED successfully.";
+    }
+
+    private BudgetDto convertToDto(Budget budget) {
+        return new BudgetDto(
+                budget.getBudgetID(),
+                budget.getAllocatedAmount(),
+                budget.getSpentAmount(),
+                budget.getRemainingAmount(),
+                budget.getStatus(),
+                budget.getProgram().getProgramID()
+        );
+    }
+
 }
