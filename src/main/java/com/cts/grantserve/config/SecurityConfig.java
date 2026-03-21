@@ -33,9 +33,11 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/User/register","/User/login").permitAll() // ALLOW THESE WITHOUT LOGIN
+                        .requestMatchers("/User/login","/User/register").permitAll() // ALLOW THESE WITHOUT LOGIN
+//                        .requestMatchers("/User/register").hasRole("APPLICANT")
                         .anyRequest().authenticated() // LOCK EVERYTHING ELSE
                 )
+
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -49,15 +51,17 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration){
+        return configuration.getAuthenticationManager();
+
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder());
         return provider;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration){
-        return configuration.getAuthenticationManager();
 
-    }
 }

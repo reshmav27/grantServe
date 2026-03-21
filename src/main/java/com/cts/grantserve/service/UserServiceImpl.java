@@ -54,7 +54,6 @@ public class UserServiceImpl implements IUserService {
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getUserID().toString(),user.getPassword()));
         if(authentication.isAuthenticated())
             return jwtService.generateToken(user.getUserID().toString());
-
         return "fail";
     }
 
