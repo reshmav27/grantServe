@@ -7,6 +7,7 @@ import com.cts.grantserve.enums.PaymentMethod;
 import com.cts.grantserve.exception.PaymentException;
 import com.cts.grantserve.repository.DisbursementRepository;
 import com.cts.grantserve.repository.PaymentRepository;
+import com.cts.grantserve.util.ClassUtilSeparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,17 +32,14 @@ public class PaymentServiceImpl implements IPaymentService {
         Disbursement disbursement = disbursementRepo.findById(dto.disbursementID())
                 .orElseThrow(() -> new PaymentException("Disbursement not found with ID: " + dto.disbursementID(), HttpStatus.NOT_FOUND));
 
-        // Business Rule: Check if payment already exists for this disbursement
+        // Check if payment already exists for this disbursement
         paymentRepo.findByDisbursement_DisbursementID(dto.disbursementID())
                 .ifPresent(p -> {
                     throw new PaymentException("Payment already processed for this disbursement", HttpStatus.CONFLICT);
                 });
 
-        Payment payment = new Payment();
+        Payment payment = ClassUtilSeparator.PaymentUtil(dto);
         payment.setDisbursement(disbursement);
-        payment.setMethod(dto.method());
-        payment.setStatus("SUCCESS");
-        payment.setDate(LocalDate.now());
 
         // Update Disbursement Status
         disbursement.setStatus("COMPLETED");

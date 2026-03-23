@@ -71,6 +71,7 @@ public class GrantApplication {
 
     @ManyToOne
     @JoinColumn(name = "researcherID")
+    @JsonBackReference
     private Researcher researcher;
 
     @ManyToOne

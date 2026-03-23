@@ -20,4 +20,4 @@ public interface IProposalRepository extends JpaRepository<Proposal, Long> {
             "FROM Proposal p WHERE p.proposalID = :id")
     List<IProposalProjection> findProjectedById(@Param("id") Long id);
 
-   }
+}

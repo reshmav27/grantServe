@@ -4,10 +4,12 @@ import com.cts.grantserve.dto.UserDto;
 import com.cts.grantserve.entity.User;
 import com.cts.grantserve.projection.IUserProjection;
 import com.cts.grantserve.service.IUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +29,16 @@ public class UserController {
     @GetMapping("/fetchUser/{userId}")
     public ResponseEntity<IUserProjection> fetchUser(@PathVariable Long userId){
         return ResponseEntity.status(200).body(userService.fetchUser(userId));
+    }
+
+    @PostMapping("/login")
+    public String UserLoginValidation(@RequestBody  User user){
+        return userService.UserLoginValidation(user);
+    }
+
+    @GetMapping("/csrf_token")
+    public CsrfToken getCsrfToken(HttpServletRequest request){
+        return (CsrfToken) request.getAttribute("_csrf");
     }
 
     @PutMapping("/update/{userId}")

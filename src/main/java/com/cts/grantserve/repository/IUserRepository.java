@@ -16,7 +16,13 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-    @Query("SELECT u FROM User u WHERE " +
-            "(:id IS NOT NULL AND u.userID = :id)" )
-    Optional<IUserProjection> finduserById(@Param("id") Long userId);
+    @Query("SELECT u.userID AS userID, " +
+            "u.name AS name, " +
+            "u.email AS email, " +
+            "u.role AS role, " +
+            "u.status AS status " +
+            "FROM User u WHERE u.userID = :userId")
+    Optional<IUserProjection> findByUserID(@Param("userId") Long userId);
+
+    Optional<User> findByuserID(Long userID);
 }
