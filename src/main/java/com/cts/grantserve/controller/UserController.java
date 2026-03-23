@@ -21,26 +21,14 @@ public class UserController {
     @Autowired
     IUserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto user){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(user));
-    }
-
     @GetMapping("/fetchUser/{userId}")
     public ResponseEntity<IUserProjection> fetchUser(@PathVariable Long userId){
         return ResponseEntity.status(200).body(userService.fetchUser(userId));
     }
-
-    @PostMapping("/login")
-    public String UserLoginValidation(@RequestBody  User user){
-        return userService.UserLoginValidation(user);
-    }
-
     @GetMapping("/csrf_token")
     public CsrfToken getCsrfToken(HttpServletRequest request){
         return (CsrfToken) request.getAttribute("_csrf");
     }
-
     @PutMapping("/update/{userId}")
     public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Long userId){
         return ResponseEntity.ok(userService.updateUser(userId,userDto));
