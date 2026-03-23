@@ -2,6 +2,7 @@ package com.cts.grantserve.globalexception;
 
 import com.cts.grantserve.exception.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -99,6 +100,31 @@ public class GlobalException {
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGlobalException(Exception ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "An unexpected error occurred");
+        body.put("error", ex.getMessage()); // This helps you debug in Postman!
+
+        log.error("Unexpected Error: ", ex);
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+
+        // Check if it's a unique constraint violation
+        String message = "Database error: This record (likely email) already exists.";
+        if (ex.getMostSpecificCause().getMessage().contains("user.email")) {
+            message = "The email address is already in use. Please use a different one.";
+        }
+
+        body.put("message", message);
+        log.error("Data Integrity Violation: {}", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT); // 409 Conflict is best for duplicates
     }
 
 }
