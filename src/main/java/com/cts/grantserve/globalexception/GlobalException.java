@@ -1,13 +1,12 @@
 package com.cts.grantserve.globalexception;
 
-import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.exception.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
@@ -17,6 +16,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 @ControllerAdvice
+@Slf4j
 public class GlobalException {
 
     @ExceptionHandler(ProposalException.class)
@@ -41,6 +41,7 @@ public class GlobalException {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
 
+        log.error("Validation failed: {}", errors);
         return ResponseEntity.badRequest().body(errors);
     }
 
@@ -49,18 +50,21 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-    @ExceptionHandler({ProgramNotFoundException.class, BudgetNotFoundException.class})
+    @ExceptionHandler({ ProgramNotFoundException.class, BudgetNotFoundException.class })
     public ResponseEntity<String> handleNotFoundException(RuntimeException ex) {
+        log.error("Resource not found exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(ProgramNotModifiableException.class)
     public ResponseEntity<String> handleProgramNotModifiableException(ProgramNotModifiableException ex) {
+        log.warn("Business logic violation: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<String> handleInsufficientBudgetException(InsufficientFundsException ex) {
+        log.error("Financial error - Insufficient funds: {}", ex.getMessage());
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
 
@@ -76,6 +80,7 @@ public class GlobalException {
 
     @ExceptionHandler(BudgetClosedException.class)
     public ResponseEntity<String> handleBudgetClosedException(BudgetClosedException ex) {
+        log.warn("Attempted action on closed budget: {}", ex.getMessage());
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
 
