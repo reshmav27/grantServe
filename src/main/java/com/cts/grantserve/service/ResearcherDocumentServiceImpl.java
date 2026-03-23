@@ -15,28 +15,28 @@ import java.util.Optional;
 public class ResearcherDocumentServiceImpl implements IResearcherDocumentService {
 
     @Autowired
-    private ResearcherDocumentRepository documentDAO;
+    private ResearcherDocumentRepository researcherDocumentRepository;
 
     @Override
     public String uploadDocument(ResearcherDocumentDto documentDto) throws ResearcherDocumentException {
         ResearcherDocument doc = ClassUtilSeparator.documentUploadUtil(documentDto);
         doc.setUploadedDate(LocalDateTime.now());
         doc.setVerificationStatus("Pending");
-        documentDAO.save(doc);
+        researcherDocumentRepository.save(doc);
         return "Document Uploaded Successfully";
     }
 
     @Override
     public Optional<ResearcherDocument> getDocument(Long id) {
-        return documentDAO.findById(id);
+        return researcherDocumentRepository.findById(id);
     }
 
     @Override
     public String deleteDocument(Long id) throws ResearcherDocumentException {
-        if (!documentDAO.existsById(id)) {
+        if (!researcherDocumentRepository.existsById(id)) {
             throw new ResearcherDocumentException("Document not found: " + id, HttpStatus.NOT_FOUND);
         }
-        documentDAO.deleteById(id);
+        researcherDocumentRepository.deleteById(id);
         return "Document Deleted Successfully";
     }
 }

@@ -17,34 +17,34 @@ import java.util.Optional;
 public class ResearcherServiceImpl implements IResearcherService {
 
     @Autowired
-    private ResearcherRepository researcherDAO;
+    private ResearcherRepository researcherRepository ;
 
     @Override
     public String createResearcher(ResearcherDto researcherDto) throws ResearcherException {
         Researcher researcher = ClassUtilSeparator.researcherRegisterUtil(researcherDto);
         researcher.setStatus("Active");
-        researcherDAO.save(researcher);
+        researcherRepository .save(researcher);
         return "Researcher Registered Successfully";
     }
 
     @Override
     public IResearcherProjection fetchResearcher(Long id) throws ResearcherException {
         // This resolves the error you saw in the Controller
-        return researcherDAO.findResearcherByResearcherID(id)
+        return researcherRepository .findResearcherByResearcherID(id)
                 .orElseThrow(() -> new ResearcherException("Researcher not found with ID: " + id, HttpStatus.NOT_FOUND));
     }
 
     @Override
     public String deleteResearcher(Long id) throws ResearcherException {
-        if (!researcherDAO.existsById(id)) {
+        if (!researcherRepository .existsById(id)) {
             throw new ResearcherException("Cannot delete. ID not found: " + id, HttpStatus.NOT_FOUND);
         }
-        researcherDAO.deleteById(id);
+        researcherRepository .deleteById(id);
         return "Researcher Deleted Successfully";
     }
 
     @Override
     public Optional<Researcher> getResearcher(Long id) {
-        return researcherDAO.findById(id);
+        return researcherRepository .findById(id);
     }
 }
