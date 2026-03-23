@@ -18,20 +18,14 @@ public class SecutiryServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // Must be this exception
-        try {
-            Long userID = Long.parseLong(username);
 
-            User user = iUserRepository.findById(userID)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userID));
+        User user = iUserRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
-            return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getUserID().toString())
-                    .password(user.getPassword()) // Remember: this must be a BCrypt hash now!
-                    .roles(user.getRole())
-                    .build();
-
-        } catch (NumberFormatException e) {
-            throw new UsernameNotFoundException("User ID must be a numeric value");
-        }
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword()) // Remember: this must be a BCrypt hash now!
+                .roles(user.getRole())
+                .build();
     }
 }
