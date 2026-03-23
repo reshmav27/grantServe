@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record PaymentDto(
-        @NotNull(message = "Disbursement ID is required")
+        @NotNull(message = "Disbursement ID cannot be null")
         Long disbursementID,
 
-        @NotNull(message = "Payment method is required")
+        @NotNull(message = "Payment method is required (BANK or WALLET)")
         PaymentMethod method,
 
-        @NotNull
-        @Positive(message = "Payment amount must be positive")
+        @NotNull(message = "Payment amount is required")
+        @Positive(message = "Payment amount must be a positive value")
         Double amount
 ) {}

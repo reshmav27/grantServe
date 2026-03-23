@@ -19,6 +19,7 @@ public class Researcher {
     private String contactInfo;
 
     @OneToMany(mappedBy = "researcher", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ResearcherDocument> documents; // One researcher has many docs [cite: 1, 85]
 
     @OneToMany(mappedBy = "researcher")

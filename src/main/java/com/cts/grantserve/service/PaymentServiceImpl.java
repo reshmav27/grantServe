@@ -4,6 +4,7 @@ import com.cts.grantserve.dto.PaymentDto;
 import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Payment;
 import com.cts.grantserve.enums.PaymentMethod;
+import com.cts.grantserve.exception.DisbursementException;
 import com.cts.grantserve.exception.PaymentException;
 import com.cts.grantserve.repository.DisbursementRepository;
 import com.cts.grantserve.repository.PaymentRepository;
@@ -28,6 +29,9 @@ public class PaymentServiceImpl implements IPaymentService {
     @Override
     @Transactional
     public Payment processPayment(PaymentDto dto) {
+        if (dto.method() != PaymentMethod.BANK && dto.method() != PaymentMethod.WALLET) {
+            throw new DisbursementException("Invalid method! Use BANK or WALLET", HttpStatus.NOT_ACCEPTABLE);
+        }
         // Check if Disbursement exists
         Disbursement disbursement = disbursementRepo.findById(dto.disbursementID())
                 .orElseThrow(() -> new PaymentException("Disbursement not found with ID: " + dto.disbursementID(), HttpStatus.NOT_FOUND));
