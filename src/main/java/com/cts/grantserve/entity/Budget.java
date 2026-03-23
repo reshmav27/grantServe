@@ -1,18 +1,21 @@
-
 package com.cts.grantserve.entity;
 
 import com.cts.grantserve.enums.BudgetStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "budget_id")
     private Long budgetID;
 
-    private Double allocateAmount;
+    private Double allocatedAmount;
     private Double spentAmount;
     private Double remainingAmount;
 
@@ -24,51 +27,4 @@ public class Budget {
     @JsonBackReference
     private Program program;
 
-    public Long getBudgetID() {
-        return budgetID;
-    }
-
-    public void setBudgetID(Long budgetID) {
-        this.budgetID = budgetID;
-    }
-
-    public Program getProgram() {
-        return program;
-    }
-
-    public void setProgram(Program program) {
-        this.program = program;
-    }
-
-    public Double getAllocatedAmount() {
-        return allocateAmount;
-    }
-
-    public void setAllocatedAmount(Double allocatedAmount) {
-        this.allocateAmount = allocatedAmount;
-    }
-
-    public Double getSpentAmount() {
-        return spentAmount;
-    }
-
-    public void setSpentAmount(Double spentAmount) {
-        this.spentAmount = spentAmount;
-    }
-
-    public Double getRemainingAmount() {
-        return remainingAmount;
-    }
-
-    public void setRemainingAmount(Double remainingAmount) {
-        this.remainingAmount = remainingAmount;
-    }
-
-    public BudgetStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BudgetStatus status) {
-        this.status = status;
-    }
 }
