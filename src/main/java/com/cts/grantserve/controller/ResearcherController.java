@@ -23,9 +23,12 @@ public class ResearcherController {
     ResearcherServiceImpl researcherService;
 
     // 1. Create/Register a Researcher
-    @PostMapping("/register")
-    public String register(@Valid @RequestBody ResearcherDto researcherDto) throws ResearcherException {
-        return researcherService.createResearcher(researcherDto);
+    @PutMapping("/Update/{id}")
+    public String updateResearcher(
+            @PathVariable Long id,
+            @Valid @RequestBody ResearcherDto researcherDto
+    ) throws ResearcherException {
+        return researcherService.UpdateResearcher(id, researcherDto);
     }
 
     // 2. Get a Researcher by ID

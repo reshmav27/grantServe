@@ -4,9 +4,6 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 public record ResearcherDto(
-        @NotBlank(message = "Name is required")
-        @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
-        String name,
 
         @NotNull(message = "Date of birth is required")
         @Past(message = "Date of birth must be in the past")
@@ -20,9 +17,6 @@ public record ResearcherDto(
         String institution,
 
         @NotBlank(message = "Department is required")
-        String department,
+        String department
 
-        @NotBlank(message = "Contact information is required")
-        @Email(message = "Please provide a valid email address")
-        String contactInfo
 ) {}
