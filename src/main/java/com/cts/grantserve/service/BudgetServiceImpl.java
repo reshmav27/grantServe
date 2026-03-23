@@ -11,7 +11,7 @@ import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.util.ClassUtilSeparator;
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.BeanUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class BudgetServiceImpl implements IBudgetService {
 
     @Autowired
@@ -42,6 +43,7 @@ public class BudgetServiceImpl implements IBudgetService {
     @Transactional
     @Override
     public String allocateAmountToResearcherByBudgetId(Long id, double allocatedAmount) {
+        log.info("Attempting to allocate {} to budget ID: {}", allocatedAmount, id);
         Budget existingBudget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Budget not found with id: " + id));
 
@@ -58,6 +60,7 @@ public class BudgetServiceImpl implements IBudgetService {
         existingBudget.setRemainingAmount(existingBudget.getRemainingAmount() - allocatedAmount);
 
         budgetRepository.save(existingBudget);
+        log.info("Allocation successful. New remaining amount: {}", existingBudget.getRemainingAmount());
         return "Amount allocated to researcher successfully";
     }
 
@@ -79,10 +82,14 @@ public class BudgetServiceImpl implements IBudgetService {
     @Transactional
     @Override
     public String updateBudgetStatusToClosed(Long programId) {
+        log.info("Attempting to close budget for Program ID: {}", programId);
+
         int rowsAffected = budgetRepository.updateBudgetStatusToClosed(programId);
         if (rowsAffected == 0) {
             throw new ProgramNotModifiableException("Cannot close budget. Either the program ID is Invalid or the budget is already in CLOSED status.");
         }
+
+        log.info("Budget for Program ID: {} successfully updated to CLOSED status.", programId);
         return "Budget status updated to CLOSED successfully.";
     }
 
