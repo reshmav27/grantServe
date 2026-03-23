@@ -11,7 +11,7 @@ public record PaymentDto(
         @NotNull(message = "Payment method is required")
         PaymentMethod method,
 
-        @NotNull
-        @Positive(message = "Payment amount must be positive")
+        @NotNull @Positive(message = "Amount must be positive")
         Double amount
-) {}
+) {
+}

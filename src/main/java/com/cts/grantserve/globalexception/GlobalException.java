@@ -24,6 +24,7 @@ public class GlobalException {
         return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
     }
 
+
     @ExceptionHandler(GrantApplicationException.class)
     public ResponseEntity<String> GrantApplicationExceptionHandler(GrantApplicationException g){
         return ResponseEntity.status(g.getHttpStatus()).body(g.getMessage());
@@ -99,6 +100,21 @@ public class GlobalException {
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handlePaymentMethodEnumError(org.springframework.http.converter.HttpMessageNotReadableException ex) {
+        String errorMsg = ex.getMessage();
+
+        // Only trigger if the error is about the PaymentMethod enum
+        if (errorMsg != null && errorMsg.contains("com.cts.grantserve.enums.PaymentMethod")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid payment method. Only BANK or WALLET are accepted.");
+        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Please check your request format.");
     }
 
 }
