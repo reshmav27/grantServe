@@ -75,6 +75,13 @@ public class ClassUtilSeparator {
         disbursement.setStatus("PENDING");
         return disbursement;
     }
+    public static Payment PaymentUtil(PaymentDto paymentDto){
+        Payment payment=new Payment();
+        payment.setMethod(paymentDto.method());
+        payment.setStatus("SUCCESS");
+        payment.setDate(LocalDate.now());
+        return payment;
+    }
 
     public static Program programUtil(ProgramDto programDto) {
         Program program = new Program();
