@@ -9,8 +9,8 @@ import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProgramNotModifiableException;
 import com.cts.grantserve.repository.ProgramRepository;
+import com.cts.grantserve.util.ClassUtilSeparator;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +29,7 @@ public class ProgramServiceImpl implements IProgramService {
     @Transactional
     @Override
     public ProgramDto createProgram(ProgramDto programDto) {
-        Program program = new Program();
-        BeanUtils.copyProperties(programDto, program);
+        Program program = ClassUtilSeparator.programUtil(programDto);
 
         Program savedProgram = programRepository.save(program);
 
@@ -52,8 +51,7 @@ public class ProgramServiceImpl implements IProgramService {
             throw new ProgramNotModifiableException("Update failed. Only DRAFT programs can be modified.");
         }
 
-        Program updatedProgram = new Program();
-        BeanUtils.copyProperties(programDto, updatedProgram);
+        Program updatedProgram = ClassUtilSeparator.programUtil(programDto);
 
         programRepository.save(updatedProgram);
 
