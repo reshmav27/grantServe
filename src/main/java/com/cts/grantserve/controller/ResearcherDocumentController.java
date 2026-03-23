@@ -8,16 +8,21 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/documents")
 public class ResearcherDocumentController {
 
-
-
     @Autowired
     private IResearcherDocumentService researcherDocumentService; // Use the Interface
+
+    // Add this to your existing ResearcherDocumentController
+    @GetMapping("/all")
+    public List<ResearcherDocument> getAllDocuments() {
+        return researcherDocumentService.getAllDocuments();
+    }
 
     @PostMapping("/upload")
     public String upload(@Valid @RequestBody ResearcherDocumentDto documentDto) throws ResearcherDocumentException {
@@ -29,8 +34,10 @@ public class ResearcherDocumentController {
         return researcherDocumentService.getDocument(id);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) throws ResearcherDocumentException {
-        return researcherDocumentService.deleteDocument(id);
+    @DeleteMapping("/delete/{researcherId}/{documentId}")
+    public String delete(
+            @PathVariable Long researcherId,
+            @PathVariable Long documentId) throws ResearcherDocumentException {
+        return researcherDocumentService.deleteDocument(researcherId, documentId);
     }
 }

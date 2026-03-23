@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import com.cts.grantserve.projection.IResearcherProjection;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +47,10 @@ public class ResearcherServiceImpl implements IResearcherService {
     @Override
     public Optional<Researcher> getResearcher(Long id) {
         return researcherRepository .findById(id);
+    }
+
+    @Override
+    public List<Researcher> getAllResearchers() {
+        return researcherRepository.findAll();
     }
 }

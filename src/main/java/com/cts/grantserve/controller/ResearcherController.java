@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +22,12 @@ public class ResearcherController {
 
     @Autowired
     ResearcherServiceImpl researcherService;
+
+    // Add this to your existing ResearcherController
+    @GetMapping("/all")
+    public List<Researcher> getAllResearchers() {
+        return researcherService.getAllResearchers();
+    }
 
     // 1. Create/Register a Researcher
     @PostMapping("/register")

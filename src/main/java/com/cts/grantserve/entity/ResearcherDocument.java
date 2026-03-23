@@ -2,6 +2,8 @@ package com.cts.grantserve.entity;
 
 
 import com.cts.grantserve.enums.DocType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
     import java.time.LocalDate;
@@ -14,6 +16,7 @@ public class ResearcherDocument {
     private Long documentID;
 
     @ManyToOne
+    @JsonIgnoreProperties("documents")
     @JoinColumn(name = "researcher_id")
     private Researcher researcher;
 
