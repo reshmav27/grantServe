@@ -40,4 +40,12 @@ public class AuditServiceImpl implements IAuditService{
     public List<Audit> getAuditByStatus(AuditStatus status) {
         return auditRepository.findByStatus(status);
     }
+
+    @Override
+    public Optional<Audit> updateAuditStatus(int id, AuditStatus status) {
+        return auditRepository.findById((long)id).map(audit -> {
+            audit.setStatus(status);
+            return auditRepository.save(audit);
+        });
+    }
 }

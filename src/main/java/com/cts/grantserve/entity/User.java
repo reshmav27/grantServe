@@ -23,8 +23,6 @@ public class User {
         this.password = password;
     }
 
-
-
     public Long getUserID() {
         return userID;
     }

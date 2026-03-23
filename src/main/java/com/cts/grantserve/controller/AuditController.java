@@ -40,6 +40,16 @@ public class AuditController {
         return ResponseEntity.ok(auditService.getAuditByStatus(enumValue));
     }
 
+    @PatchMapping("/audits/{id}/status")
+    public ResponseEntity<Audit> updateAuditStatus(
+            @PathVariable int id,
+            @Valid @RequestBody Audit audit
+    ) {
+        return auditService.updateAuditStatus(id, audit.getStatus())
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Audit not found with id " + id));
+    }
+
     private AuditStatus toAuditStatus(String value) {
         try {
             return AuditStatus.valueOf(value.toUpperCase(Locale.ROOT));
