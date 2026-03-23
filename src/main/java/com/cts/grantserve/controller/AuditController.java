@@ -40,7 +40,7 @@ public class AuditController {
         return ResponseEntity.ok(auditService.getAuditByStatus(enumValue));
     }
 
-    @PatchMapping("/audits/{id}/status")
+    @PatchMapping("/updateStatus/{id}")
     public ResponseEntity<Audit> updateAuditStatus(
             @PathVariable int id,
             @Valid @RequestBody Audit audit
