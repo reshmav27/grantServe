@@ -11,6 +11,7 @@ import com.cts.grantserve.exception.ProgramNotModifiableException;
 import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.util.ClassUtilSeparator;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProgramServiceImpl implements IProgramService {
 
     @Autowired
@@ -29,11 +31,13 @@ public class ProgramServiceImpl implements IProgramService {
     @Transactional
     @Override
     public ProgramDto createProgram(ProgramDto programDto) {
+        log.debug("Mapping DTO to Entity for program: {}", programDto.title());
         Program program = ClassUtilSeparator.programUtil(programDto);
 
         Program savedProgram = programRepository.save(program);
 
         if (savedProgram.getStatus() == ProgramStatus.ACTIVE) {
+            log.info("Program {} is ACTIVE. Initializing budget record.", savedProgram.getProgramID());
             initializeProgramBudget(savedProgram);
         }
 
@@ -44,6 +48,8 @@ public class ProgramServiceImpl implements IProgramService {
     @Override
     public String updateProgram(ProgramDto programDto) {
         Long id = programDto.programID();
+        log.info("Attempting to update program with ID: {}", id);
+
         Program existingProgram = programRepository.findById(id)
                 .orElseThrow(() -> new ProgramNotFoundException("Program not found with id: " + id));
 
@@ -56,12 +62,14 @@ public class ProgramServiceImpl implements IProgramService {
         programRepository.save(updatedProgram);
 
         if (programDto.status() == ProgramStatus.ACTIVE) {
+            log.info("Program {} updated to ACTIVE. Checking for budget initialization.", id);
             Optional<Budget> existingBudget = budgetService.getBudgetByProgram(id);
             if (existingBudget.isEmpty()) {
                 initializeProgramBudget(updatedProgram);
             }
         }
 
+        log.info("Program {} successfully updated to status: {}", id, programDto.status());
         return "Program updated successfully with status: " + programDto.status() +
             (programDto.status() == ProgramStatus.ACTIVE ? " and budget activated." : ".");
     }
@@ -69,13 +77,19 @@ public class ProgramServiceImpl implements IProgramService {
     @Transactional
     @Override
     public String updateProgramStatusToClosed(Long id) {
+        log.info("Request received to CLOSE program ID: {}", id);
+
         int rowsAffected = programRepository.updateProgramStatusToClosed(id);
 
         if (rowsAffected == 0) {
             throw new ProgramNotModifiableException("Cannot close program. Either the program ID is Invalid or the program is already in CLOSED status.");
         }
 
+        log.info("Program ID: {} marked as CLOSED in repository. Proceeding to close associated budget.", id);
+
         String res = budgetService.updateBudgetStatusToClosed(id);
+
+        log.info("Program and Budget for ID: {} successfully CLOSED.", id);
         return "Program status updated to CLOSED successfully. " + res;
     }
 
