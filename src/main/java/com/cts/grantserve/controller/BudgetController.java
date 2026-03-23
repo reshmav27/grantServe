@@ -1,24 +1,17 @@
 package com.cts.grantserve.controller;
 
-import com.cts.grantserve.dto.BudgetDto;
 import com.cts.grantserve.entity.Budget;
-import com.cts.grantserve.exception.BudgetNotFoundException;
-import com.cts.grantserve.exception.ProgramNotFoundException;
-import com.cts.grantserve.exception.ProgramNotModifiableException;
 import com.cts.grantserve.service.IBudgetService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/budgets")
+@Slf4j
 public class BudgetController {
 
     @Autowired
@@ -49,7 +42,9 @@ public class BudgetController {
     // Update a budget's allocation
     @PatchMapping("/{budgetId}")
     public ResponseEntity<String> allocateFundToResearcher(@PathVariable Long budgetId, @RequestParam Double allocatedAmount) {
+        log.info("Received request to allocate funds. Budget ID: {}, Amount: {}", budgetId, allocatedAmount);
         String response = budgetService.allocateAmountToResearcherByBudgetId(budgetId, allocatedAmount);
+        log.info("Successfully processed allocation for Budget ID: {}", budgetId);
         return ResponseEntity.ok(response);
     }
 

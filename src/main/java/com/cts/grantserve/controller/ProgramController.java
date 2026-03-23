@@ -2,9 +2,9 @@ package com.cts.grantserve.controller;
 
 import com.cts.grantserve.dto.ProgramDto;
 import com.cts.grantserve.entity.Program;
-import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.service.IProgramService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/programs")
+@Slf4j
 public class ProgramController {
 
     @Autowired
@@ -22,7 +23,9 @@ public class ProgramController {
     // Create a new program
     @PostMapping("/createProgram")
     public ResponseEntity<ProgramDto> createProgram(@Valid @RequestBody ProgramDto programDto) {
+        log.info("Received request to create a new program: {}", programDto.title());
         ProgramDto response = programService.createProgram(programDto);
+        log.info("Successfully created program with Title: {}", response.title());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
