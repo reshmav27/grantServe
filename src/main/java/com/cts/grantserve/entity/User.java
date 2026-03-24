@@ -10,10 +10,19 @@ public class User {
     private Long userID;
     private String name;
     private String role;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String phone;
     private String status;
     private String password;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Researcher researcher;
+
+    // Getter and Setter
+    public Researcher getResearcher() { return researcher; }
+    public void setResearcher(Researcher researcher) { this.researcher = researcher; }
 
     public String getPassword() {
         return password;

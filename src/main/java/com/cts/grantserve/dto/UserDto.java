@@ -25,8 +25,10 @@ public record UserDto(
         String phone,
 
         @NotBlank(message = "Role is required")
-        @Pattern(regexp = "^(ADMIN|USER|MANAGER)$",
-                message = "Invalid role selected. Must be ADMIN, USER, or MANAGER")
+        @Pattern(
+                regexp = "^(RESEARCHER|REVIEWER|MANAGER|ADMIN|COMPLIANCE|AUDITOR)$",
+                message = "Invalid role. Must be Researcher, Reviewer, Manager, Admin, Compliance, or Auditor"
+        )
         String role,
 
         @NotBlank(message = "Password is required")
