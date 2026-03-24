@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -48,6 +50,21 @@ public class ProgramController {
     public ResponseEntity<String> updateProgram(@Valid @RequestBody ProgramDto programDto) {
         String response = programService.updateProgram(programDto);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/active")
+    public List<Program> getActiveApplications(){
+        return programService.getActiveApplications(LocalDate.now());
+    }
+
+    @GetMapping("/Search")
+    public List<Program> searchProgramApplications(
+        @RequestParam(required = false) String title,
+        @RequestParam(required = false) Long id)
+    {
+        return programService.searchprogram(title,id);
+
+
     }
 
     // Close an active program

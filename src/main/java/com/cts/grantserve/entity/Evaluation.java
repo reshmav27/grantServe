@@ -1,5 +1,6 @@
 package com.cts.grantserve.entity;
 import com.cts.grantserve.enums.Result;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class Evaluation {
 
     @OneToOne
     @JoinColumn(name = "applicationID")
+    @JsonIgnore
     private GrantApplication application;
 
     @Enumerated(EnumType.STRING)
