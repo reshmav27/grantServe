@@ -33,10 +33,15 @@ public class ReviewServiceImpl implements IReviewService {
     }
 
     @Override
-    public List<Review> getReviewsByReviewer(long reviewerId) {
-        return reviewRepository.findByReviewerID(reviewerId);
-    }
 
+    public List<Review> getReviewsByReviewer(long reviewerId) {
+        List<Review> reviews = reviewRepository.findByReviewerID(reviewerId);
+        if (reviews.isEmpty()) {
+            // This will trigger your GlobalExceptionHandler
+            throw new ReviewNotFoundException("No reviews found for Reviewer ID: " + reviewerId);
+        }
+        return reviews;
+    }
     @Override
     public Review getReviewById(long id) {
         return reviewRepository.findById(id)
