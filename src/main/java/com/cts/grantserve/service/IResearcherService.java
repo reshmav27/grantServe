@@ -5,6 +5,7 @@ import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ResearcherException;
 import com.cts.grantserve.projection.IResearcherProjection;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IResearcherService {
@@ -13,4 +14,5 @@ public interface IResearcherService {
     String deleteResearcher(Long id) throws ResearcherException;
 
     Optional<Researcher> getResearcher(Long id);
+
 }
