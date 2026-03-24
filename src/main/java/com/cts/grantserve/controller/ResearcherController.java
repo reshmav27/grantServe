@@ -23,16 +23,19 @@ public class ResearcherController {
     @Autowired
     ResearcherServiceImpl researcherService;
 
-    // Add this to your existing ResearcherController
-    @GetMapping("/all")
-    public List<Researcher> getAllResearchers() {
-        return researcherService.getAllResearchers();
-    }
+//    // Add this to your existing ResearcherController
+//    @GetMapping("/all")
+//    public List<Researcher> getAllResearchers() {
+//        return researcherService.getAllResearchers();
+//    }
 
     // 1. Create/Register a Researcher
-    @PostMapping("/register")
-    public String register(@Valid @RequestBody ResearcherDto researcherDto) throws ResearcherException {
-        return researcherService.createResearcher(researcherDto);
+    @PutMapping("/Update/{id}")
+    public String updateResearcher(
+            @PathVariable Long id,
+            @Valid @RequestBody ResearcherDto researcherDto
+    ) throws ResearcherException {
+        return researcherService.UpdateResearcher(id, researcherDto);
     }
 
     // 2. Get a Researcher by ID

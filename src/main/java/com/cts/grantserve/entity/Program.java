@@ -33,7 +33,7 @@ public class Program {
     private Budget budgetRecord;
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "program-applications")
     private List<GrantApplication> applications;
 
 }

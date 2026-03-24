@@ -5,6 +5,7 @@ import com.cts.grantserve.entity.Payment;
 import com.cts.grantserve.enums.PaymentMethod;
 import com.cts.grantserve.service.IPaymentService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +16,53 @@ import java.util.List;
 @RestController
 @RequestMapping("/payments")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class PaymentController {
 
     @Autowired
     private IPaymentService paymentService;
 
     @PostMapping("/process")
-    public String process(@Valid @RequestBody PaymentDto dto) {
+    public ResponseEntity<String> process(@Valid @RequestBody PaymentDto dto) {
+        log.info("REST Request: Processing payment for Disbursement ID: {}", dto.disbursementID());
+
         Payment payment = paymentService.processPayment(dto);
-        return "Payment processed";
+
+        log.info("REST Success: Payment processed with System ID: {}", payment.getPaymentID());
+        return new ResponseEntity<>("Payment processed successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/disbursement/{disbursementId}")
     public ResponseEntity<Payment> getByDisbursement(@PathVariable Long disbursementId) {
-        return ResponseEntity.ok(paymentService.getPaymentByDisbursement(disbursementId));
+        log.info("REST Request: Fetching payment details for Disbursement ID: {}", disbursementId);
+
+        Payment payment = paymentService.getPaymentByDisbursement(disbursementId);
+        return ResponseEntity.ok(payment);
     }
 
     @GetMapping("/method/{method}")
     public ResponseEntity<List<Payment>> getByMethod(@PathVariable PaymentMethod method) {
-        return ResponseEntity.ok(paymentService.getPaymentsByMethod(method));
+        log.info("REST Request: Filtering payments by Method: {}", method);
+
+        List<Payment> payments = paymentService.getPaymentsByMethod(method);
+        log.info("REST Response: Found {} payments for method: {}", payments.size(), method);
+        return ResponseEntity.ok(payments);
+    }
+
+    @GetMapping("/researcher/{id}")
+    public ResponseEntity<List<PaymentDto>> getResearcherPayments(@PathVariable Long id) {
+        log.info("REST Request: Retrieving payment history for Researcher ID: {}", id);
+
+        List<PaymentDto> history = paymentService.getPaymentsByResearcher(id);
+        log.info("REST Response: Returning {} records for Researcher ID: {}", history.size(), id);
+        return ResponseEntity.ok(history);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Payment>> getAll() {
-        return ResponseEntity.ok(paymentService.getAllPayments());
+        log.info("REST Request: Fetching all global payment records");
+
+        List<Payment> allPayments = paymentService.getAllPayments();
+        return ResponseEntity.ok(allPayments);
     }
 }

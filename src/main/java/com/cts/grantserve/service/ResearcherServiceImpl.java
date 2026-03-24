@@ -6,51 +6,47 @@ import com.cts.grantserve.exception.ResearcherException;
 import com.cts.grantserve.projection.IResearcherProjection;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.util.ClassUtilSeparator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import com.cts.grantserve.projection.IResearcherProjection;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ResearcherServiceImpl implements IResearcherService {
 
     @Autowired
-    private ResearcherRepository researcherRepository ;
+    private ResearcherRepository researcherDAO;
 
     @Override
-    public String createResearcher(ResearcherDto researcherDto) throws ResearcherException {
-        Researcher researcher = ClassUtilSeparator.researcherRegisterUtil(researcherDto);
-        researcher.setStatus("Active");
-        researcherRepository .save(researcher);
-        return "Researcher Registered Successfully";
+    public String UpdateResearcher(Long id,ResearcherDto researcherDto) throws ResearcherException {
+        Researcher existingResearcher = researcherDAO.findById(id)
+                .orElseThrow(() -> new ResearcherException("Researcher not found with ID: " + id,HttpStatus.NOT_FOUND));
+        ClassUtilSeparator.researcherRegisterUtil(researcherDto,existingResearcher);
+        researcherDAO.save(existingResearcher);
+        return "Researcher Updated Successfully";
     }
 
     @Override
     public IResearcherProjection fetchResearcher(Long id) throws ResearcherException {
         // This resolves the error you saw in the Controller
-        return researcherRepository .findResearcherByResearcherID(id)
+        return researcherDAO.findResearcherByResearcherID(id)
                 .orElseThrow(() -> new ResearcherException("Researcher not found with ID: " + id, HttpStatus.NOT_FOUND));
     }
 
     @Override
     public String deleteResearcher(Long id) throws ResearcherException {
-        if (!researcherRepository .existsById(id)) {
+        if (!researcherDAO.existsById(id)) {
             throw new ResearcherException("Cannot delete. ID not found: " + id, HttpStatus.NOT_FOUND);
         }
-        researcherRepository .deleteById(id);
+        researcherDAO.deleteById(id);
         return "Researcher Deleted Successfully";
     }
 
     @Override
     public Optional<Researcher> getResearcher(Long id) {
-        return researcherRepository .findById(id);
-    }
-
-    @Override
-    public List<Researcher> getAllResearchers() {
-        return researcherRepository.findAll();
+        return researcherDAO.findById(id);
     }
 }
