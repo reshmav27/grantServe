@@ -27,7 +27,10 @@ public class ComplianceRecordController {
     @DeleteMapping("/DeleteComplianceRecord/{id}")
     public ResponseEntity<String> DeleteComplianceRecord(@PathVariable int id){
         return ResponseEntity.status(HttpStatus.OK).body(complianceRecordService.deleteComplianceRecord(id));
-
+    }
+    @GetMapping("/complianceRecords")
+    public ResponseEntity<?> getAllComplianceRecord() {
+        return ResponseEntity.ok(complianceRecordService.getAllComplianceRecord());
     }
     @GetMapping("getComplianceRecord/{id}")
     public ResponseEntity<ComplianceRecord> getComplianceRecord(@PathVariable int id) {
@@ -40,7 +43,6 @@ public class ComplianceRecordController {
         ComplianceResult enumValue = toComplianceResult(String.valueOf(result));
         return ResponseEntity.ok(complianceRecordService.getComplianceRecordByResult(enumValue));
     }
-
     @PatchMapping("/updateComplianceRecordResult/{id}")
     public ResponseEntity<ComplianceRecord> updateComplianceRecordResult(
             @PathVariable int id,
@@ -61,5 +63,4 @@ public class ComplianceRecordController {
             );
         }
     }
-
 }

@@ -14,6 +14,8 @@ public interface IAuditService {
 
     String deleteAudit(int id) throws AuditException;
 
+    List<Audit> getAllAudits();
+
     Optional<Audit> getAudit(int id);
 
     List<Audit> getAuditByStatus(AuditStatus status);

@@ -28,6 +28,10 @@ public class AuditController {
         return ResponseEntity.status(HttpStatus.OK).body(auditService.deleteAudit(id));
 
     }
+    @GetMapping("/audits")
+    public ResponseEntity<?> getAllAudits() {
+        return ResponseEntity.ok(auditService.getAllAudits());
+    }
     @GetMapping("/getAudit/{id}")
     public ResponseEntity<Audit> getAudit(@PathVariable int id) {
         return auditService.getAudit(id)
@@ -39,7 +43,6 @@ public class AuditController {
         AuditStatus enumValue = toAuditStatus(String.valueOf(status));
         return ResponseEntity.ok(auditService.getAuditByStatus(enumValue));
     }
-
     @PatchMapping("/updateAuditStatus/{id}")
     public ResponseEntity<Audit> updateAuditStatus(
             @PathVariable int id,

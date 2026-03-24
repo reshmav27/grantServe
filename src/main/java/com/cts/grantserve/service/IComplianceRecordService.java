@@ -1,6 +1,7 @@
 package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.ComplianceRecordDto;
+import com.cts.grantserve.entity.Audit;
 import com.cts.grantserve.entity.ComplianceRecord;
 import com.cts.grantserve.enums.ComplianceResult;
 import com.cts.grantserve.exception.ComplianceRecordException;
@@ -14,10 +15,11 @@ public interface IComplianceRecordService {
 
     String deleteComplianceRecord(int id) throws ComplianceRecordException;
 
+    List<ComplianceRecord> getAllComplianceRecord();
+
     Optional<ComplianceRecord> getComplianceRecord(int id);
 
     List<ComplianceRecord> getComplianceRecordByResult(ComplianceResult result);
 
     Optional<ComplianceRecord> updateComplianceRecordResult(int id, ComplianceResult result);
-
 }

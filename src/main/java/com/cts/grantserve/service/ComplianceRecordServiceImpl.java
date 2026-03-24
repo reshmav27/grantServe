@@ -32,6 +32,11 @@ public class ComplianceRecordServiceImpl implements IComplianceRecordService{
     }
 
     @Override
+    public List<ComplianceRecord> getAllComplianceRecord() {
+        return complianceRecordRepository.findAll();
+    }
+
+    @Override
     public Optional<ComplianceRecord> getComplianceRecord(int id) {
         return complianceRecordRepository.findById((long) id);
     }
@@ -48,5 +53,4 @@ public class ComplianceRecordServiceImpl implements IComplianceRecordService{
             return complianceRecordRepository.save(complianceRecord);
         });
     }
-
 }
