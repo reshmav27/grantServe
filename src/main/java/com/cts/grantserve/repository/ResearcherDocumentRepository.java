@@ -9,15 +9,10 @@ import java.util.Optional;
 
 @Repository
 public interface ResearcherDocumentRepository extends JpaRepository<ResearcherDocument, Long> {
-
+    Optional<ResearcherDocument> findByDocumentIDAndResearcher_ResearcherID(Long documentID, Long researcherID);
 
     List<ResearcherDocument> findByResearcher_ResearcherID(Long researcherID);
 
-
-
-
     List<ResearcherDocument> findByVerificationStatus(String status);
-
-//    Optional<IResearcherProjection> findResearcherByResearcherID(Long researcherID);
 }
 
