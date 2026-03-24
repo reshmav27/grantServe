@@ -1,6 +1,7 @@
 package com.cts.grantserve.controller;
 
 import com.cts.grantserve.dto.ComplianceRecordDto;
+import com.cts.grantserve.entity.Audit;
 import com.cts.grantserve.entity.ComplianceRecord;
 import com.cts.grantserve.enums.ComplianceResult;
 import com.cts.grantserve.service.ComplianceRecordServiceImpl;
@@ -38,6 +39,16 @@ public class ComplianceRecordController {
     public ResponseEntity<?> getComplianceRecordByResult(@PathVariable ComplianceResult result) {
         ComplianceResult enumValue = toComplianceResult(String.valueOf(result));
         return ResponseEntity.ok(complianceRecordService.getComplianceRecordByResult(enumValue));
+    }
+
+    @PatchMapping("/updateComplianceRecordResult/{id}")
+    public ResponseEntity<ComplianceRecord> updateComplianceRecordResult(
+            @PathVariable int id,
+            @Valid @RequestBody ComplianceRecord complianceRecord
+    ) {
+        return complianceRecordService.updateComplianceRecordResult(id, complianceRecord.getResult())
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Compliance Record not found with id " + id));
     }
 
     private ComplianceResult toComplianceResult(String value) {

@@ -17,4 +17,7 @@ public interface IComplianceRecordService {
     Optional<ComplianceRecord> getComplianceRecord(int id);
 
     List<ComplianceRecord> getComplianceRecordByResult(ComplianceResult result);
+
+    Optional<ComplianceRecord> updateComplianceRecordResult(int id, ComplianceResult result);
+
 }

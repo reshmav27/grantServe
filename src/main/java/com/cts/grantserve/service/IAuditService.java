@@ -17,4 +17,6 @@ public interface IAuditService {
     Optional<Audit> getAudit(int id);
 
     List<Audit> getAuditByStatus(AuditStatus status);
+
+    Optional<Audit> updateAuditStatus(int id, AuditStatus status);
 }

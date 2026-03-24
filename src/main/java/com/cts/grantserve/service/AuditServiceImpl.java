@@ -5,7 +5,6 @@ import com.cts.grantserve.repository.AuditRepository;
 import com.cts.grantserve.entity.Audit;
 import com.cts.grantserve.enums.AuditStatus;
 import com.cts.grantserve.exception.AuditException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static java.rmi.server.LogStream.log;
-
-@Slf4j
 @Service
 public class AuditServiceImpl implements IAuditService{
     @Autowired
@@ -26,7 +22,6 @@ public class AuditServiceImpl implements IAuditService{
         Audit audit = new Audit();
         BeanUtils.copyProperties(auditDto, audit);
         auditRepository.save(audit);
-        log.info("Audit is created Successfully");
         return "Created SuccessFully";
     }
 
@@ -44,5 +39,13 @@ public class AuditServiceImpl implements IAuditService{
     @Override
     public List<Audit> getAuditByStatus(AuditStatus status) {
         return auditRepository.findByStatus(status);
+    }
+
+    @Override
+    public Optional<Audit> updateAuditStatus(int id, AuditStatus status) {
+        return auditRepository.findById((long)id).map(audit -> {
+            audit.setStatus(status);
+            return auditRepository.save(audit);
+        });
     }
 }

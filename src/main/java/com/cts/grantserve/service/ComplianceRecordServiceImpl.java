@@ -41,4 +41,12 @@ public class ComplianceRecordServiceImpl implements IComplianceRecordService{
         return complianceRecordRepository.findByResult(result);
     }
 
+    @Override
+    public Optional<ComplianceRecord> updateComplianceRecordResult(int id, ComplianceResult result) {
+        return complianceRecordRepository.findById((long)id).map(complianceRecord -> {
+            complianceRecord.setResult(result);
+            return complianceRecordRepository.save(complianceRecord);
+        });
+    }
+
 }
