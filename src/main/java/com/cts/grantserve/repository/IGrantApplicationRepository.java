@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface IGrantApplicationRepository extends JpaRepository<GrantApplication,Long>, JpaSpecificationExecutor<GrantApplication> {
     Optional<List<GrantApplication>> findByResearcher_ResearcherID(Long researcherID);
+
+    Optional<List<GrantApplication>> findByProgram_ProgramID(Long programID);
 }
