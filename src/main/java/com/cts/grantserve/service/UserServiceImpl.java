@@ -51,9 +51,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     public String UserLoginValidation(User user) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(user.getUserID().toString(),user.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
         if(authentication.isAuthenticated())
-            return jwtService.generateToken(user.getUserID().toString());
+            return jwtService.generateToken(user.getEmail());
         return "fail";
     }
 

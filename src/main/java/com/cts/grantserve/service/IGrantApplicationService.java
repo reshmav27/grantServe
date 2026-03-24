@@ -16,4 +16,6 @@ public interface IGrantApplicationService {
      public GrantApplication getApplication(Long id) throws GrantApplicationException;
 
      public List<GrantApplication> search(Long id, String title);
+
+    List<GrantApplication> FetchGrantApplication(Long id);
 }

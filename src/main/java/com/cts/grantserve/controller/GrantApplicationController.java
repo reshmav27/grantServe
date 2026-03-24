@@ -23,6 +23,10 @@ public class GrantApplicationController {
     public ResponseEntity<String> createApplication(@Valid @RequestBody GrantApplicationDto grantApplication){
         return ResponseEntity.status(HttpStatus.CREATED).body(iGrantApplicationService.createApplication(grantApplication));
     }
+    @GetMapping("/FetchGrantApplication/{id}")
+    public ResponseEntity<List<GrantApplication>> FetchGrantApplication(@PathVariable Long id){
+        return ResponseEntity.ok(iGrantApplicationService.FetchGrantApplication(id));
+    }
     @DeleteMapping("/DeleteApplication/{id}")
     public ResponseEntity<String> DeleteApplication(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.OK).body(iGrantApplicationService.DeleteApplication(id));

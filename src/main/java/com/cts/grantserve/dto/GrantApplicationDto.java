@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record GrantApplicationDto(
         @NotBlank(message = "Researcher ID is required")
-        String researcherID,
+        Long researcherID,
 
         @NotNull(message = "Program ID is required")
         Long programID,

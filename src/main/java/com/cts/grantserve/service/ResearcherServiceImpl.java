@@ -20,11 +20,12 @@ public class ResearcherServiceImpl implements IResearcherService {
     private ResearcherRepository researcherDAO;
 
     @Override
-    public String createResearcher(ResearcherDto researcherDto) throws ResearcherException {
-        Researcher researcher = ClassUtilSeparator.researcherRegisterUtil(researcherDto);
-        researcher.setStatus("Active");
-        researcherDAO.save(researcher);
-        return "Researcher Registered Successfully";
+    public String UpdateResearcher(Long id,ResearcherDto researcherDto) throws ResearcherException {
+        Researcher existingResearcher = researcherDAO.findById(id)
+                .orElseThrow(() -> new ResearcherException("Researcher not found with ID: " + id,HttpStatus.NOT_FOUND));
+        ClassUtilSeparator.researcherRegisterUtil(researcherDto,existingResearcher);
+        researcherDAO.save(existingResearcher);
+        return "Researcher Updated Successfully";
     }
 
     @Override
