@@ -36,6 +36,8 @@ public class ReviewServiceImpl implements IReviewService {
         review.setReviewerID(reviewDto.reviewerId());
         review.setStatus("Pending");
         review.setDate(reviewDto.date());
+        review.setComments(reviewDto.comments());
+        review.setScore(reviewDto.score());
 
         reviewRepository.save(review);
         log.info("Service: Review assigned and saved successfully");
