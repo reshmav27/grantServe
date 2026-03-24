@@ -80,4 +80,10 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
                 .orElseThrow(()->new GrantApplicationException("No Grant Applications found for the user "+id,HttpStatus.NOT_FOUND));
     }
 
+    @Override
+    public Optional<List<GrantApplication>> fetchProgramGrantApplications(Long programID) throws GrantApplicationException{
+        return grantApplicationDao.findByProgram_ProgramID(programID);
+    }
+
+
 }
