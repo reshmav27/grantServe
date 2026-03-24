@@ -114,10 +114,17 @@ public class ProgramServiceImpl implements IProgramService {
     }
 
     @Override
-    public List<Program> searchProgram(String title, Long id) {
-        return programRepository.findAll(
+    public List<IProgramProjection> searchProgram(String title, Long id, boolean isManager) {
+        if (isManager) {
+            return programRepository.findAllProjectedBy(
                 Specification.where(ProgramSpecification.hasName(title))
-                        .or(ProgramSpecification.hasId(id))
+                    .and(ProgramSpecification.hasId(id))
+            );
+        }
+        return  programRepository.findAllProjectedBy(
+            Specification.where(ProgramSpecification.hasName(title))
+                .and(ProgramSpecification.hasId(id))
+                .and(ProgramSpecification.hasNotStatus(ProgramStatus.DRAFT))
         );
     }
 
