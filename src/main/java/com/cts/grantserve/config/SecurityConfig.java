@@ -28,7 +28,6 @@ public class SecurityConfig {
     @Autowired
     JwtFilter jwtFilter;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -38,6 +37,29 @@ public class SecurityConfig {
 //                        .requestMatchers("/User/register").hasRole("APPLICANT")
                         .requestMatchers("/api/v1/programs/createProgram", "/api/v1/programs/update", "/api/v1/programs/").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/programs/**", "/api/v1/budgets/**").hasRole("MANAGER")
+                                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/researcher/register").permitAll()
+
+                                // 2. ADMIN ONLY: Get all researchers or all documents
+                                .requestMatchers("/api/researcher/all").hasRole("ADMIN")
+                                .requestMatchers("/api/documents/all").hasRole("ADMIN")
+
+                                // 3. RESEARCHER & ADMIN: Specific Researcher Access
+                                // Note: Logic to ensure Researcher A can't delete Researcher B
+                                // should be handled inside the Service layer since we aren't using @PreAuthorize.
+                                .requestMatchers(HttpMethod.GET, "/api/researcher/{id}").hasAnyRole("RESEARCHER", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/researcher/delete/{id}").hasAnyRole("RESEARCHER", "ADMIN")
+
+                                // 4. DOCUMENTS: Upload and Delete
+                                .requestMatchers(HttpMethod.POST, "/api/documents/upload").hasRole("RESEARCHER")
+                                .requestMatchers(HttpMethod.GET, "/api/documents/{id}").hasAnyRole("RESEARCHER", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/documents/delete/{id}").hasRole("RESEARCHER")
+
+                                // 5. EXISTING MANAGER RULES
+                                .requestMatchers(HttpMethod.GET, "/api/v1/programs/**", "/api/v1/budgets/**").permitAll()
+                                .requestMatchers("/api/v1/programs/createProgram", "/api/v1/programs/update").hasRole("MANAGER")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/programs/**", "/api/v1/budgets/**").hasRole("MANAGER")
+
                         .anyRequest().authenticated() // LOCK EVERYTHING ELSE
                 )
 
