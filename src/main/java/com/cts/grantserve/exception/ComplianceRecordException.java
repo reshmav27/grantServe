@@ -11,4 +11,9 @@ public class ComplianceRecordException extends RuntimeException
         super(message);
         this.httpStatus = httpStatus;
     }
+
+    public HttpStatus getHttpStatus()
+    {
+        return httpStatus;
+    }
 }
