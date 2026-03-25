@@ -40,6 +40,9 @@ public class SecurityConfig {
                 // 1. PROGRAM MANAGER
                 .requestMatchers("/api/v1/programs/createProgram", "/api/v1/programs/update", "/api/v1/programs/manager/search").hasRole("MANAGER")
                 .requestMatchers(HttpMethod.PATCH, "/api/v1/programs/**", "/api/v1/budgets/**").hasRole("MANAGER")
+                .requestMatchers(HttpMethod.POST,"/disbursements/initiate").hasRole("MANAGER")
+                .requestMatchers(HttpMethod.DELETE,"/disbursements/delete/**").hasRole("MANAGER")
+                .requestMatchers(HttpMethod.POST,"/payments/process").hasRole("MANAGER")
 
                 // 2. ADMIN ONLY: Get all researchers or all documents
                 .requestMatchers(HttpMethod.POST, "/api/researcher/register").permitAll()
@@ -56,11 +59,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/documents/upload").hasRole("RESEARCHER")
                 .requestMatchers(HttpMethod.GET, "/api/documents/{id}").hasAnyRole("RESEARCHER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/documents/delete/{id}").hasRole("RESEARCHER")
-
-//                // 5. EXISTING MANAGER RULES
-//                .requestMatchers(HttpMethod.GET, "/api/v1/programs/**", "/api/v1/budgets/**").permitAll()
-//                .requestMatchers("/api/v1/programs/createProgram", "/api/v1/programs/update").hasRole("MANAGER")
-//                .requestMatchers(HttpMethod.PATCH, "/api/v1/programs/**", "/api/v1/budgets/**").hasRole("MANAGER")
 
                 .anyRequest().authenticated() // LOCK EVERYTHING ELSE
             )
