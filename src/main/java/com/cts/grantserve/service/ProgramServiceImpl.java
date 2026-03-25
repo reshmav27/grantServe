@@ -8,7 +8,6 @@ import com.cts.grantserve.enums.BudgetStatus;
 import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProgramNotModifiableException;
-import com.cts.grantserve.projection.IBudgetProjection;
 import com.cts.grantserve.projection.IProgramProjection;
 import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.specification.ProgramSpecification;
@@ -47,7 +46,7 @@ public class ProgramServiceImpl implements IProgramService {
             initializeProgramBudget(savedProgram);
         }
 
-        return convertToDto(savedProgram);
+        return ClassUtilSeparator.convertToDto(savedProgram);
     }
 
     @Transactional
@@ -140,18 +139,6 @@ public class ProgramServiceImpl implements IProgramService {
         );
 
         budgetService.createBudget(budgetDto);
-    }
-
-    private ProgramDto convertToDto(Program program) {
-        return new ProgramDto(
-                program.getProgramID(),
-                program.getTitle(),
-                program.getDescription(),
-                program.getStartDate(),
-                program.getEndDate(),
-                program.getBudget(),
-                program.getStatus()
-        );
     }
 
 }

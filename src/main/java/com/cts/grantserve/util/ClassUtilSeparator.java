@@ -3,10 +3,6 @@ package com.cts.grantserve.util;
 import com.cts.grantserve.dto.*;
 import com.cts.grantserve.entity.*;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -110,6 +106,29 @@ public class ClassUtilSeparator {
         budget.setRemainingAmount(budgetDto.remainingAmount());
 
         return budget;
+    }
+
+    public static ProgramDto convertToDto(Program program) {
+        return new ProgramDto(
+                program.getProgramID(),
+                program.getTitle(),
+                program.getDescription(),
+                program.getStartDate(),
+                program.getEndDate(),
+                program.getBudget(),
+                program.getStatus()
+        );
+    }
+
+    public static BudgetDto convertToDto(Budget budget) {
+        return new BudgetDto(
+                budget.getBudgetID(),
+                budget.getAllocatedAmount(),
+                budget.getSpentAmount(),
+                budget.getRemainingAmount(),
+                budget.getStatus(),
+                budget.getProgram().getProgramID()
+        );
     }
 
 }
