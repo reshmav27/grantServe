@@ -8,6 +8,8 @@ import com.cts.grantserve.enums.BudgetStatus;
 import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProgramNotModifiableException;
+import com.cts.grantserve.projection.IBudgetProjection;
+import com.cts.grantserve.projection.IProgramProjection;
 import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.specification.ProgramSpecification;
 import com.cts.grantserve.util.ClassUtilSeparator;
@@ -19,7 +21,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +49,6 @@ public class ProgramServiceImpl implements IProgramService {
 
         return convertToDto(savedProgram);
     }
-
-
 
     @Transactional
     @Override
@@ -101,25 +100,32 @@ public class ProgramServiceImpl implements IProgramService {
     }
 
     @Override
-    public Optional<Program> getProgram(Long id) {
-        return programRepository.findById(id);
+    public Optional<IProgramProjection> getProgram(Long id) {
+        return programRepository.findProjectedByProgramID(id);
     }
 
-    public List<Program> getAllPrograms() {
-        return programRepository.findAll();
+    @Override
+    public List<IProgramProjection> getAllPrograms() {
+        return programRepository.findAllProjectedBy();
     }
-
 
     @Cacheable(value = "activeGrants", key = "#now")
-    public List<Program> getActiveApplications(LocalDate now) {
+    public List<IProgramProjection> getActiveApplications(LocalDate now) {
         return programRepository.findActiveApplications(now);
     }
 
     @Override
-    public List<Program> searchprogram(String title,Long id) {
-        return programRepository.findAll(
+    public List<IProgramProjection> searchProgram(String title, Long id, boolean isManager) {
+        if (isManager) {
+            return programRepository.findAllProjectedBy(
                 Specification.where(ProgramSpecification.hasName(title))
-                        .or(ProgramSpecification.hasId(id))
+                    .and(ProgramSpecification.hasId(id))
+            );
+        }
+        return  programRepository.findAllProjectedBy(
+            Specification.where(ProgramSpecification.hasName(title))
+                .and(ProgramSpecification.hasId(id))
+                .and(ProgramSpecification.hasNotStatus(ProgramStatus.DRAFT))
         );
     }
 

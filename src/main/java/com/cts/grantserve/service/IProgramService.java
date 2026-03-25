@@ -2,11 +2,10 @@ package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.ProgramDto;
 import com.cts.grantserve.entity.Program;
-import com.cts.grantserve.enums.ProgramStatus;
+import com.cts.grantserve.projection.IProgramProjection;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +20,11 @@ public interface IProgramService {
     @Transactional
     String updateProgramStatusToClosed(Long id);
 
-    Optional<Program> getProgram(Long id);
+    Optional<IProgramProjection> getProgram(Long id);
 
-    List<Program> getAllPrograms();
+    List<IProgramProjection> getAllPrograms();
 
-    public List<Program> getActiveApplications(LocalDate now);
+    List<IProgramProjection> getActiveApplications(LocalDate now);
 
-    List<Program> searchprogram(String title,Long id);
+    List<IProgramProjection> searchProgram(String title, Long id, boolean isManager);
 }
