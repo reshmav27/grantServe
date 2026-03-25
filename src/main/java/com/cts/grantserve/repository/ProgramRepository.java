@@ -2,6 +2,7 @@ package com.cts.grantserve.repository;
 
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.projection.IProgramProjection;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,6 +22,10 @@ public interface ProgramRepository extends JpaRepository<Program, Long>, JpaSpec
     List<IProgramProjection> findAllProjectedBy();
 
     Optional<IProgramProjection> findProjectedByProgramID(Long id);
+
+    default List<IProgramProjection> findAllProjectedBy(Specification<Program> spec) {
+        return findBy(spec, q -> q.as(IProgramProjection.class).all());
+    }
 
     @Modifying
     @Transactional

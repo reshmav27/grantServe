@@ -2,6 +2,7 @@ package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.BudgetDto;
 import com.cts.grantserve.entity.Budget;
+import com.cts.grantserve.projection.IBudgetProjection;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -12,11 +13,11 @@ public interface IBudgetService {
     @Transactional
     BudgetDto createBudget(BudgetDto budgetDto);
 
-    Optional<Budget> getBudget(Long id);
+    Optional<IBudgetProjection> getBudget(Long id);
 
     Optional<Budget> getBudgetByProgram(Long programId);
 
-    List<Budget> getAllBudgets();
+    List<IBudgetProjection> getAllBudgets();
 
     @Transactional
     String allocateAmountToResearcherByBudgetId(Long id, double allocatedAmount);

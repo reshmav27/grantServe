@@ -1,6 +1,7 @@
 package com.cts.grantserve.controller;
 
 import com.cts.grantserve.entity.Budget;
+import com.cts.grantserve.projection.IBudgetProjection;
 import com.cts.grantserve.service.IBudgetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class BudgetController {
 
     // Get a budget by budget ID
     @GetMapping("{id}")
-    public ResponseEntity<Budget> getBudgetById(@PathVariable Long id) {
+    public ResponseEntity<IBudgetProjection> getBudgetById(@PathVariable Long id) {
         return budgetService.getBudget(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -27,7 +28,7 @@ public class BudgetController {
 
     // Get all budget records
     @GetMapping
-    public ResponseEntity<List<Budget>> getAllBudgets() {
+    public ResponseEntity<List<IBudgetProjection>> getAllBudgets() {
         return ResponseEntity.ok(budgetService.getAllBudgets());
     }
 

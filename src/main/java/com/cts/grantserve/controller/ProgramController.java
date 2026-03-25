@@ -37,14 +37,6 @@ public class ProgramController {
         return ResponseEntity.ok(programService.getAllPrograms());
     }
 
-    // Get a specific program by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<IProgramProjection> getProgram(@PathVariable Long id) {
-        return programService.getProgram(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     // Update program details (only works if program is in DRAFT)
     @PutMapping("/update")
     public ResponseEntity<String> updateProgram(@Valid @RequestBody ProgramDto programDto) {
@@ -57,9 +49,14 @@ public class ProgramController {
         return programService.getActiveApplications(LocalDate.now());
     }
 
+    @GetMapping("/manager/search")
+    public List<IProgramProjection> searchProgramApplicationsForManager(@RequestParam(required = false) String title, @RequestParam(required = false) Long id) {
+        return programService.searchProgram(title, id, true);
+    }
+
     @GetMapping("/search")
-    public List<Program> searchProgramApplications(@RequestParam(required = false) String title, @RequestParam(required = false) Long id) {
-        return programService.searchProgram(title,id);
+    public List<IProgramProjection> searchProgramApplications(@RequestParam(required = false) String title, @RequestParam(required = false) Long id) {
+        return programService.searchProgram(title, id, false);
     }
 
     // Close an active program
