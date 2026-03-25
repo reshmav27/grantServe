@@ -1,6 +1,7 @@
 package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.GrantApplicationDto;
+import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ProposalException;
@@ -73,7 +74,6 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
                         .or(GrantApplicationSpecification.hasName(name))
         );
     }
-
     @Override
     public List<GrantApplication> FetchGrantApplication(Long id) throws GrantApplicationException {
         return grantApplicationDao.findByResearcher_ResearcherID(id)

@@ -1,4 +1,5 @@
 package com.cts.grantserve.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "proposalID")
+    @JsonBackReference
     private Proposal proposal;
 
     private Long reviewerID; // Linked to User.userID

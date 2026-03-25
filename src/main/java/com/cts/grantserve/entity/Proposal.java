@@ -1,8 +1,11 @@
 package com.cts.grantserve.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -20,6 +23,18 @@ public class Proposal {
     @JoinColumn(name = "applicationID")
     @JsonBackReference
     private GrantApplication grantApplication;
+
+    @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Review> review = new ArrayList<>();;
+
+    public List<Review> getReview() {
+        return review;
+    }
+
+    public void setReview(List<Review> review) {
+        this.review = review;
+    }
 
     public GrantApplication getGrantApplication() {
         return grantApplication;

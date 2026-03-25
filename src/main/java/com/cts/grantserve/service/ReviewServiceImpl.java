@@ -21,6 +21,9 @@ public class ReviewServiceImpl implements IReviewService {
     @Autowired
     private IProposalRepository proposalRepository;
 
+    @Autowired
+    private ProposalServiceImpl proposalService;
+
     @Override
     public String assignReviewer(ReviewDto reviewDto) {
         log.info("Service: Assigning Reviewer ID {} to Proposal ID {}", reviewDto.reviewerId(), reviewDto.proposalId());
@@ -76,8 +79,8 @@ public class ReviewServiceImpl implements IReviewService {
         existing.setScore(reviewDto.score());
         existing.setComments(reviewDto.comments());
         existing.setStatus(reviewDto.status());
-
         reviewRepository.save(existing);
+        proposalService.addReviewToProposal(existing.getProposal().getProposalID(),existing);
         log.info("Service: Review ID {} updated successfully", id);
         return "Review updated successfully";
     }
