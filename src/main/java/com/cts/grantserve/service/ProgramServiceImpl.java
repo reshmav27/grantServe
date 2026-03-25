@@ -8,13 +8,18 @@ import com.cts.grantserve.enums.BudgetStatus;
 import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProgramNotModifiableException;
+import com.cts.grantserve.projection.IProgramProjection;
 import com.cts.grantserve.repository.ProgramRepository;
+import com.cts.grantserve.specification.ProgramSpecification;
 import com.cts.grantserve.util.ClassUtilSeparator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,13 +99,26 @@ public class ProgramServiceImpl implements IProgramService {
     }
 
     @Override
-    public Optional<Program> getProgram(Long id) {
-        return programRepository.findById(id);
+    public Optional<IProgramProjection> getProgram(Long id) {
+        return programRepository.findProjectedByProgramID(id);
     }
 
     @Override
-    public List<Program> getAllPrograms() {
-        return programRepository.findAll();
+    public List<IProgramProjection> getAllPrograms() {
+        return programRepository.findAllProjectedBy();
+    }
+
+    @Cacheable(value = "activeGrants", key = "#now")
+    public List<IProgramProjection> getActiveApplications(LocalDate now) {
+        return programRepository.findActiveApplications(now);
+    }
+
+    @Override
+    public List<Program> searchProgram(String title, Long id) {
+        return programRepository.findAll(
+                Specification.where(ProgramSpecification.hasName(title))
+                        .or(ProgramSpecification.hasId(id))
+        );
     }
 
     private void initializeProgramBudget(Program program) {

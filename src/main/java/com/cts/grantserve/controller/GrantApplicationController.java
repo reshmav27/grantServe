@@ -23,6 +23,10 @@ public class GrantApplicationController {
     public ResponseEntity<String> createApplication(@Valid @RequestBody GrantApplicationDto grantApplication){
         return ResponseEntity.status(HttpStatus.CREATED).body(iGrantApplicationService.createApplication(grantApplication));
     }
+    @GetMapping("/FetchGrantApplication/{id}")
+    public ResponseEntity<List<GrantApplication>> FetchGrantApplication(@PathVariable Long id){
+        return ResponseEntity.ok(iGrantApplicationService.FetchGrantApplication(id));
+    }
     @DeleteMapping("/DeleteApplication/{id}")
     public ResponseEntity<String> DeleteApplication(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.OK).body(iGrantApplicationService.DeleteApplication(id));
@@ -31,10 +35,21 @@ public class GrantApplicationController {
     public ResponseEntity<GrantApplication> getApplication(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(iGrantApplicationService.getApplication(id));
     }
+
     @GetMapping("/search")
     public List<GrantApplication> search(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String title) {
         return iGrantApplicationService.search(id, title);
     }
+
+    @GetMapping("/ProgramGrantApplications/{programID}")
+    public ResponseEntity<List<GrantApplication>> fetchProgramGrantApplications(@PathVariable Long programID){
+        return
+                iGrantApplicationService.fetchProgramGrantApplications(programID)
+                        .map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build());
+
+    }
+
 }

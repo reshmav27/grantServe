@@ -18,11 +18,20 @@ public class Researcher {
     private String department;
     private String contactInfo;
 
+    @OneToOne
+    @JoinColumn(name = "user_id") // The foreign key column in Researcher table
+    private User user;
+
+    // Standard Getter/Setter
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
     @OneToMany(mappedBy = "researcher", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ResearcherDocument> documents; // One researcher has many docs [cite: 1, 85]
 
     @OneToMany(mappedBy = "researcher")
-    @JsonManagedReference
+    @JsonManagedReference(value = "researcher-applications")
     private List<GrantApplication> applications;
 
     public List<ResearcherDocument> getDocuments() {

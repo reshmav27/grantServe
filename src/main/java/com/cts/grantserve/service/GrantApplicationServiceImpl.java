@@ -2,11 +2,14 @@ package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.GrantApplicationDto;
 import com.cts.grantserve.entity.Program;
+import com.cts.grantserve.entity.Researcher;
 import com.cts.grantserve.exception.ProposalException;
+import com.cts.grantserve.exception.ResearcherException;
 import com.cts.grantserve.repository.IGrantApplicationRepository;
 import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.exception.GrantApplicationException;
 import com.cts.grantserve.repository.ProgramRepository;
+import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.specification.GrantApplicationSpecification;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
     @Autowired
     ProgramRepository programRepository;
 
+    @Autowired
+    ResearcherRepository researcherRepository;
+
     public String createApplication(GrantApplicationDto grantApplicationDto) throws GrantApplicationException {
         GrantApplication grantApplication = new GrantApplication();
         BeanUtils.copyProperties(grantApplicationDto,grantApplication);
@@ -38,6 +44,10 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
         Program program = programRepository.findById(grantApplicationDto.programID())
                 .orElseThrow(() -> new ProposalException("Program Not found", HttpStatus.NOT_FOUND));
         grantApplication.setProgram(program);
+
+        Researcher researcher = researcherRepository.findById(grantApplicationDto.researcherID())
+                        .orElseThrow(()->new ResearcherException("Researcher Not found",HttpStatus.NOT_FOUND));
+        grantApplication.setResearcher(researcher);
 
         grantApplicationDao.save(grantApplication);
         return "Created SuccessFully";
@@ -63,5 +73,17 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
                         .or(GrantApplicationSpecification.hasName(name))
         );
     }
+
+    @Override
+    public List<GrantApplication> FetchGrantApplication(Long id) throws GrantApplicationException {
+        return grantApplicationDao.findByResearcher_ResearcherID(id)
+                .orElseThrow(()->new GrantApplicationException("No Grant Applications found for the user "+id,HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public Optional<List<GrantApplication>> fetchProgramGrantApplications(Long programID) throws GrantApplicationException{
+        return grantApplicationDao.findByProgram_ProgramID(programID);
+    }
+
 
 }

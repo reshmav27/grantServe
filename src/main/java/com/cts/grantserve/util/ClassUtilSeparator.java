@@ -14,16 +14,12 @@ import java.time.LocalDateTime;
 @Data
 public class ClassUtilSeparator {
 
-    public static Researcher researcherRegisterUtil(ResearcherDto dto) {
-        Researcher researcher = new Researcher();
-        // Record components are accessed via name() method
-        researcher.setName(dto.name());
-        researcher.setDob(dto.dob());
-        researcher.setGender(dto.gender());
-        researcher.setInstitution(dto.institution());
-        researcher.setDepartment(dto.department());
-        researcher.setContactInfo(dto.contactInfo());
-        return researcher;
+    public static Researcher researcherRegisterUtil(ResearcherDto dto, Researcher existingResearcher) {
+        existingResearcher.setDob(dto.dob());
+        existingResearcher.setGender(dto.gender());
+        existingResearcher.setInstitution(dto.institution());
+        existingResearcher.setDepartment(dto.department());
+        return existingResearcher;
     }
 
     public static ResearcherDocument documentUploadUtil(ResearcherDocumentDto dto) {
@@ -63,7 +59,14 @@ public class ClassUtilSeparator {
         newUser.setPhone(userDto.phone());
         newUser.setRole(userDto.role());
 
-
+        if ("RESEARCHER".equalsIgnoreCase(userDto.role())) {
+            Researcher researcher = new Researcher();
+            researcher.setName(userDto.name());
+            researcher.setStatus("PENDING");
+            researcher.setContactInfo("Email : "+userDto.email()+" ,Phone : "+userDto.phone());
+            newUser.setResearcher(researcher);
+            researcher.setUser(newUser);
+        }
 
         return newUser;
     }

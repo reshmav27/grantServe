@@ -71,12 +71,12 @@ public class GrantApplication {
 
     @ManyToOne
     @JoinColumn(name = "researcherID")
-    @JsonBackReference
+    @JsonBackReference(value = "researcher-applications")
     private Researcher researcher;
 
     @ManyToOne
     @JoinColumn(name = "programID")
-    @JsonBackReference
+    @JsonBackReference(value = "program-applications")
     private Program program;
 
     @OneToMany(mappedBy = "grantApplication", cascade = CascadeType.ALL, orphanRemoval = true)
