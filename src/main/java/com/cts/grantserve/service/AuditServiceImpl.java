@@ -32,6 +32,11 @@ public class AuditServiceImpl implements IAuditService{
     }
 
     @Override
+    public List<Audit> getAllAudits() {
+        return auditRepository.findAll();
+    }
+
+    @Override
     public Optional<Audit> getAudit(int id) {
         return auditRepository.findById((long) id);
     }
