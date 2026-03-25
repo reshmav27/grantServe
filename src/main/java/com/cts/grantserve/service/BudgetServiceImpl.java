@@ -38,7 +38,7 @@ public class BudgetServiceImpl implements IBudgetService {
                 .orElseThrow(() -> new ProgramNotFoundException("Program not found"));
         budget.setProgram(program);
 
-        return convertToDto(budgetRepository.save(budget));
+        return ClassUtilSeparator.convertToDto(budgetRepository.save(budget));
     }
 
     @Transactional
@@ -92,17 +92,6 @@ public class BudgetServiceImpl implements IBudgetService {
 
         log.info("Budget for Program ID: {} successfully updated to CLOSED status.", programId);
         return "Budget status updated to CLOSED successfully.";
-    }
-
-    private BudgetDto convertToDto(Budget budget) {
-        return new BudgetDto(
-                budget.getBudgetID(),
-                budget.getAllocatedAmount(),
-                budget.getSpentAmount(),
-                budget.getRemainingAmount(),
-                budget.getStatus(),
-                budget.getProgram().getProgramID()
-        );
     }
 
 }
