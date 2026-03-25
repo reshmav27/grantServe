@@ -1,7 +1,7 @@
 package com.cts.grantserve.specification;
 
-import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.entity.Program;
+import com.cts.grantserve.enums.ProgramStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProgramSpecification {
@@ -15,6 +15,12 @@ public class ProgramSpecification {
         return (root, query, cb) -> {
             if (id == null) return null;
             return cb.equal(root.get("id"), id);
+        };
+    }
+    public static Specification<Program> hasNotStatus(ProgramStatus status) {
+        return (root, query, cb) -> {
+            if (status == null) return null;
+            return cb.notEqual(root.get("status"), status);
         };
     }
 }

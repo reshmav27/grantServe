@@ -26,5 +26,5 @@ public interface IProgramService {
 
     List<IProgramProjection> getActiveApplications(LocalDate now);
 
-    List<Program> searchProgram(String title, Long id);
+    List<IProgramProjection> searchProgram(String title, Long id, boolean isManager);
 }

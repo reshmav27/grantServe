@@ -5,6 +5,7 @@ import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.enums.BudgetStatus;
 import com.cts.grantserve.exception.*;
+import com.cts.grantserve.projection.IBudgetProjection;
 import com.cts.grantserve.repository.BudgetRepository;
 import com.cts.grantserve.repository.ProgramRepository;
 
@@ -65,8 +66,8 @@ public class BudgetServiceImpl implements IBudgetService {
     }
 
     @Override
-    public Optional<Budget> getBudget(Long id) {
-        return budgetRepository.findById(id);
+    public Optional<IBudgetProjection> getBudget(Long id) {
+        return budgetRepository.findProjectedByBudgetID(id);
     }
 
     @Override
@@ -75,8 +76,8 @@ public class BudgetServiceImpl implements IBudgetService {
     }
 
     @Override
-    public List<Budget> getAllBudgets() {
-        return budgetRepository.findAll();
+    public List<IBudgetProjection> getAllBudgets() {
+        return budgetRepository.findAllProjectedBy();
     }
 
     @Transactional
