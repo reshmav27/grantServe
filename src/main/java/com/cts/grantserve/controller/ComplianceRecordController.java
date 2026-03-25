@@ -18,23 +18,27 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/GrantServe")
 public class ComplianceRecordController {
+
     @Autowired
     ComplianceRecordServiceImpl complianceRecordService;
+
     @PostMapping("/createComplianceRecord")
     public ResponseEntity<String> createComplianceRecord(@Valid @RequestBody ComplianceRecordDto complianceRecord){
         return ResponseEntity.status(HttpStatus.CREATED).body(complianceRecordService.createComplianceRecord(complianceRecord));
     }
+
     @DeleteMapping("/DeleteComplianceRecord/{id}")
     public ResponseEntity<String> DeleteComplianceRecord(@PathVariable int id){
         return ResponseEntity.status(HttpStatus.OK).body(complianceRecordService.deleteComplianceRecord(id));
-
     }
+
     @GetMapping("getComplianceRecord/{id}")
     public ResponseEntity<ComplianceRecord> getComplianceRecord(@PathVariable int id) {
         return complianceRecordService.getComplianceRecord(id)
                 .map(app -> ResponseEntity.ok(app))
                 .orElse(ResponseEntity.notFound().build());
     }
+
     @GetMapping("getComplianceRecordByResult/{result}")
     public ResponseEntity<?> getComplianceRecordByResult(@PathVariable ComplianceResult result) {
         ComplianceResult enumValue = toComplianceResult(String.valueOf(result));
