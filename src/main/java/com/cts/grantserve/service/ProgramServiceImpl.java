@@ -8,6 +8,7 @@ import com.cts.grantserve.enums.BudgetStatus;
 import com.cts.grantserve.enums.ProgramStatus;
 import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProgramNotModifiableException;
+import com.cts.grantserve.projection.IBudgetProjection;
 import com.cts.grantserve.projection.IProgramProjection;
 import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.specification.ProgramSpecification;
@@ -114,10 +115,17 @@ public class ProgramServiceImpl implements IProgramService {
     }
 
     @Override
-    public List<Program> searchProgram(String title, Long id) {
-        return programRepository.findAll(
+    public List<IProgramProjection> searchProgram(String title, Long id, boolean isManager) {
+        if (isManager) {
+            return programRepository.findAllProjectedBy(
                 Specification.where(ProgramSpecification.hasName(title))
-                        .or(ProgramSpecification.hasId(id))
+                    .and(ProgramSpecification.hasId(id))
+            );
+        }
+        return  programRepository.findAllProjectedBy(
+            Specification.where(ProgramSpecification.hasName(title))
+                .and(ProgramSpecification.hasId(id))
+                .and(ProgramSpecification.hasNotStatus(ProgramStatus.DRAFT))
         );
     }
 
