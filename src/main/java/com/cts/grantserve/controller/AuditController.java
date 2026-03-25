@@ -17,32 +17,38 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/GrantServe")
 public class AuditController {
+
     @Autowired
     private AuditServiceImpl auditService;
+
     @PostMapping("/createAudit")
     public ResponseEntity<String> createAudit(@Valid @RequestBody AuditDto audit){
         return ResponseEntity.status(HttpStatus.CREATED).body(auditService.createAudit(audit));
     }
+
     @DeleteMapping("/deleteAudit/{id}")
     public ResponseEntity<String> DeleteAudit(@PathVariable int id){
         return ResponseEntity.status(HttpStatus.OK).body(auditService.deleteAudit(id));
-
     }
+
     @GetMapping("/audits")
     public ResponseEntity<?> getAllAudits() {
         return ResponseEntity.ok(auditService.getAllAudits());
     }
+
     @GetMapping("/getAudit/{id}")
     public ResponseEntity<Audit> getAudit(@PathVariable int id) {
         return auditService.getAudit(id)
                 .map(app -> ResponseEntity.ok(app))
                 .orElse(ResponseEntity.notFound().build());
     }
+
     @GetMapping("/getAuditByStatus/{status}")
     public ResponseEntity<?> getAuditByStatus(@PathVariable AuditStatus status) {
         AuditStatus enumValue = toAuditStatus(String.valueOf(status));
         return ResponseEntity.ok(auditService.getAuditByStatus(enumValue));
     }
+
     @PatchMapping("/updateAuditStatus/{id}")
     public ResponseEntity<Audit> updateAuditStatus(
             @PathVariable int id,
