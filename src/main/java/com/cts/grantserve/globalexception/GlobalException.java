@@ -102,12 +102,12 @@ public class GlobalException {
     }
 
     @ExceptionHandler(AuditException.class)
-    public ResponseEntity<String> proposalExceptionHandler(AuditException p){
+    public ResponseEntity<String> auditExceptionHandler(AuditException p){
         return ResponseEntity.status(p.getHttpStatus()).body(p.getMessage());
     }
 
     @ExceptionHandler(ComplianceRecordException.class)
-    public ResponseEntity<String> GrantApplicationExceptionHandler(ComplianceRecordException g){
+    public ResponseEntity<String> complianceRecordExceptionHandler(ComplianceRecordException g){
         return ResponseEntity.status(g.getHttpStatus()).body(g.getMessage());
     }
 
