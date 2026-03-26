@@ -129,4 +129,27 @@ public class ClassUtilSeparator {
         return review;
     }
 
+    public static ProgramDto convertToDto(Program program) {
+        return new ProgramDto(
+                program.getProgramID(),
+                program.getTitle(),
+                program.getDescription(),
+                program.getStartDate(),
+                program.getEndDate(),
+                program.getBudget(),
+                program.getStatus()
+        );
+    }
+
+    public static BudgetDto convertToDto(Budget budget) {
+        return new BudgetDto(
+                budget.getBudgetID(),
+                budget.getAllocatedAmount(),
+                budget.getSpentAmount(),
+                budget.getRemainingAmount(),
+                budget.getStatus(),
+                budget.getProgram().getProgramID()
+        );
+    }
+
 }
