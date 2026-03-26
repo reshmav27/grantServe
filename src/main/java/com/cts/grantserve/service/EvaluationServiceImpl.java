@@ -1,17 +1,17 @@
 package com.cts.grantserve.service;
 
-import com.cts.grantserve.entity.Researcher;
-import com.cts.grantserve.entity.ResearcherDocument;
-import com.cts.grantserve.repository.EvaluationRepository;
-import com.cts.grantserve.repository.IGrantApplicationRepository;
 import com.cts.grantserve.dto.EvaluationDto;
 import com.cts.grantserve.entity.Evaluation;
 import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.exception.EvaluationNotFoundException;
-import com.cts.grantserve.repository.ResearcherRepository;
+import com.cts.grantserve.repository.EvaluationRepository;
+import com.cts.grantserve.repository.IGrantApplicationRepository;
+import com.cts.grantserve.util.ClassUtilSeparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Slf4j
@@ -22,46 +22,37 @@ public class EvaluationServiceImpl implements IEvaluationService {
     private EvaluationRepository evaluationRepository;
 
     @Autowired
-    private ResearcherRepository researcherRepository; // Add this instance variable
-
-    @Autowired
     private IGrantApplicationRepository applicationRepository;
 
     @Override
+    @Transactional
     public String createEvaluation(EvaluationDto evaluationDto) {
-        log.info("Service: Processing evaluation creation for Application ID: {}", evaluationDto.applicationID());
+        log.info("Service: Creating Evaluation for Application ID: {}", evaluationDto.applicationID());
 
-        Evaluation eval = new Evaluation();
-        //ResearcherDocument researcherDocument=new ResearcherDocument();
+        // 1. Fetch the Grant Application from the database
         GrantApplication app = applicationRepository.findById(evaluationDto.applicationID())
                 .orElseThrow(() -> {
                     log.error("Service Error: Application ID {} not found", evaluationDto.applicationID());
                     return new RuntimeException("Application not found");
                 });
 
-        eval.setApplication(app);
-        eval.setResult(evaluationDto.result());
-        eval.setDate(evaluationDto.date());
-        eval.setNotes(evaluationDto.notes());
+        // 2. Use the Util class to create the Evaluation entity
+        Evaluation eval = ClassUtilSeparator.evaluationUtil(evaluationDto, app);
 
+        // 3. Update the Status in the Grant Application Table
+        // This is the core requirement: changing the application status based on the evaluation result
+        String statusResult = evaluationDto.result().toString();
+        app.setStatus(statusResult);
+        log.info("Application ID {} status updated to: {}", app.getApplicationID(), statusResult);
 
-        Researcher researcher = app.getResearcher();
-        if (researcher != null && researcher.getDocuments() != null) {
-            String finalStatus = evaluationDto.result().toString(); // "APPROVED" or "REJECTED"
+        // 4. Save the updated Grant Application (Updates the 'status' column in your DB)
+        applicationRepository.save(app);
 
-            for (ResearcherDocument doc : researcher.getDocuments()) {
-                doc.setVerificationStatus(finalStatus);
-                log.info("Updating document ID {} to status: {}", doc.getDocumentID(), finalStatus);
-            }
-             //Save the researcher to persist document changes (if cascading is on)
-             researcherRepository.save(researcher);
-
-        }
+        // 5. Save the Evaluation record
         evaluationRepository.save(eval);
-        log.info("Service: Evaluation saved successfully in database");
-        return "Evaluation submitted successfully";
-    }
 
+        return "Evaluation processed. Grant Application status updated to " + statusResult;
+    }
 
     @Override
     public List<Evaluation> getAllEvaluations() {
@@ -73,18 +64,14 @@ public class EvaluationServiceImpl implements IEvaluationService {
     public Evaluation getEvaluationById(long id) {
         log.info("Service: Searching for evaluation ID: {}", id);
         return evaluationRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Service Error: Evaluation ID {} not found", id);
-                    return new EvaluationNotFoundException("Evaluation ID " + id + " not found");
-                });
+                .orElseThrow(() -> new EvaluationNotFoundException("Evaluation ID " + id + " not found"));
     }
 
     @Override
     public String deleteEvaluation(long id) {
-        log.info("Service: Attempting to delete evaluation ID: {}", id);
+        log.info("Service: Deleting evaluation ID: {}", id);
         Evaluation eval = getEvaluationById(id);
         evaluationRepository.delete(eval);
-        log.info("Service: Evaluation record ID {} successfully removed", id);
-        return "Evaluation record removed";
+        return "Evaluation record removed successfully";
     }
 }

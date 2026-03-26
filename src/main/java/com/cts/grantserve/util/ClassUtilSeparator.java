@@ -108,27 +108,25 @@ public class ClassUtilSeparator {
         return budget;
     }
 
-    public static ProgramDto convertToDto(Program program) {
-        return new ProgramDto(
-                program.getProgramID(),
-                program.getTitle(),
-                program.getDescription(),
-                program.getStartDate(),
-                program.getEndDate(),
-                program.getBudget(),
-                program.getStatus()
-        );
+    public static Evaluation evaluationUtil(EvaluationDto evaluationDto, GrantApplication application) {
+        Evaluation eval = new Evaluation();
+        eval.setApplication(application);
+        eval.setResult(evaluationDto.result());
+        eval.setDate(LocalDate.now());
+        eval.setNotes(evaluationDto.notes());
+        return eval;
     }
 
-    public static BudgetDto convertToDto(Budget budget) {
-        return new BudgetDto(
-                budget.getBudgetID(),
-                budget.getAllocatedAmount(),
-                budget.getSpentAmount(),
-                budget.getRemainingAmount(),
-                budget.getStatus(),
-                budget.getProgram().getProgramID()
-        );
+
+    public static Review reviewUtil(ReviewDto dto, Proposal proposal, User reviewer) {
+        Review review = new Review();
+        review.setProposal(proposal);
+        review.setReviewer(reviewer);
+        review.setScore(dto.score());
+        review.setComments(dto.comments());
+        review.setDate(dto.date());
+        review.setStatus(dto.status());
+        return review;
     }
 
 }

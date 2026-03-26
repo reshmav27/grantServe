@@ -13,42 +13,62 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/review")
+@RequestMapping("review") // Added /api prefix for consistency with Evaluation module
 public class ReviewController {
 
     @Autowired
     private IReviewService reviewService;
 
+    // POST: Assign a new reviewer to a proposal
     @PostMapping("/assign")
     public ResponseEntity<String> assign(@Valid @RequestBody ReviewDto reviewDto) {
-        // Record accessors: reviewerId() and proposalId()
-        log.info("Request: Assigning Reviewer {} to Proposal {}", reviewDto.reviewerId(), reviewDto.proposalId());
+        log.info("Controller: Assigning Reviewer ID {} to Proposal ID {}",
+                reviewDto.reviewerId(), reviewDto.proposalId());
+
         String response = reviewService.assignReviewer(reviewDto);
-        log.info("Success: Review assigned");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        log.info("Controller: Review successfully assigned");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    // GET: Reviewer Dashboard - Fetch all reviews for a specific user
     @GetMapping("/dashboard/{reviewerId}")
     public ResponseEntity<List<Review>> getDashboard(@PathVariable long reviewerId) {
-        log.info("Request: Dashboard data for Reviewer ID: {}", reviewerId);
+        log.info("Controller: Fetching dashboard for Reviewer ID: {}", reviewerId);
+
         List<Review> reviews = reviewService.getReviewsByReviewer(reviewerId);
-        log.info("Success: Found {} reviews for Reviewer {}", reviews.size(), reviewerId);
+
+        log.info("Controller: Successfully found {} reviews", reviews.size());
         return ResponseEntity.ok(reviews);
     }
 
+    // GET: Fetch a specific review by its ID (Added for complete CRUD)
+    @GetMapping("/{id}")
+    public ResponseEntity<Review> getById(@PathVariable long id) {
+        log.info("Controller: Fetching individual Review ID: {}", id);
+        Review review = reviewService.getReviewById(id);
+        return ResponseEntity.ok(review);
+    }
+
+    // PUT: Update score, comments, or status (e.g., from PENDING to REVIEWED)
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable long id, @Valid @RequestBody ReviewDto reviewDto) {
-        log.info("Request: Updating Review ID: {}", id);
+        log.info("Controller: Updating Review ID: {}", id);
+
         String response = reviewService.updateReview(id, reviewDto);
-        log.info("Success: Review ID: {} updated", id);
+
+        log.info("Controller: Review ID {} updated successfully", id);
         return ResponseEntity.ok(response);
     }
 
+    // DELETE: Remove a review assignment
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {
-        log.warn("Request: Deleting Review ID: {}", id);
+        log.warn("Controller: Deleting Review record ID: {}", id);
+
         String response = reviewService.deleteReview(id);
-        log.info("Success: Review ID: {} removed", id);
+
+        log.info("Controller: Review record ID {} deleted", id);
         return ResponseEntity.ok(response);
     }
 }

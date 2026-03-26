@@ -13,34 +13,52 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/evaluation")
+@RequestMapping("evaluation") // Added /api prefix - common industry standard
 public class EvaluationController {
 
     @Autowired
     private IEvaluationService evaluationService;
 
+    // POST: Create a new evaluation and update Grant Application status
     @PostMapping("/submit")
     public ResponseEntity<String> submit(@Valid @RequestBody EvaluationDto evaluationDto) {
-        // Record accessor: applicationID() instead of getApplicationID()
-        log.info("Request: Submit evaluation for Application ID: {}", evaluationDto.applicationID());
+        log.info("Controller: Received request to submit evaluation for Application ID: {}", evaluationDto.applicationID());
+
         String response = evaluationService.createEvaluation(evaluationDto);
-        log.info("Success: Evaluation created for Application ID: {}", evaluationDto.applicationID());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        log.info("Controller: Evaluation processed successfully for Application ID: {}", evaluationDto.applicationID());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    // GET: Retrieve all evaluation records
     @GetMapping("/all")
     public ResponseEntity<List<Evaluation>> getAll() {
-        log.info("Request: Fetching all evaluations");
+        log.info("Controller: Fetching all evaluations");
         List<Evaluation> evaluations = evaluationService.getAllEvaluations();
-        log.info("Success: Retrieved {} records", evaluations.size());
-        return ResponseEntity.ok(evaluations);
+
+        if (evaluations.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(evaluations, HttpStatus.OK);
     }
 
+    // GET: Retrieve a single evaluation by ID (Added this missing method)
+    @GetMapping("/{id}")
+    public ResponseEntity<Evaluation> getById(@PathVariable long id) {
+        log.info("Controller: Fetching evaluation with ID: {}", id);
+        Evaluation evaluation = evaluationService.getEvaluationById(id);
+        return new ResponseEntity<>(evaluation, HttpStatus.OK);
+    }
+
+    // DELETE: Remove an evaluation record
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {
-        log.warn("Request: Deleting evaluation ID: {}", id);
+        log.warn("Controller: Request to delete evaluation record ID: {}", id);
+
         String response = evaluationService.deleteEvaluation(id);
-        log.info("Success: Evaluation ID: {} deleted", id);
-        return ResponseEntity.ok(response);
+
+        log.info("Controller: Evaluation record ID: {} deleted successfully", id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

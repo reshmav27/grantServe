@@ -12,7 +12,7 @@ public class Evaluation {
     private Long evaluationID;
 
     @OneToOne
-    @JoinColumn(name = "applicationID")
+    @JoinColumn(name = "applicationID",nullable = false)
     @JsonIgnore
     private GrantApplication application;
 
