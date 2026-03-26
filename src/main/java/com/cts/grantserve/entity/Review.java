@@ -1,4 +1,5 @@
 package com.cts.grantserve.entity;
+import com.cts.grantserve.enums.ReviewStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,11 +14,15 @@ public class Review {
     @JoinColumn(name = "proposalID")
     private Proposal proposal;
 
-    private Long reviewerID; // Linked to User.userID
+    @ManyToOne
+    @JoinColumn(name = "reviewerid", nullable = false)
+    private User reviewer;
+
     private Integer score;
     private String comments;
     private java.time.LocalDate date;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
 
     public Long getReviewID() {
         return reviewID;
@@ -35,12 +40,12 @@ public class Review {
         this.proposal = proposal;
     }
 
-    public Long getReviewerID() {
-        return reviewerID;
+    public User getReviewer() {
+        return reviewer;
     }
 
-    public void setReviewerID(Long reviewerID) {
-        this.reviewerID = reviewerID;
+    public void setReviewer(User reviewer) {
+        this.reviewer = reviewer;
     }
 
     public Integer getScore() {
@@ -67,13 +72,11 @@ public class Review {
         this.date = date;
     }
 
-    public String getStatus() {
+    public ReviewStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReviewStatus status) {
         this.status = status;
     }
-
-
 }

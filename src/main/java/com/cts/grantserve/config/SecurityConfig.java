@@ -34,8 +34,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/login", "/auth/register").permitAll() // ALLOW THESE WITHOUT LOGIN
-                // .requestMatchers("/User/register").hasRole("APPLICANT")
-//                .requestMatchers("/auth/login", "/auth/register").permitAll()
+
 
                 // 1. PROGRAM MANAGER
                 .requestMatchers("/api/v1/programs/createProgram", "/api/v1/programs/update", "/api/v1/programs/manager/search").hasRole("MANAGER")

@@ -112,4 +112,25 @@ public class ClassUtilSeparator {
         return budget;
     }
 
+    public static Evaluation evaluationUtil(EvaluationDto evaluationDto, GrantApplication application) {
+        Evaluation eval = new Evaluation();
+        eval.setApplication(application);
+        eval.setResult(evaluationDto.result());
+        eval.setDate(LocalDate.now());
+        eval.setNotes(evaluationDto.notes());
+        return eval;
+    }
+
+
+    public static Review reviewUtil(ReviewDto dto, Proposal proposal, User reviewer) {
+        Review review = new Review();
+        review.setProposal(proposal);
+        review.setReviewer(reviewer);
+        review.setScore(dto.score());
+        review.setComments(dto.comments());
+        review.setDate(dto.date());
+        review.setStatus(dto.status());
+        return review;
+    }
+
 }
