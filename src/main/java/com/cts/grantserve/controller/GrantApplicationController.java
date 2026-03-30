@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/GrantApplication")
@@ -36,12 +38,23 @@ public class GrantApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(iGrantApplicationService.getApplication(id));
     }
 
+    @GetMapping("/UserApplicationCount/{id}")
+    public ResponseEntity<Map<String, Object>> getApplicationCount(@PathVariable Long id) {
+        long count = iGrantApplicationService.getuserApplicationCount(id);
+        Map<String, Object> response = new HashMap<>();
+        String key = "Total number of applications for user " + id;
+        response.put(key, count);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/search")
     public List<GrantApplication> search(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String title) {
         return iGrantApplicationService.search(id, title);
     }
+
+
 
     @GetMapping("/ProgramGrantApplications/{programID}")
     public ResponseEntity<List<GrantApplication>> fetchProgramGrantApplications(@PathVariable Long programID){

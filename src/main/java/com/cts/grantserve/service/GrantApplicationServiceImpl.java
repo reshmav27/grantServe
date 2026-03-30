@@ -81,6 +81,11 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
     }
 
     @Override
+    public Long getuserApplicationCount(Long id) throws  GrantApplicationException{
+        return grantApplicationDao.countByResearcher_ResearcherID(id);
+    }
+
+    @Override
     public Optional<List<GrantApplication>> fetchProgramGrantApplications(Long programID) throws GrantApplicationException{
         return grantApplicationDao.findByProgram_ProgramID(programID);
     }
