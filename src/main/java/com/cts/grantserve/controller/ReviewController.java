@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ReviewController {
 
     // POST: Assign a new reviewer to a proposal
     @PostMapping("/assign")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<String> assign(@Valid @RequestBody ReviewDto reviewDto) {
         log.info("Controller: Assigning Reviewer ID {} to Proposal ID {}",
                 reviewDto.reviewerId(), reviewDto.proposalId());
@@ -33,6 +35,7 @@ public class ReviewController {
 
     // GET: Reviewer Dashboard - Fetch all reviews for a specific user
     @GetMapping("/dashboard/{reviewerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER','REVIEWER')")
     public ResponseEntity<List<Review>> getDashboard(@PathVariable long reviewerId) {
         log.info("Controller: Fetching dashboard for Reviewer ID: {}", reviewerId);
 
@@ -44,6 +47,7 @@ public class ReviewController {
 
     // GET: Fetch a specific review by its ID (Added for complete CRUD)
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER','REVIEWER')")
     public ResponseEntity<Review> getById(@PathVariable long id) {
         log.info("Controller: Fetching individual Review ID: {}", id);
         Review review = reviewService.getReviewById(id);
@@ -52,6 +56,7 @@ public class ReviewController {
 
     // PUT: Update score, comments, or status (e.g., from PENDING to REVIEWED)
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('REVIEWER')")
     public ResponseEntity<String> update(@PathVariable long id, @Valid @RequestBody ReviewDto reviewDto) {
         log.info("Controller: Updating Review ID: {}", id);
 
@@ -63,6 +68,7 @@ public class ReviewController {
 
     // DELETE: Remove a review assignment
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<String> delete(@PathVariable long id) {
         log.warn("Controller: Deleting Review record ID: {}", id);
 

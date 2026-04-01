@@ -11,7 +11,10 @@ import com.cts.grantserve.repository.UserRepository; // Added this
 import com.cts.grantserve.util.ClassUtilSeparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Slf4j
@@ -61,7 +64,7 @@ public class ReviewServiceImpl implements IReviewService {
 
         if (reviews.isEmpty()) {
             log.warn("Service: No reviews found for Reviewer ID: {}", reviewerId);
-            throw new ReviewNotFoundException("No reviews found for Reviewer ID: " + reviewerId);
+            throw new ReviewNotFoundException("No reviews found for Reviewer ID: " + reviewerId, HttpStatus.NOT_FOUND);
         }
 
         return reviews;
@@ -71,22 +74,35 @@ public class ReviewServiceImpl implements IReviewService {
     public Review getReviewById(long id) {
         log.info("Service: Searching for review ID: {}", id);
         return reviewRepository.findById(id)
-                .orElseThrow(() -> new ReviewNotFoundException("Review ID " + id + " not found"));
+                .orElseThrow(() -> new ReviewNotFoundException("Review ID " + id + " not found",HttpStatus.NOT_FOUND));
     }
 
     @Override
+    @Transactional
     public String updateReview(long id, ReviewDto reviewDto) {
         log.info("Service: Updating review ID: {}", id);
+
+        // 1. Fetch the existing review
         Review existing = getReviewById(id);
 
-        // Update fields from DTO
+        // 2. Update Review fields
         existing.setScore(reviewDto.score());
         existing.setComments(reviewDto.comments());
-        existing.setStatus(reviewDto.status()); // Sets the Enum value
+        existing.setStatus(reviewDto.status());
         existing.setDate(reviewDto.date());
 
+        // 3. Sync with Proposal Table
+        // If the review status is now REVIEWED, update the linked Proposal
+        if ("REVIEWED".equalsIgnoreCase(reviewDto.status().name())) {
+            Proposal proposal = existing.getProposal();
+            log.info("Service: Review complete. Updating Proposal ID {} status to REVIEWED", proposal.getProposalID());
+
+            proposal.setStatus("REVIEWED");
+            proposalRepository.save(proposal);
+        }
+
         reviewRepository.save(existing);
-        log.info("Service: Review ID {} updated successfully", id);
+        log.info("Service: Review ID {} and linked Proposal updated successfully", id);
         return "Review updated successfully";
     }
 
