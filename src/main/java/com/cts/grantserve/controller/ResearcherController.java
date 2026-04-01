@@ -42,12 +42,6 @@ public class ResearcherController {
         return projection;
     }
 
-    // 3. Delete a Researcher
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) throws ResearcherException {
-        log.warn("REST request to DELETE Researcher ID: {}", id);
-        String response = researcherService.deleteResearcher(id);
-        log.info("Deletion confirmed for ID: {}", id);
-        return response;
-    }
+
+
 }

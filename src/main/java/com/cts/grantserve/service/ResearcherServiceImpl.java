@@ -48,19 +48,7 @@ public class ResearcherServiceImpl implements IResearcherService {
                 });
     }
 
-    @Override
-    public String deleteResearcher(Long id) throws ResearcherException {
-        log.info("Request to delete researcher with ID: {}", id);
 
-        if (!researcherDAO.existsById(id)) {
-            log.error("Delete failed: ID {} does not exist", id);
-            throw new ResearcherException("Cannot delete. ID not found: " + id, HttpStatus.NOT_FOUND);
-        }
-
-        researcherDAO.deleteById(id);
-        log.info("Researcher with ID {} deleted successfully", id);
-        return "Researcher Deleted Successfully";
-    }
 
     @Override
     public Optional<Researcher> getResearcher(Long id) {
