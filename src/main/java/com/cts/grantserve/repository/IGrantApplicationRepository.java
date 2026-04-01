@@ -13,5 +13,6 @@ public interface IGrantApplicationRepository extends JpaRepository<GrantApplicat
     Optional<List<GrantApplication>> findByResearcher_ResearcherID(Long researcherID);
 
     Optional<List<GrantApplication>> findByProgram_ProgramID(Long programID);
-    //Optional<List<GrantApplication>> findByStatus_ResearcherID(Long researcherID,String Status);
+
+    Long countByResearcher_ResearcherID(Long researcherID);
 }

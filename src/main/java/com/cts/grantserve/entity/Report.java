@@ -1,12 +1,19 @@
 package com.cts.grantserve.entity;
+
 import com.cts.grantserve.enums.ReportScope;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
+@Data               // Generates all Getters, Setters, toString, equals, and hashCode
+@NoArgsConstructor  // Required by JPA/Hibernate
+@AllArgsConstructor // Useful for creating reports in your Service layer
 public class Report {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportID;
@@ -14,38 +21,8 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportScope scope;
 
-    private String metrics; // Usually stored as JSON string
-    private java.time.LocalDate generatedDate;
+    @Column(columnDefinition = "TEXT") // Good practice for JSON/Metrics strings
+    private String metrics;
 
-    public Long getReportID() {
-        return reportID;
-    }
-
-    public void setReportID(Long reportID) {
-        this.reportID = reportID;
-    }
-
-    public ReportScope getScope() {
-        return scope;
-    }
-
-    public void setScope(ReportScope scope) {
-        this.scope = scope;
-    }
-
-    public String getMetrics() {
-        return metrics;
-    }
-
-    public void setMetrics(String metrics) {
-        this.metrics = metrics;
-    }
-
-    public LocalDate getGeneratedDate() {
-        return generatedDate;
-    }
-
-    public void setGeneratedDate(LocalDate generatedDate) {
-        this.generatedDate = generatedDate;
-    }
+    private LocalDate generatedDate;
 }

@@ -3,10 +3,14 @@ package com.cts.grantserve.entity;
 import com.cts.grantserve.enums.AuditScope;
 import com.cts.grantserve.enums.AuditStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 public class Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,52 +23,4 @@ public class Audit {
     private java.time.LocalDate date;
     @Enumerated(EnumType.STRING)
     private AuditStatus status;
-
-    public Long getAuditID() {
-        return auditID;
-    }
-
-    public void setAuditID(Long auditID) {
-        this.auditID = auditID;
-    }
-
-    public Long getOfficerID() {
-        return officerID;
-    }
-
-    public void setOfficerID(Long officerID) {
-        this.officerID = officerID;
-    }
-
-    public AuditScope getScope() {
-        return scope;
-    }
-
-    public void setScope(AuditScope scope) {
-        this.scope = scope;
-    }
-
-    public String getFindings() {
-        return findings;
-    }
-
-    public void setFindings(String findings) {
-        this.findings = findings;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public AuditStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(AuditStatus status) {
-        this.status = status;
-    }
 }
