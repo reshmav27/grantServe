@@ -2,26 +2,25 @@ package com.cts.grantserve.entity;
 
 import com.cts.grantserve.enums.NotificationCategory;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
+@Data               // Generates Getters, Setters, toString, equals, and hashCode
+@NoArgsConstructor  // Generates the required empty constructor for JPA
+@AllArgsConstructor // Generates a constructor with all fields
 public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationID;
+
     @ManyToOne
-    @JoinColumn(name = "userID",nullable = false)
+    @JoinColumn(name = "userID", nullable = false)
     private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     private Long entityID;
     private String message;
@@ -30,54 +29,5 @@ public class Notification {
     private NotificationCategory category;
 
     private String status; // Read/Unread
-    private java.time.LocalDate createdDate;
-
-    public Long getNotificationID() {
-        return notificationID;
-    }
-
-    public void setNotificationID(Long notificationID) {
-        this.notificationID = notificationID;
-    }
-
-
-    public Long getEntityID() {
-        return entityID;
-    }
-
-    public void setEntityID(Long entityID) {
-        this.entityID = entityID;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public NotificationCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(NotificationCategory category) {
-        this.category = category;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDate getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
-    }
+    private LocalDate createdDate;
 }

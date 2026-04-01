@@ -4,6 +4,7 @@ import com.cts.grantserve.dto.GrantApplicationDto;
 import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.Program;
 import com.cts.grantserve.entity.Researcher;
+import com.cts.grantserve.exception.ProgramNotFoundException;
 import com.cts.grantserve.exception.ProposalException;
 import com.cts.grantserve.exception.ResearcherException;
 import com.cts.grantserve.repository.IGrantApplicationRepository;
@@ -12,6 +13,7 @@ import com.cts.grantserve.exception.GrantApplicationException;
 import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.specification.GrantApplicationSpecification;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,6 +26,8 @@ import java.util.Optional;
 
 import static com.cts.grantserve.specification.GrantApplicationSpecification.hasName;
 
+
+@Slf4j
 @Service
 public class GrantApplicationServiceImpl implements IGrantApplicationService {
 
@@ -43,7 +47,7 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
         grantApplication.setSubmittedDate(LocalDate.now());
 
         Program program = programRepository.findById(grantApplicationDto.programID())
-                .orElseThrow(() -> new ProposalException("Program Not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ProgramNotFoundException("Program Not found"));
         grantApplication.setProgram(program);
 
         Researcher researcher = researcherRepository.findById(grantApplicationDto.researcherID())

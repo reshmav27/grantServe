@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
-@Slf4j // Injects the SLF4J 'log' object
 public class DisbursementServiceImpl implements IDisbursementService {
 
     @Autowired
