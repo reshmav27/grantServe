@@ -1,7 +1,16 @@
 package com.cts.grantserve.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class ReviewNotFoundException extends RuntimeException {
-    public ReviewNotFoundException(String message) {
+
+    private HttpStatus httpStatus;
+    public ReviewNotFoundException(String message,HttpStatus httpStatus) {
         super(message);
+        this.httpStatus = httpStatus;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 }
