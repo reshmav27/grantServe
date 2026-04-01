@@ -20,14 +20,6 @@ public class ResearcherDocumentController {
     @Autowired
     private IResearcherDocumentService researcherDocumentService;
 
-    @GetMapping("/all")
-    public List<ResearcherDocument> getAllDocuments() {
-        log.info("REST request to retrieve all documents");
-        List<ResearcherDocument> docs = researcherDocumentService.getAllDocuments();
-        log.debug("Total documents retrieved: {}", docs.size());
-        return docs;
-    }
-
     @PostMapping("/upload")
     public String upload(@Valid @RequestBody ResearcherDocumentDto documentDto) throws ResearcherDocumentException {
         log.info("REST request to upload document for Researcher ID: {}", documentDto.researcherID());
