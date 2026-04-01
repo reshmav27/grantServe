@@ -51,16 +51,5 @@ public class GrantApplicationServiceImplTest {
         verify(grantApplicationDao,times(1)).save(any(GrantApplication.class));
     }
 
-    void testDtoReturn_null(){
-
-        GrantApplicationDto dto = null;
-        assertThrows(Null)
-
-
-    }
-
-
-
-
 
 }
