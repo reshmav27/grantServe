@@ -5,6 +5,7 @@ import com.cts.grantserve.repository.ComplianceRecordRepository;
 import com.cts.grantserve.entity.ComplianceRecord;
 import com.cts.grantserve.enums.ComplianceResult;
 import com.cts.grantserve.exception.ComplianceRecordException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ComplianceRecordServiceImpl implements IComplianceRecordService{
     @Autowired

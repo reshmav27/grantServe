@@ -1,17 +1,28 @@
 package com.cts.grantserve.entity;
+
 import com.cts.grantserve.enums.ReviewStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = "proposal") // Prevents infinite loops when logging a Review
+@EqualsAndHashCode(exclude = "proposal")
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewID;
 
     @ManyToOne
     @JoinColumn(name = "proposalID")
+    @JsonBackReference
     private Proposal proposal;
 
     @ManyToOne
@@ -20,63 +31,8 @@ public class Review {
 
     private Integer score;
     private String comments;
-    private java.time.LocalDate date;
+    private LocalDate date;
+
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
-
-    public Long getReviewID() {
-        return reviewID;
-    }
-
-    public void setReviewID(Long reviewID) {
-        this.reviewID = reviewID;
-    }
-
-    public Proposal getProposal() {
-        return proposal;
-    }
-
-    public void setProposal(Proposal proposal) {
-        this.proposal = proposal;
-    }
-
-    public User getReviewer() {
-        return reviewer;
-    }
-
-    public void setReviewer(User reviewer) {
-        this.reviewer = reviewer;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public ReviewStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReviewStatus status) {
-        this.status = status;
-    }
 }

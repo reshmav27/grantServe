@@ -143,4 +143,14 @@ public class GlobalException {
                 .body("Please check your request format.");
     }
 
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNoResourceFoundException(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "The requested endpoint does not exist. Please check your URL and HTTP method.");
+        body.put("path", ex.getResourcePath());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND); // Now it returns 404
+    }
+
 }

@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Slf4j
+@Service
 public class BudgetServiceImpl implements IBudgetService {
 
     @Autowired

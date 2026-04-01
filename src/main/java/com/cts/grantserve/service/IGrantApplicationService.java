@@ -20,4 +20,6 @@ public interface IGrantApplicationService {
     List<GrantApplication> FetchGrantApplication(Long id);
 
     Optional<List<GrantApplication>> fetchProgramGrantApplications(Long programID) throws GrantApplicationException;
+
+    public Long getuserApplicationCount(Long id) throws  GrantApplicationException;
 }
