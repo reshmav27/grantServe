@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -132,5 +133,106 @@ public class DisbursementServiceImplTest {
         // Verify it's the correct error
         assertEquals("Application not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
+    @Test
+    @DisplayName("reconcileBudget: Should update budget successfully")
+    void testReconcileBudget_Success() {
+        // Arrange
+        Long programId = 1L;
+        Double amount = 500.0;
+        Budget budget = new Budget();
+        budget.setAllocatedAmount(2000.0);
+        budget.setSpentAmount(500.0);
+        budget.setRemainingAmount(1500.0);
+
+        when(budgetRepo.findByProgramProgramID(programId)).thenReturn(Optional.of(budget));
+
+        // Act
+        disbursementServiceImpl.reconcileBudget(programId, amount);
+
+        // Assert
+        // New Spent: 500 + 500 = 1000 | New Remaining: 2000 - 1000 = 1000
+        assertEquals(1000.0, budget.getSpentAmount());
+        assertEquals(1000.0, budget.getRemainingAmount());
+        verify(budgetRepo, times(1)).save(budget);
+    }
+
+    @Test
+    @DisplayName("reconcileBudget: Should throw exception for insufficient funds")
+    void testReconcileBudget_InsufficientFunds() {
+        // Arrange
+        Long programId = 1L;
+        Double amount = 5000.0; // Higher than available
+        Budget budget = new Budget();
+        budget.setRemainingAmount(1000.0);
+
+        when(budgetRepo.findByProgramProgramID(programId)).thenReturn(Optional.of(budget));
+
+        // Act & Assert
+        DisbursementException ex = assertThrows(DisbursementException.class, () -> {
+            disbursementServiceImpl.reconcileBudget(programId, amount);
+        });
+
+        assertTrue(ex.getMessage().contains("Insufficient funds"));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
+    }
+    @Test
+    @DisplayName("trackByApplication: Should return list of disbursements")
+    void testTrackByApplication() {
+        // Arrange
+        Long appId = 1L;
+        List<Disbursement> mockList = List.of(new Disbursement(), new Disbursement());
+        when(disbursementRepo.findByApplication_ApplicationID(appId)).thenReturn(mockList);
+
+        // Act
+        List<Disbursement> result = disbursementServiceImpl.trackByApplication(appId);
+
+        // Assert
+        assertEquals(2, result.size());
+        verify(disbursementRepo, times(1)).findByApplication_ApplicationID(appId);
+    }
+
+    @Test
+    @DisplayName("trackByStatus: Should return filtered list")
+    void testTrackByStatus() {
+        // Arrange
+        String status = "COMPLETED";
+        when(disbursementRepo.findByStatus(status)).thenReturn(List.of(new Disbursement()));
+
+        // Act
+        List<Disbursement> result = disbursementServiceImpl.trackByStatus(status);
+
+        // Assert
+        assertFalse(result.isEmpty());
+        verify(disbursementRepo, times(1)).findByStatus(status);
+    }
+    @Test
+    @DisplayName("deleteDisbursement: Should delete when ID exists")
+    void testDeleteDisbursement_Success() {
+        // Arrange
+        Long id = 1L;
+        when(disbursementRepo.existsById(id)).thenReturn(true);
+
+        // Act
+        disbursementServiceImpl.deleteDisbursement(id);
+
+        // Assert
+        verify(disbursementRepo, times(1)).deleteById(id);
+    }
+
+    @Test
+    @DisplayName("deleteDisbursement: Should throw exception when ID missing")
+    void testDeleteDisbursement_NotFound() {
+        // Arrange
+        Long id = 999L;
+        when(disbursementRepo.existsById(id)).thenReturn(false);
+
+        // Act & Assert
+        DisbursementException ex = assertThrows(DisbursementException.class, () -> {
+            disbursementServiceImpl.deleteDisbursement(id);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, ex.getHttpStatus());
+        verify(disbursementRepo, never()).deleteById(anyLong());
     }
 }
