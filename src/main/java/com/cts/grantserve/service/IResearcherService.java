@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface IResearcherService {
     String UpdateResearcher(Long id,ResearcherDto researcherDto) throws ResearcherException;
     IResearcherProjection fetchResearcher(Long id) throws ResearcherException;
-    String deleteResearcher(Long id) throws ResearcherException;
+
 
     Optional<Researcher> getResearcher(Long id);
 
