@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class EvaluationController {
 
     // POST: Create a new evaluation and update Grant Application status
     @PostMapping("/submit")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<String> submit(@Valid @RequestBody EvaluationDto evaluationDto) {
         log.info("Controller: Received request to submit evaluation for Application ID: {}", evaluationDto.applicationID());
 
@@ -32,6 +34,7 @@ public class EvaluationController {
 
     // GET: Retrieve all evaluation records
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER', 'REVIEWER')")
     public ResponseEntity<List<Evaluation>> getAll() {
         log.info("Controller: Fetching all evaluations");
         List<Evaluation> evaluations = evaluationService.getAllEvaluations();
@@ -45,6 +48,7 @@ public class EvaluationController {
 
     // GET: Retrieve a single evaluation by ID (Added this missing method)
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER','REVIEWER')")
     public ResponseEntity<Evaluation> getById(@PathVariable long id) {
         log.info("Controller: Fetching evaluation with ID: {}", id);
         Evaluation evaluation = evaluationService.getEvaluationById(id);
@@ -53,6 +57,7 @@ public class EvaluationController {
 
     // DELETE: Remove an evaluation record
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> delete(@PathVariable long id) {
         log.warn("Controller: Request to delete evaluation record ID: {}", id);
 

@@ -59,6 +59,20 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/documents/{id}").hasAnyRole("RESEARCHER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/documents/delete/{id}").hasRole("RESEARCHER")
 
+                // Admin and manager: submits evaluation
+                    .requestMatchers(HttpMethod.POST, "/evaluation/submit").hasAnyRole("ADMIN", "MANAGER")
+                    .requestMatchers(HttpMethod.DELETE, "/evaluation/delete/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/evaluation/all", "/evaluation/{id}").hasAnyRole("ADMIN", "REVIEWER","MANAGER")
+
+                    .requestMatchers(HttpMethod.POST, "/review/assign").hasAnyRole("ADMIN","MANAGER")
+                    .requestMatchers(HttpMethod.DELETE, "/review/delete/**").hasAnyRole("ADMIN","MANAGER")
+
+                    // Reviewer performs the update (scoring/comments)
+                    .requestMatchers(HttpMethod.PUT, "/review/update/**").hasRole("REVIEWER")
+
+                    // Both can view the dashboard and individual reviews
+                    .requestMatchers(HttpMethod.GET, "/review/dashboard/**", "/review/{id}").hasAnyRole("ADMIN", "REVIEWER","MANAGER")
+
                 .anyRequest().authenticated() // LOCK EVERYTHING ELSE
             )
             .httpBasic(Customizer.withDefaults())

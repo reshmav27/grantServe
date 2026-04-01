@@ -9,6 +9,7 @@ import com.cts.grantserve.repository.IGrantApplicationRepository;
 import com.cts.grantserve.util.ClassUtilSeparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +65,7 @@ public class EvaluationServiceImpl implements IEvaluationService {
     public Evaluation getEvaluationById(long id) {
         log.info("Service: Searching for evaluation ID: {}", id);
         return evaluationRepository.findById(id)
-                .orElseThrow(() -> new EvaluationNotFoundException("Evaluation ID " + id + " not found"));
+                .orElseThrow(() -> new EvaluationNotFoundException("Evaluation ID " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
