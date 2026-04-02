@@ -13,3 +13,4 @@ public interface DisbursementRepository extends JpaRepository<Disbursement, Long
 
     List<Disbursement> findByStatus(String status);
 }
+
