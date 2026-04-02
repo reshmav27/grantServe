@@ -1,9 +1,15 @@
 package com.cts.grantserve.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter // This automatically creates the getStatus() method for you
 public class ResearcherException extends RuntimeException {
-    public ResearcherException(String message, HttpStatus notFound) {
+
+    private final HttpStatus status;
+
+    public ResearcherException(String message, HttpStatus status) {
         super(message);
+        this.status = status;
     }
 }
