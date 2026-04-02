@@ -1,6 +1,7 @@
 package com.cts.grantserve.controller;
 
 import com.cts.grantserve.dto.ProposalDto;
+import com.cts.grantserve.entity.Proposal;
 import com.cts.grantserve.projection.IProposalProjection;
 import com.cts.grantserve.service.IProposalService;
 import jakarta.validation.Valid;
@@ -28,4 +29,12 @@ public class ProposalController {
         return ResponseEntity.status(200).body(proposalService.getProposal(proposalId));
 
     }
+
+    @GetMapping("/getRecentProposals/{applicationId}")
+    public ResponseEntity<List<IProposalProjection>> getRecentProposals(@PathVariable Long applicationId){
+        return ResponseEntity.ok(proposalService.getRecentProposals(applicationId));
+    }
+
+
+
 }

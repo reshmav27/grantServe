@@ -18,11 +18,11 @@ public interface IProposalRepository extends JpaRepository<Proposal, Long> {
             "p.fileURI as fileURI, " +
             "p.submittedDate as submittedDate, " +
             "p.status as status, " +
-            "p.grantApplication.applicationID as applicationID, " +
-            "p.review as review " + // ADDED THIS LINE
+            "p.grantApplication.applicationID as applicationID " +
             "FROM Proposal p " +
-            "LEFT JOIN p.review " +  // ADDED JOIN to ensure reviews are loaded
             "WHERE p.proposalID = :id")
     List<IProposalProjection> findProjectedById(@Param("id") Long id);
+
+    List<IProposalProjection> findTop3ByGrantApplication_ApplicationIDOrderByProposalIDDesc(Long applicationId);
 
 }

@@ -13,6 +13,7 @@ import com.cts.grantserve.exception.GrantApplicationException;
 import com.cts.grantserve.repository.ProgramRepository;
 import com.cts.grantserve.repository.ResearcherRepository;
 import com.cts.grantserve.specification.GrantApplicationSpecification;
+import com.cts.grantserve.util.ClassUtilSeparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +42,18 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
     ResearcherRepository researcherRepository;
 
     public String createApplication(GrantApplicationDto grantApplicationDto) throws GrantApplicationException {
-        GrantApplication grantApplication = new GrantApplication();
-        BeanUtils.copyProperties(grantApplicationDto,grantApplication);
+        GrantApplication grantApplication = ClassUtilSeparator.createGrantApplication(grantApplicationDto);
         grantApplication.setStatus("Active");
         grantApplication.setSubmittedDate(LocalDate.now());
+
+        Researcher researcher = researcherRepository.findById(grantApplicationDto.researcherID())
+                .orElseThrow(()->new ResearcherException("Researcher Not found",HttpStatus.NOT_FOUND));
+        grantApplication.setResearcher(researcher);
 
         Program program = programRepository.findById(grantApplicationDto.programID())
                 .orElseThrow(() -> new ProgramNotFoundException("Program Not found"));
         grantApplication.setProgram(program);
 
-        Researcher researcher = researcherRepository.findById(grantApplicationDto.researcherID())
-                        .orElseThrow(()->new ResearcherException("Researcher Not found",HttpStatus.NOT_FOUND));
-        grantApplication.setResearcher(researcher);
 
         grantApplicationDao.save(grantApplication);
         return "Created SuccessFully";
@@ -78,6 +79,7 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
                         .or(GrantApplicationSpecification.hasName(name))
         );
     }
+
     @Override
     public List<GrantApplication> FetchGrantApplication(Long id) throws GrantApplicationException {
         return grantApplicationDao.findByResearcher_ResearcherID(id)
@@ -86,12 +88,20 @@ public class GrantApplicationServiceImpl implements IGrantApplicationService {
 
     @Override
     public Long getuserApplicationCount(Long id) throws  GrantApplicationException{
+        grantApplicationDao.findByResearcher(id)
+                .orElseThrow(()->new GrantApplicationException("Researcher Not found with id "+id,HttpStatus.NOT_FOUND));
         return grantApplicationDao.countByResearcher_ResearcherID(id);
     }
-
     @Override
-    public Optional<List<GrantApplication>> fetchProgramGrantApplications(Long programID) throws GrantApplicationException{
-        return grantApplicationDao.findByProgram_ProgramID(programID);
+    public Optional<List<GrantApplication>> fetchProgramGrantApplications(Long programID) throws GrantApplicationException {
+        log.info("Fetching applications for Program ID: {}", programID);
+
+        // Use the method that correctly handles the Long ID
+        List<GrantApplication> applications = grantApplicationDao.findByProgram_ProgramID(programID)
+                .orElseThrow(() -> new GrantApplicationException("Program not found or has no applications with id " + programID, HttpStatus.NOT_FOUND));
+
+        // Optional.of is safer here to match your return type
+        return Optional.of(applications);
     }
 
 
