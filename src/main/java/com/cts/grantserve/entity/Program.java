@@ -24,6 +24,7 @@ public class Program {
     private LocalDate startDate;
     private LocalDate endDate;
     private Double budget;
+    private int count;
 
     @Enumerated(EnumType.STRING)
     private ProgramStatus status;
