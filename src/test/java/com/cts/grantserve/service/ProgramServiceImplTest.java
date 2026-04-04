@@ -37,11 +37,12 @@ class ProgramServiceImplTest {
     @Test
     @DisplayName("Create Program - Active Status triggers Budget Initialization")
     void createProgram_ActiveStatus() {
-        ProgramDto dto = new ProgramDto(1L, "Title", "Desc", LocalDate.now(), LocalDate.now().plusDays(20), 5000.0, ProgramStatus.ACTIVE);
+        ProgramDto dto = new ProgramDto(1L, "Title", "Desc", LocalDate.now(), LocalDate.now().plusDays(20), 5000.0, 10,ProgramStatus.ACTIVE);
         Program savedProgram = new Program();
         savedProgram.setProgramID(1L);
         savedProgram.setStatus(ProgramStatus.ACTIVE);
         savedProgram.setBudget(5000.0);
+        savedProgram.setCount(10);
 
         when(programRepository.save(any(Program.class))).thenReturn(savedProgram);
 
@@ -54,7 +55,7 @@ class ProgramServiceImplTest {
     @Test
     @DisplayName("Update Program - Only DRAFT programs can be modified")
     void updateProgram_NonDraftThrowsException() {
-        ProgramDto dto = new ProgramDto(1L, "Title", "Desc", LocalDate.now(), LocalDate.now().plusDays(20), 5000.0, ProgramStatus.ACTIVE);
+        ProgramDto dto = new ProgramDto(1L, "Title", "Desc", LocalDate.now(), LocalDate.now().plusDays(20), 5000.0, 10,ProgramStatus.ACTIVE);
         Program existing = new Program();
         existing.setStatus(ProgramStatus.ACTIVE); // Not DRAFT
 
