@@ -18,6 +18,12 @@ public class ClassUtilSeparator {
         return existingResearcher;
     }
 
+    public static GrantApplication createGrantApplication(GrantApplicationDto dto){
+        GrantApplication grantApplication = new GrantApplication();
+        grantApplication.setTitle(dto.title());
+        return  grantApplication;
+    }
+
     public static ResearcherDocument documentUploadUtil(ResearcherDocumentDto dto) {
         ResearcherDocument doc = new ResearcherDocument();
         doc.setDocType(dto.docType());
