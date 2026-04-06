@@ -35,6 +35,10 @@ public class GrantApplication {
     @JsonManagedReference
     private List<Disbursement> disbursement;
 
+    @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "application-allocation")
+    private Allocation allocation;
+
     private String title;
     private java.time.LocalDate submittedDate;
     private String status;

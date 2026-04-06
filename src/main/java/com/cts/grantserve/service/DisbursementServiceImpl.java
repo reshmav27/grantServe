@@ -1,10 +1,12 @@
 package com.cts.grantserve.service;
 
 import com.cts.grantserve.dto.DisbursementDto;
+import com.cts.grantserve.entity.Allocation;
 import com.cts.grantserve.entity.Budget;
 import com.cts.grantserve.entity.Disbursement;
 import com.cts.grantserve.entity.GrantApplication;
 import com.cts.grantserve.exception.DisbursementException;
+import com.cts.grantserve.repository.AllocationRepository;
 import com.cts.grantserve.repository.BudgetRepository;
 import com.cts.grantserve.repository.DisbursementRepository;
 import com.cts.grantserve.repository.IGrantApplicationRepository;
@@ -25,7 +27,7 @@ public class DisbursementServiceImpl implements IDisbursementService {
     private DisbursementRepository disbursementRepo;
 
     @Autowired
-    private BudgetRepository budgetRepo;
+    private AllocationRepository allocationRepo;
 
     @Autowired
     private IGrantApplicationRepository applicationRepo;
@@ -33,52 +35,47 @@ public class DisbursementServiceImpl implements IDisbursementService {
     @Override
     @Transactional
     public Disbursement initiateDisbursement(DisbursementDto dto) {
-        log.info("Service: Initiating disbursement for Application ID: {} with amount: {}",
+        log.info("Service: Initiating disbursement for Application ID: {} Amount: {}",
                 dto.applicationID(), dto.amount());
 
-        // 1. Reconcile Budget (Business Rule)
-        reconcileBudget(dto.programID(), dto.amount());
-
-        // 2. Map and fetch Application
-        Disbursement disbursement = ClassUtilSeparator.DisbursementUtil(dto);
-        GrantApplication app = applicationRepo.findById(dto.applicationID())
+        // 1. Fetch Allocation (The researcher's specific "wallet")
+        Allocation allocation = allocationRepo.findByApplicationApplicationID(dto.applicationID())
                 .orElseThrow(() -> {
-                    log.error("Initiation Failed: Application ID {} not found", dto.applicationID());
-                    return new DisbursementException("Application not found", HttpStatus.NOT_FOUND);
+                    return new DisbursementException("Funds have not been allocated yet. Allocation must be initiated first.", HttpStatus.BAD_REQUEST);
                 });
+
+        // 2. Validate against the Researcher's Remaining Balance
+        if (dto.amount() > allocation.getRemainingBalance()) {
+            throw new DisbursementException("Insufficient allocated funds. Remaining balance: " + allocation.getRemainingBalance(), HttpStatus.BAD_REQUEST);
+        }
+
+        // 3. Update Allocation Financials
+        Double newDisbursedTotal = (allocation.getDisbursedAmount() != null ? allocation.getDisbursedAmount() : 0.0) + dto.amount();
+        allocation.setDisbursedAmount(newDisbursedTotal);
+        allocation.setRemainingBalance(allocation.getTotalAwardedAmount() - newDisbursedTotal);
+
+        if (allocation.getRemainingBalance() <= 0) {
+            allocation.setStatus("EXHAUSTED");
+        }
+        allocationRepo.save(allocation);
+
+        // 4. Map DTO to Entity using your Util
+        Disbursement disbursement = ClassUtilSeparator.DisbursementUtil(dto);
+
+        // 5. Link Application to Disbursement
+        GrantApplication app = applicationRepo.findById(dto.applicationID())
+                .orElseThrow(() -> new DisbursementException("Application not found", HttpStatus.NOT_FOUND));
 
         disbursement.setApplication(app);
 
+
         Disbursement saved = disbursementRepo.save(disbursement);
-        log.info("Service Success: Disbursement record saved with ID: {}", saved.getDisbursementID());
+        log.info("Service Success: Disbursement ID {} created. New Balance: {}",
+                saved.getDisbursementID(), allocation.getRemainingBalance());
 
         return saved;
     }
 
-    @Override
-    @Transactional
-    public void reconcileBudget(Long programId, Double amount) {
-        log.info("Checking budget for Program ID: {}. Requested amount: {}", programId, amount);
-
-        Budget budget = budgetRepo.findByProgramProgramID(programId)
-                .orElseThrow(() -> {
-                    log.error("Budget Check Failed: No budget found for Program ID: {}", programId);
-                    return new DisbursementException("Budget not found for Program ID: " + programId, HttpStatus.NOT_FOUND);
-                });
-
-        if (budget.getRemainingAmount() < amount) {
-            log.warn("Insufficient Funds for Program ID {}: Available {}, Requested {}",
-                    programId, budget.getRemainingAmount(), amount);
-            throw new DisbursementException("Insufficient funds! Available: " + budget.getRemainingAmount(), HttpStatus.BAD_REQUEST);
-        }
-
-        // Update budget values
-        budget.setSpentAmount(budget.getSpentAmount() + amount);
-        budget.setRemainingAmount(budget.getAllocatedAmount() - budget.getSpentAmount());
-
-        budgetRepo.save(budget);
-        log.info("Budget updated for Program ID {}: New Remaining Amount: {}", programId, budget.getRemainingAmount());
-    }
 
     @Override
     public List<Disbursement> trackByApplication(Long appId) {

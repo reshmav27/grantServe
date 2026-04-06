@@ -2,9 +2,12 @@ package com.cts.grantserve.entity;
 
 import com.cts.grantserve.enums.BudgetStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,5 +29,10 @@ public class Budget {
     @JoinColumn(name = "program_id")
     @JsonBackReference
     private Program program;
+
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "budget-allocation")
+    private List<Allocation> allocations;
 
 }

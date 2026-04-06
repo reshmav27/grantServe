@@ -18,6 +18,12 @@ public class ClassUtilSeparator {
         return existingResearcher;
     }
 
+    public static GrantApplication createGrantApplication(GrantApplicationDto dto){
+        GrantApplication grantApplication = new GrantApplication();
+        grantApplication.setTitle(dto.title());
+        return  grantApplication;
+    }
+
     public static ResearcherDocument documentUploadUtil(ResearcherDocumentDto dto) {
         ResearcherDocument doc = new ResearcherDocument();
         doc.setDocType(dto.docType());
@@ -89,6 +95,7 @@ public class ClassUtilSeparator {
         program.setTitle(programDto.title());
         program.setDescription(programDto.description());
         program.setBudget(programDto.budget());
+        program.setCount(programDto.count());
         program.setStartDate(programDto.startDate());
         program.setEndDate(programDto.endDate());
         program.setStatus(programDto.status());
@@ -137,6 +144,7 @@ public class ClassUtilSeparator {
                 program.getStartDate(),
                 program.getEndDate(),
                 program.getBudget(),
+                program.getCount(),
                 program.getStatus()
         );
     }

@@ -112,22 +112,41 @@ public class GlobalException {
         log.error("Unexpected Error: ", ex);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+//        Map<String, Object> body = new LinkedHashMap<>();
+//        body.put("timestamp", LocalDateTime.now());
+//
+//        // Check if it's a unique constraint violation
+//        String message = "Database error: This record (likely email) already exists.";
+//        if (ex.getMostSpecificCause().getMessage().contains("user.email")) {
+//            message = "The email address is already in use. Please use a different one.";
+//        }
+//
+//        body.put("message", message);
+//        log.error("Data Integrity Violation: {}", ex.getMessage());
+//        return new ResponseEntity<>(body, HttpStatus.CONFLICT); // 409 Conflict is best for duplicates
+//    }
 
-        // Check if it's a unique constraint violation
-        String message = "Database error: This record (likely email) already exists.";
-        if (ex.getMostSpecificCause().getMessage().contains("user.email")) {
-            message = "The email address is already in use. Please use a different one.";
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrity(DataIntegrityViolationException ex) {
+        String errorMessage = ex.getMostSpecificCause().getMessage();
+        String userFriendlyMessage = "Database error: A unique record already exists.";
+
+        // Check for User Email Duplicate
+        if (errorMessage.contains("users") || errorMessage.contains("email")) {
+            userFriendlyMessage = "The email address is already in use. Please use a different one.";
+        }
+        // Check for Allocation Duplicate (Your new module)
+        else if (errorMessage.contains("allocation")) {
+            userFriendlyMessage = "Error: This application already has funds allocated.";
         }
 
-        body.put("message", message);
         log.error("Data Integrity Violation: {}", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT); // 409 Conflict is best for duplicates
-    }
 
+        // Returning simple string as requested
+        return new ResponseEntity<>(userFriendlyMessage, HttpStatus.CONFLICT);
+    }
     @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
     public ResponseEntity<String> handlePaymentMethodEnumError(org.springframework.http.converter.HttpMessageNotReadableException ex) {
         String errorMsg = ex.getMessage();
@@ -141,6 +160,12 @@ public class GlobalException {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body("Please check your request format.");
+    }
+
+    @ExceptionHandler(AllocationException.class)
+    public ResponseEntity<String> handleAllocationException(AllocationException ex) {
+        // Returns just the message as a String with the specific HTTP Status
+        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
     }
 
     @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
